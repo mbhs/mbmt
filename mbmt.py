@@ -4,11 +4,11 @@ from flask import Flask, request, session, g, redirect, url_for, abort, render_t
 
 # Default Flask configuration
 
-app = Flask(__name__)
+app = Flask(__name__)t
 app.config.from_object(__name__)
 
 app.config.update(dict(
-    DATABASE=os.path.join(app.root_path, 'flaskr.db'),
+    DATABASE=os.path.join(app.root_path, 'mbmt.db'),
     SECRET_KEY='development key',
     USERNAME='admin',
     PASSWORD='default'
