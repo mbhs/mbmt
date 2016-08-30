@@ -23,8 +23,12 @@ def initdb_command():
 
 
 @app.route('/')
-def index():
+def page_index():
     return render_template('index.html')
+
+@app.route("/register")
+def page_register():
+    return render_template("register.html")
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=5000, debug=True)

@@ -1,2 +1,40 @@
-.title { text-align: center; font-size: 56px; margin-bottom: 0; }
-.tagline { text-align: center; font-size: 24px; margin-top: 0; }
+@media (min-width: 1200px) {
+    .container { max-width: 970px; }
+}
+
+form { margin: 1.5em auto; }
+label { display: block; }
+label.name { 
+    font-weight: normal;
+    font-size: 20px; 
+    margin-bottom: 0px;
+    margin-top: 20px;
+}
+label.description {
+    font-weight: normal;
+    margin-bottom: 0px;
+}
+input {
+    margin-top: 8px;
+}
+
+.lower { margin-top: 1em; }
+.lowerer { margin-top: 2em; }
+
+.title { 
+    text-align: center; 
+    font-size: 56px; 
+    margin-bottom: 0;
+}
+
+.tagline { 
+    text-align: center; 
+    font-size: 24px; 
+    margin-top: 0; 
+}
+
+.center {
+    max-width: 720px;
+    text-align: center;
+    margin: 2em auto;
+}
