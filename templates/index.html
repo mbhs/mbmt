@@ -1,17 +1,11 @@
-<html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <title>MBMT</title>
-        <link rel="stylesheet" type="text/css" href="/static/styles/master.css">
-    </head>
-    <body>
-        <h1 class="logo">MBMT</h1>
-        <p class="tagline">The Montgomery Blair Mathematics Tournament<br>Coming April 22, 2017</p>
-        <div class="content">
-            <h2>About</h2>
-            <p>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris eu quam diam. Vivamus felis lectus, aliquam posuere nisi vitae, rutrum efficitur orci. Nulla convallis, nunc et blandit faucibus, magna dolor posuere mi, a bibendum diam tortor vitae ante. Maecenas placerat purus risus, eu gravida mi condimentum eu. Vivamus mollis felis finibus ligula tristique finibus. Nulla ut ornare enim. In risus odio, congue a quam ut, scelerisque pretium metus. Vivamus ultricies libero tristique euismod mattis. Cras finibus sodales leo sed finibus. Integer ullamcorper massa nunc, accumsan tempus elit sollicitudin a.
-            </p>
-        </div>
-    </body>
-</html>
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1 class="title">MBMT</h1>
+<p class="tagline">Montgomery Blair Mathematics Tournament</p>
+
+<h2>About</h2>
+<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et consequat purus, ac commodo elit. Phasellus fermentum consectetur tempus. Vestibulum blandit, nisl congue elementum sollicitudin, ligula lacus vulputate neque, nec tristique massa leo congue nibh. Nulla et egestas nibh. Aliquam et purus mi. Ut a mauris gravida, malesuada ligula tempus, iaculis est. Vivamus non varius felis. Morbi blandit orci ac augue rutrum mollis. Fusce et malesuada elit, ut auctor felis. Nullam maximus leo sed metus vestibulum, ut vulputate dui luctus. Proin ut sem et dui auctor tempor. Morbi dapibus congue arcu sit amet maximus. Sed sed sem eget tortor euismod fermentum vitae sit amet ipsum. Phasellus finibus dui nec ante suscipit porta. Donec porttitor rutrum nulla, at maximus orci porttitor nec. Aenean diam lectus, consectetur id tincidunt eu, ultrices in leo.</p>
+
+{% endblock %}
