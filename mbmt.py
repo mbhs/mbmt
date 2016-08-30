@@ -4,7 +4,7 @@ from flask import Flask, request, session, g, redirect, url_for, abort, render_t
 
 # Default Flask configuration
 
-app = Flask(__name__)t
+app = Flask(__name__)
 app.config.from_object(__name__)
 
 app.config.update(dict(
