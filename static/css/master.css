@@ -1,25 +1,33 @@
 @media (min-width: 1200px) {
-    .container { max-width: 970px; }
+    .container { max-width: 940px; }
 }
 
 form { margin: 1.5em auto; }
 label { display: block; }
+
 label.name { 
     font-weight: normal;
     font-size: 20px; 
     margin-bottom: 0px;
     margin-top: 20px;
 }
+
 label.description {
     font-weight: normal;
     margin-bottom: 0px;
 }
+
 input {
     margin-top: 8px;
 }
 
+.right { float: right; }
+
+#submit { width: 90px; }
+#cancel { margin-right: 1em; width: 90px; }
+
 .lower { margin-top: 1em; }
-.lowerer { margin-top: 2em; }
+.lowerer { margin-top: 1.5em; }
 
 .title { 
     text-align: center; 
