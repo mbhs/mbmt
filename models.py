@@ -1,9 +1,16 @@
+"""Database models for MBMT.
+
+The database is structured by sponsor. Sponsors register teams, which
+are composed of students.
+"""
+
 from mbmt import db
 
-import enum
+SUBJECTS = ["Algebra", "Number Theory", "Geometry", "Combinatorics"]
 
 
-class School(db.Model):
+class Sponsor(db.Model):
+
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, unique=True)
 
@@ -11,13 +18,13 @@ class School(db.Model):
         self.name = name
 
     def __repr__(self):
-        return '<School:{}>'.format(self.name)
+        return "<Sponsor: %s>" % self.name
 
 
 class Team(db.Model):
+
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, unique=True)
-
     school_id = db.Column(db.Integer, db.ForeignKey('school.id'))
     school = db.relationship('School', backref=db.backref('teams', lazy='dynamic'))
 
@@ -26,16 +33,13 @@ class Team(db.Model):
         self.school = school
 
     def __repr__(self):
-        return '<Team:{} from {}>'.format(self.name, self.school.name)
-
-
-SUBJECTS = ['Algebra', 'Number Theory', 'Geometry', 'Combinatorics']
+        return "<Team: %s, Sponsor: %s>" % (self.name, self.school.name)
 
 
 class Student(db.Model):
+
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String)
-
     team_id = db.Column(db.Integer, db.ForeignKey('team.id'))
     team = db.relationship('Team', backref=db.backref('members', lazy='dynamic'))
 
@@ -47,4 +51,4 @@ class Student(db.Model):
         self.team = team
 
     def __repr__(self):
-        return '<Student:{} from {} from {}>'.format(self.name, self.team.name, self.team.school.name)
+        return "<Student: %s, Team: %s, Sponsor: %s>" % (self.name, self.team.name, self.team.school.name)
