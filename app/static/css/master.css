@@ -46,3 +46,7 @@ input {
     text-align: center;
     margin: 2em auto;
 }
+
+.asteriskField {
+    display: none;
+}

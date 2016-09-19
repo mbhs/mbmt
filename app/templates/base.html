@@ -12,12 +12,12 @@
         <nav id="menu" class="navbar navbar-default navbar-static-top navbar-xs">
             <div class="container">
                 <ul class="nav navbar-nav navbar-left">
-                    <li><a href="/">MBMT</a></li>
+                    <li><a href="{% url 'index' %}">MBMT</a></li>
                     <li><a href="/about">About</a></li>
                     <li><a href="/rules">Rules</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a href="/register">Register</a></li>
+                    <li><a href="{% url 'register' %}">Register</a></li>
                     <li><a href="/login">Login</a></li>
                 </ul>
             </div>
