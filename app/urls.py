@@ -7,5 +7,6 @@ urlpatterns = [
     url(r'^login/$', views.login, name='login'),
     url(r'^rules/$', views.rules, name='rules'),
     url(r'^about/$', views.about, name='about'),
-    url(r'^registration/$', views.registration, name='registration')
+    url(r'^teams/$', views.teams, name='teams'),
+    url(r'^teams/add/$', views.add_team, name='add_team')
 ]

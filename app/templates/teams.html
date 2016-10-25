@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2 class="lowerer"><strong>{{ request.user.school.name }}</strong> Teams</h2>
+
+{% if not request.user.school.teams %}
+    <p>
+        Looks like you don't have any teams yet!
+    </p>
+{% else %}
+    <table class="table table-striped table-hover">
+        <tr>
+            <th>Name</th>
+            <th>Members</th>
+        </tr>
+
+        {% for team in request.user.school.teams.all %}
+            <tr>
+                <td>{{ team.name }}</td>
+                <td>
+                    <ul>
+                        {% for student in team.students.all %}
+                            <li>{{ student.name }} ({{ student.subject1 }}, {{ student.subject2 }})</li>
+                        {% endfor %}
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endif %}
+
+<br/>
+<a href="{% url 'add_team' %}">+ Add Team</a>
+
+{% endblock %}
