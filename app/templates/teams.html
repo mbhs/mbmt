@@ -21,7 +21,7 @@
                 <td>
                     <ul>
                         {% for student in team.students.all %}
-                            <li>{{ student.name }} ({{ student.subject1 }}, {{ student.subject2 }})</li>
+                            <li>{{ student.name }} ({{ student.get_subject1_display }}, {{ student.get_subject2_display }})</li>
                         {% endfor %}
                     </ul>
                 </td>
