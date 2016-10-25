@@ -1,10 +1,8 @@
 from django.shortcuts import render, redirect
+from django.contrib.auth.models import User
 from django.contrib import auth
 
-from app import forms
-
-import string
-import random
+from app import forms, models
 
 
 def index(request):
@@ -30,13 +28,19 @@ def register(request):
         form = forms.RegisterForm(request.POST)
 
         if form.is_valid():
-            school = form.save(commit=False)
-            school.code = ''.join([random.choice(string.ascii_lowercase + string.digits) for _ in range(32)])
+            user = User.objects.create_user(form.cleaned_data['username'],
+                                            email=form.cleaned_data['email'],
+                                            password=form.cleaned_data['password'],
+                                            first_name=form.cleaned_data['first_name'],
+                                            last_name=form.cleaned_data['last_name'])
+
+            school = models.School(user=user, name=form.cleaned_data['school_name'])
             school.save()
 
-            return render(request, "loggedin.html", {
-                'code': school.code
-            })
+            user = auth.authenticate(username=user.get_username(), password=form.cleaned_data['password'])
+            auth.login(request, user)
+
+            return redirect('index')
 
     return render(request, "register.html", {
         'form': form

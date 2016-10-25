@@ -11,6 +11,8 @@ class School(models.Model):
 
     code = models.CharField(max_length=32)
 
+    user = models.OneToOneField('auth.User', related_name="school")
+
 
 class Team(models.Model):
     name = models.CharField(max_length=256)

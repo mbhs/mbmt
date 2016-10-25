@@ -1,5 +1,6 @@
-from django.forms import ModelForm, ValidationError
+from django.forms import ModelForm, ValidationError, CharField
 from django.contrib.auth import authenticate
+from django.contrib.auth.models import User
 
 from app import models
 
@@ -13,9 +14,11 @@ class PrettyForm(ModelForm):
 
 
 class RegisterForm(PrettyForm):
+    school_name = CharField(max_length=128)
+
     class Meta:
-        model = models.School
-        fields = ['name', 'sponsor', 'email']
+        model = User
+        fields = ['username', 'first_name', 'last_name', 'email', 'password', 'email']
 
 
 class LoginForm(PrettyForm):
