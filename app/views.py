@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth.models import User
 from django.contrib import auth
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 
 from app import forms, models
 
@@ -65,3 +66,40 @@ def login(request):
     return render(request, "login.html", {
         'form': form
     })
+<<<<<<< HEAD
+=======
+
+
+@login_required
+def teams(request):
+    return render(request, "teams.html")
+
+
+@login_required
+def add_team(request):
+    team_form = forms.TeamForm()
+    student_forms = forms.StudentFormSet()
+
+    if request.method == 'POST':
+        team_form = forms.TeamForm(request.POST)
+        student_forms = forms.StudentFormSet(request.POST)
+
+        if team_form.is_valid() and student_forms.is_valid():
+            team = team_form.save(commit=False)
+            team.school = request.user.school
+            team.save()
+
+            students = student_forms.save(commit=False)
+
+            for student in students:
+                student.team = team
+                student.save()
+
+            return redirect('teams')
+
+    return render(request, "team.html", {
+        'team_form': team_form,
+        'student_helper': forms.PrettyHelper(),
+        'student_forms': student_forms
+    })
+>>>>>>> origin/master

@@ -17,11 +17,14 @@
                     <li><a href="{% url 'about' %}">About</a></li>
                     <li><a href="{% url 'topics' %}">Topics</a></li>
                     <li><a href="{% url 'rules' %}">Rules</a></li>
-                    <li><a href="{% url 'registration' %}">Registration</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a href="{% url 'register' %}">Register</a></li>
-                    <li><a href="{% url 'login' %}">Login</a></li>
+                    {% if request.user.is_authenticated %}
+                        <li><a href="{% url 'teams' %}">My Teams</a></li>
+                    {% else %}
+                        <li><a href="{% url 'register' %}">Register</a></li>
+                        <li><a href="{% url 'login' %}">Login</a></li>
+                    {% endif %}
                 </ul>
             </div>
         </nav>

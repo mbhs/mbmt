@@ -9,4 +9,6 @@ urlpatterns = [
     url(r'^about/$', views.about, name='about'),
     url(r'^topics/$', views.topics, name='topics'),
     url(r'^registration/$', views.registration, name='registration')
+    url(r'^teams/$', views.teams, name='teams'),
+    url(r'^teams/add/$', views.add_team, name='add_team')
 ]

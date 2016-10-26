@@ -35,5 +35,5 @@ class Student(models.Model):
         (COMBINATORICS, "Combinatorics")
     )
 
-    category1 = models.CharField(max_length=2, choices=SUBJECTS)
-    category2 = models.CharField(max_length=2, choices=SUBJECTS)
+    subject1 = models.CharField(max_length=2, choices=SUBJECTS, verbose_name="Subject 1")
+    subject2 = models.CharField(max_length=2, choices=SUBJECTS, verbose_name="Subject 2")

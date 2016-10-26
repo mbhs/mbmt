@@ -4,16 +4,23 @@
 
 {% block content %}
 
-<h2 class="lowerer">Sponsor Login</h2>
+<h2 class="lowerer">Team</h2>
+
 
 <form name="registration" data-toggle="validator" role="form" method="post">
     <script src="{% static "js/validator.min.js" %}"></script>
 
-    {% crispy form %}
+    {% crispy team_form %}
+
+    {{ student_forms.management_form|crispy }}
+    {% for form in student_forms %}
+        <h3>Student {{ forloop.counter }}</h3>
+        {% crispy form student_helper %}
+    {% endfor %}
 
     <div class="form-group">
         <input id="submit" type="submit" value="Finish" class="btn btn-primary right"/>
-        <input id="cancel" type="button" value="Cancel" class="btn btn-secondary right" onclick="window.location = {% url 'index' %};"/>
+        <input id="cancel" type="button" value="Cancel" class="btn btn-secondary right" onclick="window.location = {% url 'teams' %};"/>
     </div>
 </form>
 
