@@ -18,6 +18,14 @@ def rules(request):
     return render(request, "rules.html")
 
 
+def topics(request):
+    return render(request, "topics.html")
+
+
+def registration(request):
+    return render(request, "registration.html")
+
+
 def register(request):
     form = forms.RegisterForm()
 

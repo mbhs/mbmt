@@ -2,6 +2,10 @@
     .container { max-width: 940px; }
 }
 
+body {
+    margin-bottom: 4em;
+}
+
 form { margin: 1.5em auto; }
 label { display: block; }
 
@@ -27,7 +31,7 @@ input {
 #cancel { margin-right: 1em; width: 90px; }
 
 .lower { margin-top: 1em; }
-.lowerer { margin-top: 1.5em; }
+.lowerer { margin-top: 0.5em; }
 
 .title { 
     text-align: center; 
@@ -49,4 +53,30 @@ input {
 
 .asteriskField {
     display: none;
+}
+
+ol.top > li {
+    margin-top: 0.3em;
+}
+
+/* .red { color: red; } */
+
+table.schedule {
+    font-size: 14px;
+}
+
+table.schedule td {
+    padding-top: 1px;
+    padding-bottom: 1px;
+}
+
+table.schedule td:first-of-type {
+    padding-left: 10px;
+    padding-right: 10px;
+    border-right: 1px solid black;
+    text-align: right;
+}
+
+table.schedule td:last-of-type {
+    padding-left: 10px;
 }
