@@ -7,6 +7,7 @@
         <link rel="stylesheet" type="text/css" href="{% static "css/bootstrap.min.css" %}">
         <link rel="stylesheet" type="text/css" href="{% static "css/master.css" %}">
         <script type="text/javascript" src="{% static "js/jquery.min.js" %}"></script>
+        <script type="text/javascript" src="{% static "js/bootstrap.min.js" %}"></script>
     </head>
     <body>
         <nav id="menu" class="navbar navbar-default navbar-static-top navbar-xs">
@@ -18,7 +19,14 @@
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     {% if request.user.is_authenticated %}
-                        <li><a href="{% url 'teams' %}">My Teams</a></li>
+                        {% if perms.app.can_grade %}
+                            <li><a href="{% url 'grade' %}">Grading</a></li>
+                        {% else %}
+                            <li><a href="{% url 'teams' %}">My Teams</a></li>
+                        {% endif %}
+
+                        <li><a href="{% url 'logout' %}">Logout
+                        </a></li>
                     {% else %}
                         <li><a href="{% url 'register' %}">Register</a></li>
                         <li><a href="{% url 'login' %}">Login</a></li>

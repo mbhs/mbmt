@@ -51,13 +51,19 @@ def login(request):
         form = forms.LoginForm(request.POST)
 
         if form.is_valid():
-            auth.login(request, form.school)
+            auth.login(request, form.user)
 
-            return redirect("index.html")
+            return redirect('index')
 
     return render(request, "login.html", {
         'form': form
     })
+
+
+def logout(request):
+    auth.logout(request)
+
+    return redirect('index')
 
 
 @login_required
@@ -91,4 +97,12 @@ def add_team(request):
         'team_form': team_form,
         'student_helper': forms.PrettyHelper(),
         'student_forms': student_forms
+    })
+
+
+@login_required
+def grade(request):
+    return render(request, "grade.html", {
+        'teams': models.Team.objects.all(),
+        'students': models.Student.objects.all()
     })

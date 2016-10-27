@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block content %}
+
+<div class="form-group">
+    <label for="search">Search:</label>
+    <input class="form-control" id="search" name="search" oninput="update();">
+</div>
+
+<br/>
+
+<div>
+    <ul class="nav nav-tabs nav-justified" role="tablist">
+        <li role="presentation" class="active"><a href="#students" aria-controls="students" role="tab" data-toggle="tab">Students</a></li>
+        <li role="presentation"><a href="#teams" aria-controls="teams" role="tab" data-toggle="tab">Teams</a></li>
+    </ul>
+
+    <div class="tab-content">
+        <div role="tabpanel" class="tab-pane active" id="students">
+            <table class="table table-striped table-hover">
+                <tr>
+                    <th>Name</th>
+                    <th>School</th>
+                    <th>Scores</th>
+                </tr>
+
+                {% for student in students %}
+                    <tr>
+                        <td>{{ student.name }}</td>
+                        <td>{{ student.team.school.name }} {{ student.team.school.id }}</td>
+                        <td></td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+
+        <div role="tabpanel" class="tab-pane" id="teams">
+            <table class="table table-striped table-hover">
+                <tr>
+                    <th>Name</th>
+                    <th>Number</th>
+                    <th>School</th>
+                    <th>Scores</th>
+                </tr>
+
+                {% for team in teams %}
+                    <tr>
+                        <td>{{ team.name }}</td>
+                        <td>{{ team.id }}</td>
+                        <td>{{ team.school.name }}</td>
+                        <td>{{ team.scores }}</td>
+                        <td></td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" src="{% static "js/grade.js" %}"></script>
+{% endblock %}

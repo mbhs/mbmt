@@ -18,9 +18,14 @@ class Team(models.Model):
     name = models.CharField(max_length=256)
     school = models.ForeignKey(School, related_name="teams")
 
+    class Meta:
+        permissions = (
+            ('can_grade', "Can grade student answers"),
+        )
+
 
 class Student(models.Model):
-    name = models.CharField(max_length=256)
+    name = models.CharField(max_length=256, blank=True)
     team = models.ForeignKey(Team, related_name="students")
 
     ALGEBRA = 'AL'
@@ -35,5 +40,5 @@ class Student(models.Model):
         (COMBINATORICS, "Combinatorics")
     )
 
-    subject1 = models.CharField(max_length=2, choices=SUBJECTS, verbose_name="Subject 1")
-    subject2 = models.CharField(max_length=2, choices=SUBJECTS, verbose_name="Subject 2")
+    subject1 = models.CharField(max_length=2, blank=True, choices=SUBJECTS, verbose_name="Subject 1")
+    subject2 = models.CharField(max_length=2, blank=True, choices=SUBJECTS, verbose_name="Subject 2")

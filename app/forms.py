@@ -1,4 +1,4 @@
-from django.forms import Form, ModelForm, ValidationError, CharField, inlineformset_factory, BaseInlineFormSet
+from django.forms import Form, ModelForm, ValidationError, CharField, inlineformset_factory, BaseInlineFormSet, PasswordInput
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
 
@@ -40,16 +40,14 @@ StudentFormSet = inlineformset_factory(models.Team, models.Student, fields=['nam
                                        can_delete=False, extra=5, formset=StudentInlineFormSet)
 
 
-class LoginForm(PrettyForm, ModelForm):
-    class Meta:
-        model = models.School
-        fields = ['code']
+class LoginForm(PrettyForm):
+    username = CharField()
+    password = CharField(widget=PasswordInput)
 
-    def clean_code(self):
-        data = self.cleaned_data['code']
-        self.school = authenticate(code=data)
+    def clean(self):
+        self.user = authenticate(username=self.cleaned_data['username'], password=self.cleaned_data['password'])
 
-        if self.school is None:
-            raise ValidationError("Token not found!")
+        if self.user is None:
+            raise ValidationError("Login was unsuccessful!")
 
-        return data
+        return self.cleaned_data

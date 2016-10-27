@@ -8,8 +8,6 @@
 
 
 <form name="registration" data-toggle="validator" role="form" method="post">
-    <script src="{% static "js/validator.min.js" %}"></script>
-
     {% crispy team_form %}
 
     {{ student_forms.management_form|crispy }}
