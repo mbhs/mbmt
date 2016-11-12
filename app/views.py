@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib import auth
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.models import User
 
 from app import forms, models
@@ -109,8 +109,15 @@ def add_team(request):
 
 
 @login_required
+@permission_required('app.can_grade')
 def grade(request):
     return render(request, "grade.html", {
         'teams': models.Team.objects.all(),
         'students': models.Student.objects.all()
     })
+
+
+@login_required
+@permission_required('app.can_grade')
+def score(request, type, id):
+    print("SCORING", type, id)

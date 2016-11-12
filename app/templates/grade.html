@@ -22,14 +22,18 @@
                 <tr>
                     <th>Name</th>
                     <th>School</th>
-                    <th>Scores</th>
+                    <th>Team</th>
+                    <th>Subject 1</th>
+                    <th>Subject 2</th>
                 </tr>
 
                 {% for student in students %}
                     <tr>
                         <td>{{ student.name }}</td>
                         <td>{{ student.team.school.name }} {{ student.team.school.id }}</td>
-                        <td></td>
+                        <td>{{ student.team.name }}</td>
+                        <td>{{ student.subject1 }} {{ student.score1.args }} <a href="{% url 'score' type='subject1' id=student.id %}">(edit)</a></td>
+                        <td>{{ student.subject2 }} {{ student.score2.args }} <a href="{% url 'score' type='subject2' id=student.id %}">(edit)</a></td>
                     </tr>
                 {% endfor %}
             </table>
@@ -41,7 +45,8 @@
                     <th>Name</th>
                     <th>Number</th>
                     <th>School</th>
-                    <th>Scores</th>
+                    <th>Team</th>
+                    <th>Guts</th>
                 </tr>
 
                 {% for team in teams %}
@@ -49,8 +54,8 @@
                         <td>{{ team.name }}</td>
                         <td>{{ team.id }}</td>
                         <td>{{ team.school.name }}</td>
-                        <td>{{ team.scores }}</td>
-                        <td></td>
+                        <td><a href="{% url 'score' type='team' id=team.id %}">(edit)</a></td>
+                        <td><a href="{% url 'score' type='guts' id=team.id %}">(edit)</a></td>
                     </tr>
                 {% endfor %}
             </table>

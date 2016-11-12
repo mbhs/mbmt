@@ -1,4 +1,4 @@
-from django.forms import Form, ModelForm, ValidationError, CharField, inlineformset_factory, BaseInlineFormSet, PasswordInput
+from django import forms
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
 
@@ -14,40 +14,46 @@ class PrettyHelper(FormHelper):
         self.html5_required = True
 
 
-class PrettyForm(Form):
+class PrettyForm(forms.Form):
     helper = PrettyHelper()
 
 
-class RegisterForm(PrettyForm, ModelForm):
-    school_name = CharField(max_length=256)
+class RegisterForm(PrettyForm, forms.ModelForm):
+    school_name = forms.CharField(max_length=256)
 
     class Meta:
         model = User
         fields = ['username', 'first_name', 'last_name', 'email', 'password', 'email']
 
 
-class TeamForm(PrettyForm, ModelForm):
+class TeamForm(PrettyForm, forms.ModelForm):
     class Meta:
         model = models.Team
         fields = ['name']
 
 
-class StudentInlineFormSet(BaseInlineFormSet):
+class StudentInlineFormSet(forms.BaseInlineFormSet):
     pass
 
 
-StudentFormSet = inlineformset_factory(models.Team, models.Student, fields=['name', 'subject1', 'subject2'],
+StudentFormSet = forms.inlineformset_factory(models.Team, models.Student, fields=['name', 'subject1', 'subject2'],
                                        can_delete=False, extra=5, formset=StudentInlineFormSet)
 
 
 class LoginForm(PrettyForm):
-    username = CharField()
-    password = CharField(widget=PasswordInput)
+    username = forms.CharField()
+    password = forms.CharField(widget=forms.PasswordInput)
 
     def clean(self):
         self.user = authenticate(username=self.cleaned_data['username'], password=self.cleaned_data['password'])
 
         if self.user is None:
-            raise ValidationError("Login was unsuccessful!")
+            raise forms.ValidationError("Login was unsuccessful!")
 
         return self.cleaned_data
+
+
+class QuestionsField(forms.Field):
+    def __init__(self, schema, **kwargs):
+        self.schema = schema
+        super(QuestionsField, self).__init__(**kwargs)
