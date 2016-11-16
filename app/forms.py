@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
 
 from app import models
 
@@ -20,10 +21,18 @@ class PrettyForm(forms.Form):
 
 class RegisterForm(PrettyForm, forms.ModelForm):
     school_name = forms.CharField(max_length=256)
+    password = forms.CharField(widget=forms.PasswordInput)
+    password_duplicate = forms.CharField(widget=forms.PasswordInput, label='Enter password again')
+    def clean(self):
+        cleaned_data = super(RegisterForm, self).clean()
+        if cleaned_data.get('password') != cleaned_data.get('password_duplicate'):
+            raise ValidationError('Passwords do not match')
+        return cleaned_data
 
     class Meta:
         model = User
-        fields = ['username', 'first_name', 'last_name', 'email', 'password', 'email']
+        fields = ['username', 'first_name', 'last_name', 'email', 'email']
+
 
 
 class TeamForm(PrettyForm, forms.ModelForm):
