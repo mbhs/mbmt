@@ -27,51 +27,50 @@ def registration(request):
 
 
 def register(request):
-    form = forms.RegisterForm()
+    """The registration page for school sponsors."""
 
-    if request.method == 'POST':
+    # Assert post and form is valid
+    if request.method == "POST":
         form = forms.RegisterForm(request.POST)
-
         if form.is_valid():
-            user = User.objects.create_user(form.cleaned_data['username'],
-                                            email=form.cleaned_data['email'],
-                                            password=form.cleaned_data['password'],
-                                            first_name=form.cleaned_data['first_name'],
-                                            last_name=form.cleaned_data['last_name'])
 
-            school = models.School(user=user, name=form.cleaned_data['school_name'])
+            # Create user and school
+            user = User.objects.create_user(
+                form.cleaned_data["username"],
+                    email=form.cleaned_data["email"],
+                    password=form.cleaned_data["password"],
+                    first_name=form.cleaned_data["first_name"],
+                    last_name=form.cleaned_data["last_name"])
+            school = models.School(user=user, name=form.cleaned_data["school_name"])
             school.save()
 
-            user = auth.authenticate(username=user.get_username(), password=form.cleaned_data['password'])
+            # Login the user and redirect
+            user = auth.authenticate(username=user.get_username(), password=form.cleaned_data["password"])
             auth.login(request, user)
+            return redirect("index")
 
-            return redirect('index')
-
-    return render(request, "register.html", {
-        'form': form
-    })
+    # Render the form to the page
+    form = forms.RegisterForm()
+    return render(request, "register.html", {"form": form})
 
 
 def login(request):
+    """Process a login request."""
+
     form = forms.LoginForm()
-
-    if request.method == 'POST':
+    if request.method == "POST":
         form = forms.LoginForm(request.POST)
-
         if form.is_valid():
             auth.login(request, form.user)
+            return redirect("index")
 
-            return redirect('index')
-
-    return render(request, "login.html", {
-        'form': form
-    })
+    return render(request, "login.html", {"form": form})
 
 
 def logout(request):
     auth.logout(request)
 
-    return redirect('index')
+    return redirect("index")
 
 
 @login_required
@@ -84,7 +83,7 @@ def add_team(request):
     team_form = forms.TeamForm()
     student_forms = forms.StudentFormSet()
 
-    if request.method == 'POST':
+    if request.method == "POST":
         team_form = forms.TeamForm(request.POST)
         student_forms = forms.StudentFormSet(request.POST)
 
@@ -99,25 +98,25 @@ def add_team(request):
                 student.team = team
                 student.save()
 
-            return redirect('teams')
+            return redirect("teams")
 
     return render(request, "team.html", {
-        'team_form': team_form,
-        'student_helper': forms.PrettyHelper(),
-        'student_forms': student_forms
+        "team_form": team_form,
+        "student_helper": forms.PrettyHelper(),
+        "student_forms": student_forms
     })
 
 
 @login_required
-@permission_required('app.can_grade')
+@permission_required("app.can_grade")
 def grade(request):
     return render(request, "grade.html", {
-        'teams': models.Team.objects.all(),
-        'students': models.Student.objects.all()
+        "teams": models.Team.objects.all(),
+        "students": models.Student.objects.all()
     })
 
 
 @login_required
-@permission_required('app.can_grade')
+@permission_required("app.can_grade")
 def score(request, type, id):
     print("SCORING", type, id)
