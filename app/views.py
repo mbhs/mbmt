@@ -52,7 +52,7 @@ def register(request):
 
     # Render the form to the page
     form = forms.RegisterForm()
-    return render(request, "register.html", {"form": form})
+    return render(request, "register.html", {"form": form, "no_splash": True})
 
 
 def login(request):
@@ -65,7 +65,7 @@ def login(request):
             auth.login(request, form.user)
             return redirect("index")
 
-    return render(request, "login.html", {"form": form})
+    return render(request, "login.html", {"form": form, "no_splash": True})
 
 
 def logout(request):

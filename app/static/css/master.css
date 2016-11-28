@@ -1,9 +1,22 @@
-/*@media (min-width: 1200px) {*/
-    /*.container { max-width: 940px; }*/
-/*}*/
-
 body {
+    margin-top: 50px;
     margin-bottom: 4em;
+}
+
+#menu {
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+#splash {
+    width: 100%;
+    box-sizing: border-box;
+    margin-bottom: 2em;
+}
+
+#content {
+    max-width: 720px;
+    margin-top: 0;
 }
 
 form { margin: 1.5em auto; }
@@ -32,6 +45,7 @@ input {
 
 .lower { margin-top: 1em; }
 .lowerer { margin-top: 0.5em; }
+.lowererer { margin-top: 3em; }
 
 .title { 
     text-align: center; 
