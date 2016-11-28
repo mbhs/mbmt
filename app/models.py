@@ -4,15 +4,15 @@ from django.db import models
 
 
 SUBJECT_CHOICES = (
-    ("AL", "Algebra"),
-    ("NT", "Number Theory"),
-    ("GE", "Geometry"),
-    ("CO", "Combinatorics")
+    ("al", "Algebra"),
+    ("nu", "Number Theory"),
+    ("ge", "Geometry"),
+    ("co", "Combinatorics")
 )
 
 QUESTION_TYPES = (
-    ("B", "Boolean"),
-    ("R", "Estimation")
+    ("co", "Correct"),
+    ("es", "Estimation")
 )
 
 
@@ -57,22 +57,47 @@ class Student(models.Model):
 class Competition(models.Model):
     """An competition question container."""
 
-    name = models.CharField(max_length=256)
+    name = models.CharField(max_length=128)
     year = models.IntegerField()
+
+    def __init__(self, name, year):
+        """Initialize a new competition."""
+
+        super().__init__()
+        self.name = name
+        self.year = year
 
 
 class Round(models.Model):
     """A single competition round."""
 
-    individual = models.BooleanField()
     competition = models.ForeignKey(Competition, related_name="rounds")
+    name = models.CharField(max_length=64)
+    individual = models.BooleanField()
+
+    def __init__(self, competition, name, individual):
+        """Initialize a new round."""
+
+        super().__init__()
+        self.competition = competition
+        self.name = name
+        self.individual = individual
 
 
 class Question(models.Model):
     """A question container model."""
 
-    type = models.CharField(max_length=1, choices=QUESTION_TYPES)
     round = models.ForeignKey(Round, related_name="questions")
+    label = models.CharField(max_length=32)
+    type = models.CharField(max_length=2, choices=QUESTION_TYPES)
+
+    def __init__(self, round, label, type):
+        """Initialize a new question."""
+
+        super().__init__()
+        self.round = round
+        self.label = label
+        self.type = type
 
 
 class Answer(models.Model):
@@ -82,3 +107,8 @@ class Answer(models.Model):
     student = models.ForeignKey(Student, related_name="answers")
     team = models.ForeignKey(Team, related_name="answers")
     value = models.FloatField()
+
+    def points(self):
+        """Calculate the raw number of points received for the question."""
+
+        return self.value

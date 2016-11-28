@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.models import User
 
 from app import forms, models
+from app import competition
 
 
 def index(request):

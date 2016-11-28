@@ -1,0 +1,136 @@
+name: MBMT 2017
+rounds:
+  - name: Individual Round 1
+    individual: true
+    questions:
+      - label: 1
+        type: correct
+      - label: 2
+        type: correct
+      - label: 3
+        type: correct
+      - label: 4
+        type: correct
+      - label: 5
+        type: correct
+      - label: 6
+        type: correct
+      - label: 7
+        type: correct
+      - label: 8
+        type: correct
+  - name: Individual Round 2
+    individual: true
+    questions:
+      - label: 1
+        type: correct
+      - label: 2
+        type: correct
+      - label: 3
+        type: correct
+      - label: 4
+        type: correct
+      - label: 5
+        type: correct
+      - label: 6
+        type: correct
+      - label: 7
+        type: correct
+      - label: 8
+        type: correct
+  - name: Team Round
+    individual: false
+    questions:
+      - label: 1
+        type: correct
+      - label: 2
+        type: correct
+      - label: 3
+        type: correct
+      - label: 4
+        type: correct
+      - label: 5
+        type: correct
+      - label: 6
+        type: correct
+      - label: 7
+        type: correct
+      - label: 8
+        type: correct
+      - label: 9
+        type: correct
+      - label: 10
+        type: correct
+      - label: 11
+        type: correct
+      - label: 12
+        type: correct
+      - label: 13
+        type: correct
+      - label: 14
+        type: correct
+      - label: 15
+        type: correct
+  - name: Guts Round
+    individual: false
+    questions:
+      - label: 1
+        type: correct
+      - label: 2
+        type: correct
+      - label: 3
+        type: correct
+      - label: 4
+        type: correct
+      - label: 5
+        type: correct
+      - label: 6
+        type: correct
+      - label: 7
+        type: correct
+      - label: 8
+        type: correct
+      - label: 9
+        type: correct
+      - label: 10
+        type: correct
+      - label: 11
+        type: correct
+      - label: 12
+        type: correct
+      - label: 13
+        type: correct
+      - label: 14
+        type: correct
+      - label: 15
+        type: correct
+      - label: 16
+        type: correct
+      - label: 17
+        type: correct
+      - label: 18
+        type: correct
+      - label: 19
+        type: correct
+      - label: 20
+        type: correct
+      - label: 21
+        type: correct
+      - label: 22
+        type: correct
+      - label: 23
+        type: correct
+      - label: 24
+        type: correct
+      - label: 25
+        type: correct
+      - label: 26
+        type: estimation
+      - label: 27
+        type: estimation
+      - label: 28
+        type: estimation
+      - label: 29
+        type: estimation
+      - label: 30
+        type: estimation
