@@ -1,6 +1,7 @@
 body {
     margin-top: 50px;
-    margin-bottom: 4em;
+    margin-bottom: 2em;
+    overflow-y: scroll;
 }
 
 #menu {
@@ -11,7 +12,7 @@ body {
 #splash {
     width: 100%;
     box-sizing: border-box;
-    margin-bottom: 2em;
+    margin-bottom: 1em;
 }
 
 #content {

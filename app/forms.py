@@ -41,7 +41,8 @@ class RegisterForm(PrettyForm, forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ['username', 'first_name', 'last_name', 'email', 'email']
+        email = {"required": True}
+        fields = ["email", "first_name", "last_name"]
 
 
 class TeamForm(PrettyForm, forms.ModelForm):
