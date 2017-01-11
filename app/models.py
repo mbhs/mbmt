@@ -1,6 +1,7 @@
 """Models for the competition and response."""
 
 from django.db import models
+from django.contrib.auth.models import User
 
 
 SUBJECT_CHOICES = (
@@ -20,8 +21,7 @@ class School(models.Model):
     """A simple school model that is represented by a teacher."""
 
     name = models.CharField(max_length=256)
-    email = models.EmailField()
-    user = models.OneToOneField('auth.User', related_name="school")
+    user = models.OneToOneField(User, related_name="school")
 
     def __str__(self):
         """Represent the school as a string."""

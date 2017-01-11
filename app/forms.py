@@ -25,8 +25,14 @@ class PrettyForm(forms.Form):
 
 
 class RegisterForm(PrettyForm, forms.ModelForm):
-    """School sponsor registration form."""
+    """School sponsor registration form.
 
+    To simplify registration and team management, the username field
+    has effectively been replaced by the email field. In other words,
+    users log in with their emails. This form makes that work.
+    """
+
+    username = forms.EmailField(max_length=64, label="Email address")
     school_name = forms.CharField(max_length=256)
     password = forms.CharField(widget=forms.PasswordInput)
     password_duplicate = forms.CharField(widget=forms.PasswordInput, label='Enter password again')
@@ -41,31 +47,46 @@ class RegisterForm(PrettyForm, forms.ModelForm):
 
     class Meta:
         model = User
-        email = {"required": True}
-        fields = ["email", "first_name", "last_name"]
+        exclude = ["email"]
+        fields = ["username", "password", "password_duplicate", "first_name", "last_name", "school_name"]
 
 
 class TeamForm(PrettyForm, forms.ModelForm):
+    """Form for creating a new team."""
+
     class Meta:
         model = models.Team
-        fields = ['name']
+        fields = ["name"]
 
 
-class StudentInlineFormSet(forms.BaseInlineFormSet):
-    pass
+class StudentForm(forms.ModelForm):
+
+    def is_valid(self):
+        """Clean and validate student data."""
+
+        is_valid = super().is_valid()
+        if self.cleaned_data["name"].strip():
+            is_valid = is_valid and self.cleaned_data["subject1"] != self.cleaned_data["subject2"]
+        return is_valid
+
+    class Meta:
+        model = models.Student
+        fields = ["name", "subject1", "subject2"]
 
 
-StudentFormSet = forms.inlineformset_factory(
-    models.Team,
+StudentFormSet = forms.modelformset_factory(
     models.Student,
-    fields=['name', 'subject1', 'subject2'],
-    can_delete=False,
-    extra=5,
-    formset=StudentInlineFormSet)
+    form=StudentForm,
+    min_num=5,
+    max_num=5)
 
 
 class LoginForm(PrettyForm):
-    """Login form for graders and sponsors."""
+    """Login form for graders and sponsors.
+
+    Note that as a result of the registration process, usernames
+    conform to email field standards. Login still works.
+    """
 
     username = forms.CharField()
     password = forms.CharField(widget=forms.PasswordInput)

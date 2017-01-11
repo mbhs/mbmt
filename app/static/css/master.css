@@ -12,12 +12,11 @@ body {
 #splash {
     width: 100%;
     box-sizing: border-box;
-    margin-bottom: 1em;
 }
 
 #content {
     max-width: 720px;
-    margin-top: 0;
+    margin-top: 1em;
 }
 
 form { margin: 1.5em auto; }
@@ -94,4 +93,15 @@ table.schedule td:first-of-type {
 
 table.schedule td:last-of-type {
     padding-left: 10px;
+}
+
+
+table#teams {
+    margin-top: 1em;
+}
+
+table#teams ul {
+    margin-bottom: 0;
+    padding-left: 0px;
+    list-style-type: none;
 }

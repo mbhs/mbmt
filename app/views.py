@@ -38,7 +38,7 @@ def register(request):
             # Create user and school
             user = User.objects.create_user(
                 form.cleaned_data["username"],
-                    email=form.cleaned_data["email"],
+                    email=form.cleaned_data["username"],
                     password=form.cleaned_data["password"],
                     first_name=form.cleaned_data["first_name"],
                     last_name=form.cleaned_data["last_name"])
@@ -58,54 +58,102 @@ def register(request):
 def login(request):
     """Process a login request."""
 
+    # Check if the form is valid
     form = forms.LoginForm()
     if request.method == "POST":
         form = forms.LoginForm(request.POST)
         if form.is_valid():
             auth.login(request, form.user)
-            return redirect("index")
+            return redirect("teams")
 
     return render(request, "login.html", {"form": form, "no_splash": True})
 
 
+@login_required
 def logout(request):
-    auth.logout(request)
+    """Logout the currently logged in user."""
 
+    auth.logout(request)
     return redirect("index")
 
 
 @login_required
 def teams(request):
-    return render(request, "teams.html")
+    return render(request, "teams.html", {"no_splash": True})
 
 
 @login_required
-def add_team(request):
-    team_form = forms.TeamForm()
-    student_forms = forms.StudentFormSet()
+def edit_team(request):
+    """Add a team to the list."""
 
+    team = None
+    students = models.User.objects.none()
+    editing_existing = False
+    if request.GET.get("id"):
+        team = models.Team.objects.filter(id=request.GET["id"]).first()
+        if team:
+            editing_existing = True
+            students = team.students.all()
+
+    error_message = None
+
+    # Register a team from posted data
     if request.method == "POST":
-        team_form = forms.TeamForm(request.POST)
-        student_forms = forms.StudentFormSet(request.POST)
 
+        # Validate data
+        team_form = forms.TeamForm(request.POST, instance=team)
+        student_forms = forms.StudentFormSet(request.POST, queryset=students)
+
+        # Check validity and create team
         if team_form.is_valid() and student_forms.is_valid():
-            team = team_form.save(commit=False)
-            team.school = request.user.school
-            team.save()
 
-            students = student_forms.save(commit=False)
+            # Dirty fix for making sure there are more than 0 teams
+            is_valid = True
 
-            for student in students:
-                student.team = team
-                student.save()
+            # If not editing existing
+            if not editing_existing:
+                team = team_form.save(commit=False)
+                team.school = request.user.school
+                team.save()
+                students = student_forms.save(commit=False)
+                for student in students:
+                    student.team = team
+                    student.save()
+            else:
+                team = team_form.save()
+                form_students = list(student_forms.save(commit=False))
+                if len(form_students) == 0:
+                    is_valid = False
+                    error_message = "Invalid form: must have at least one student."
+                for student in form_students:
+                    student.team = team
+                    student.save()
 
-            return redirect("teams")
+            # Redirect
+            if is_valid:
+                return redirect("teams")
 
+        # Error message
+        else:
+            error_message = "Invalid form: make sure there are no duplicate subject tests."
+
+    # Render the form view
     return render(request, "team.html", {
-        "team_form": team_form,
+        "team_form": forms.TeamForm(instance=team),
+        "student_forms": forms.StudentFormSet(queryset=students),
         "student_helper": forms.PrettyHelper(),
-        "student_forms": student_forms
+        "error_message": error_message,
+        "no_splash": True,
     })
+
+
+@login_required
+def remove_team(request):
+    """Remove the team."""
+
+    if request.GET["id"]:
+        models.Team.objects.filter(id=request.GET["id"]).delete()
+    return redirect("teams")
 
 
 @login_required
@@ -113,7 +161,8 @@ def add_team(request):
 def grade(request):
     return render(request, "grade.html", {
         "teams": models.Team.objects.all(),
-        "students": models.Student.objects.all()
+        "students": models.Student.objects.all(),
+        "no_splash": True,
     })
 
 
