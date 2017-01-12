@@ -2,7 +2,6 @@
 
 body {
     margin-top: 50px;
-    margin-bottom: 2em;
     overflow-y: scroll;
     font-family: 'Roboto';
 }
@@ -62,13 +61,13 @@ h1.title {
 
 span.title-left {
     background-color: red;
-    color: #E8E8E8;
+    color: lightgray;
     padding: 0 .2em;
     border-radius: .2em 0 0 .2em;
 }
 
 span.title-right {
-    background-color: #E8E8E8;
+    background-color: lightgray;
     color: red;
     padding: 0 .2em;
     border-radius: 0 .2em .2em 0;
@@ -130,4 +129,16 @@ table#teams ul {
     margin-bottom: 0;
     padding-left: 0px;
     list-style-type: none;
+}
+
+div.about-person img {
+    border-radius: 50%;
+    width: 100%;
+}
+
+footer {
+    margin-top: 2em;
+    padding: 1em;
+    background-color: #f5f5f5;
+    text-align: center;
 }

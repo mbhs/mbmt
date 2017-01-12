@@ -11,6 +11,10 @@ def index(request):
     return render(request, "index.html")
 
 
+def info(request):
+    return render(request, "info.html")
+
+
 def about(request):
     return render(request, "about.html")
 
