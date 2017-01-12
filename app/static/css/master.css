@@ -22,7 +22,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 #content {
-    max-width: 720px;
+    /*max-width: 720px;*/
     margin-top: 1em;
 }
 
@@ -54,10 +54,29 @@ input {
 .lowerer { margin-top: 0.5em; }
 .lowererer { margin-top: 3em; }
 
-.title { 
-    text-align: center; 
-    font-size: 56px; 
-    margin-bottom: 0;
+h1.title {
+    font-size: 10em;
+    text-align: center;
+    padding: .2em;
+}
+
+span.title-left {
+    background-color: red;
+    color: #E8E8E8;
+    padding: 0 .2em;
+    border-radius: .2em 0 0 .2em;
+}
+
+span.title-right {
+    background-color: #E8E8E8;
+    color: red;
+    padding: 0 .2em;
+    border-radius: 0 .2em .2em 0;
+}
+
+p.main-text {
+    text-align: center;
+    font-size: 2em;
 }
 
 .tagline { 
@@ -66,11 +85,11 @@ input {
     margin-top: 0; 
 }
 
-.center {
-    max-width: 720px;
-    text-align: center;
-    margin: 2em auto;
-}
+/*.center {*/
+    /*max-width: 720px;*/
+    /*text-align: center;*/
+    /*margin: 2em auto;*/
+/*}*/
 
 .asteriskField {
     display: none;
