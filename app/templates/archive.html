@@ -1,11 +1,12 @@
 {% extends "base.html" %}
+{% load staticfiles %}
 
 {% block content %}
 
 <h1 class="lowerer">Archive</h1>
 
 Here we're keeping all of past year's problems and solutions, as well as contest results. Some years might be missing
-a round since we haven't done every round every year.
+a round since we haven't done every round every year. In each year, the more difficult division is listed second.
 
 <br/><br/>
 
@@ -15,35 +16,64 @@ a round since we haven't done every round every year.
             <tr>
                 <th>Year</th>
                 <th>Division</th>
-                <th>Results</th>
                 <th>Algebra</th>
                 <th>Geometry</th>
-                <th>Combinatorics</th>
+                <th>Counting</th>
                 <th>Number Theory</th>
                 <th>Sprint</th>
                 <th>Team</th>
-                <th>Guts</th>
                 <th>Fun</th>
+                <th>Guts</th>
             </tr>
         </thead>
 
         <tbody>
             <tr>
-                <td rowspan="2">2016</td>
-                <td>Euclid</td>
+                <th rowspan="2">2016</th>
+                <th>Euclid</th>
+                <td><a href="{% static 'archive/2016/euclid/alg.pdf' %}" target="_blank">Problems</a></td>
+                <td><a href="{% static 'archive/2016/euclid/geo.pdf' %}" target="_blank">Problems</a></td>
+                <td><a href="{% static 'archive/2016/euclid/cp.pdf' %}" target="_blank">Problems</a></td>
+                <td><a href="{% static 'archive/2016/euclid/nt.pdf' %}" target="_blank">Problems</a></td>
+                <td><a href="{% static 'archive/2016/euclid/sprint.pdf' %}" target="_blank">Problems</a></td>
+                <td><a href="{% static 'archive/2016/euclid/team.pdf' %}" target="_blank">Problems</a></td>
+                <td>N/A</td>
+                <td rowspan="2"><a href="{% static 'archive/2016/guts.pdf' %}" target="_blank">Problems</a></td>
             </tr>
 
             <tr>
-                <td>Lobachevsky</td>
+                <th>Lobachevsky</th>
+                <td><a href="{% static 'archive/2016/lobachevsky/alg.pdf' %}" target="_blank">Problems</a></td>
+                <td><a href="{% static 'archive/2016/lobachevsky/geo.pdf' %}" target="_blank">Problems</a></td>
+                <td><a href="{% static 'archive/2016/lobachevsky/cp.pdf' %}" target="_blank">Problems</a></td>
+                <td><a href="{% static 'archive/2016/lobachevsky/nt.pdf' %}" target="_blank">Problems</a></td>
+                <td><a href="{% static 'archive/2016/lobachevsky/sprint.pdf' %}" target="_blank">Problems</a></td>
+                <td><a href="{% static 'archive/2016/lobachevsky/team.pdf' %}" target="_blank">Problems</a></td>
+                <td>N/A</td>
             </tr>
 
             <tr>
-                <td rowspan="2">2015</td>
-                <td>Euler</td>
+                <th rowspan="2">2015</th>
+                <th>Fermat</th>
+                <td><a href="{% static 'archive/2015/fermat/alg.pdf' %}" target="_blank">Problems</a></td>
+                <td><a href="{% static 'archive/2015/fermat/geo.pdf' %}" target="_blank">Problems</a></td>
+                <td><a href="{% static 'archive/2015/fermat/cp.pdf' %}" target="_blank">Problems</a></td>
+                <td><a href="{% static 'archive/2015/fermat/nt.pdf' %}" target="_blank">Problems</a></td>
+                <td><a href="{% static 'archive/2015/fermat/sprint.pdf' %}" target="_blank">Problems</a></td>
+                <td><a href="{% static 'archive/2015/fermat/team.pdf' %}" target="_blank">Problems</a></td>
+                <td>N/A</td>
+                <td rowspan="2"><a href="{% static 'archive/2015/guts.pdf' %}" target="_blank">Problems</a></td>
             </tr>
 
             <tr>
-                <td>Fermat</td>
+                <th>Euler</th>
+                <td><a href="{% static 'archive/2015/euler/alg.pdf' %}" target="_blank">Problems</a></td>
+                <td><a href="{% static 'archive/2015/euler/geo.pdf' %}" target="_blank">Problems</a></td>
+                <td><a href="{% static 'archive/2015/euler/cp.pdf' %}" target="_blank">Problems</a></td>
+                <td><a href="{% static 'archive/2015/euler/nt.pdf' %}" target="_blank">Problems</a></td>
+                <td><a href="{% static 'archive/2015/euler/sprint.pdf' %}" target="_blank">Problems</a></td>
+                <td><a href="{% static 'archive/2015/euler/team.pdf' %}" target="_blank">Problems</a></td>
+                <td>N/A</td>
             </tr>
         </tbody>
 </table>

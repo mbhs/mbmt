@@ -57,6 +57,7 @@ h1.title {
     font-size: 10vw;
     text-align: center;
     padding: .2em;
+    user-select: none;
 }
 
 span.title-left {
