@@ -19,6 +19,10 @@ def about(request):
     return render(request, "about.html")
 
 
+def archive(request):
+    return render(request, "archive.html")
+
+
 def rules(request):
     return render(request, "rules.html")
 

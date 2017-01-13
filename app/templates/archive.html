@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1 class="lowerer">Archive</h1>
+
+Here we're keeping all of past year's problems and solutions, as well as contest results. Some years might be missing
+a round since we haven't done every round every year.
+
+<br/><br/>
+
+<table class="table table-hover table-striped">
+    <thead>
+        <tr>
+            <th>Year</th>
+            <th>Division</th>
+            <th>Results</th>
+            <th>Algebra</th>
+            <th>Geometry</th>
+            <th>Combinatorics</th>
+            <th>Number Theory</th>
+            <th>Sprint</th>
+            <th>Team</th>
+            <th>Guts</th>
+            <th>Fun</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        <tr>
+            <td rowspan="2">2016</td>
+            <td>Euclid</td>
+        </tr>
+
+        <tr>
+            <td>Lobachevsky</td>
+        </tr>
+
+        <tr>
+            <td rowspan="2">2015</td>
+            <td>Euler</td>
+        </tr>
+
+        <tr>
+            <td>Fermat</td>
+        </tr>
+    </tbody>
+</table>
+
+{% endblock %}

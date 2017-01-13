@@ -6,6 +6,7 @@ urlpatterns = [
     url(r'^rules/$', views.rules, name='rules'),
     url(r'^info/$', views.info, name='info'),
     url(r'^about/$', views.about, name='about'),
+    url(r'^archive/$', views.archive, name='archive'),
 
     url(r'^grade/all$', views.grade, name='grade'),
     url(r'^grade/score/(?P<type>.+)/(?P<id>\d+)$', views.score, name='score'),
