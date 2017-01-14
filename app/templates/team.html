@@ -8,6 +8,11 @@
 
 For a complete explanation regarding what team compositions are allowed, see the <a href="{% url 'rules' %}#registration">Rules</a>.
 
+{% if student_forms.non_form_errors %}
+    <br/><br/>
+    <div class="alert alert-danger">{{ student_forms.non_form_errors }}</div>
+{% endif %}
+
 <form name="registration" data-toggle="validator" role="form" method="post">
     {% crispy team_form %}
 

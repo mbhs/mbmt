@@ -81,12 +81,37 @@ class StudentForm(forms.ModelForm):
         fields = ["name", "subject1", "subject2"]
 
 
-StudentFormSet = forms.modelformset_factory(
+NaiveStudentFormSet = forms.modelformset_factory(
     models.Student,
     form=StudentForm,
     min_num=5,
     max_num=5)
 
+
+class StudentFormSet(NaiveStudentFormSet):
+    def clean(self):
+        students = [form.instance for form in self if form.instance.name]
+
+        if len(students) == 0:
+            raise ValidationError("There must be at least one student.")
+
+        subjects = {subject: len(list(filter(lambda student: student.subject1 == code or
+                               student.subject2 == code, students))) for code, subject in models.SUBJECT_CHOICES}
+
+        if len(students) == 3:
+            for subject, count in subjects.items():
+                if count < 1:
+                    raise ValidationError("There must be at least one student in subject {}.".format(subject))
+        elif len(students) == 4:
+            for subject, count in subjects.items():
+                if count < 1:
+                    raise ValidationError("There must be at least one student in subject {}.".format(subject))
+                if count > 3:
+                    raise ValidationError("There can be at most three students in subject {}.".format(subject))
+        elif len(students) == 5:
+            for subject, count in subjects.items():
+                if count < 2:
+                    raise ValidationError("There must be at least two students in subject {}.".format(subject))
 
 class LoginForm(PrettyForm):
     """Login form for graders and sponsors.
