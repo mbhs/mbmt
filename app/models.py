@@ -6,9 +6,9 @@ from django.contrib.auth.models import User
 
 SUBJECT_CHOICES = (
     ("al", "Algebra"),
-    ("nu", "Number Theory"),
+    ("nt", "Number Theory"),
     ("ge", "Geometry"),
-    ("co", "Combinatorics")
+    ("cp", "Counting and Probability")
 )
 
 QUESTION_TYPES = (

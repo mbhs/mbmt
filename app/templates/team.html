@@ -4,8 +4,9 @@
 
 {% block content %}
 
-<h2 class="lowerer">Team</h2>
-<p>{% if error_message%}{{ error_message }}{% endif %}</p>
+<h2 class="lowerer">Edit Team</h2>
+
+For a complete explanation regarding what team compositions are allowed, see the <a href="{% url 'rules' %}#registration">Rules</a>.
 
 <form name="registration" data-toggle="validator" role="form" method="post">
     {% crispy team_form %}
@@ -13,6 +14,7 @@
     {{ student_forms.management_form|crispy }}
     {% for form in student_forms %}
         <h3>Student {{ forloop.counter }}</h3>
+
         {% crispy form student_helper %}
     {% endfor %}
 

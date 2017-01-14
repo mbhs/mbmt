@@ -15,8 +15,8 @@ urlpatterns = [
     url(r'^registration/$', views.registration, name='registration'),
 
     url(r'^teams/$', views.teams, name='teams'),
-    url(r'^teams/edit/$', views.edit_team, name='add_team'),
-    url(r'^teams/remove/$', views.remove_team, name='remove_team'),
+    url(r'^teams/edit/(\d+)?$', views.edit_team, name='edit_team'),
+    url(r'^teams/remove/(\d+)$', views.remove_team, name='remove_team'),
 
     url(r'^accounts/register/$', views.register, name='register'),
     url(r'^accounts/login/$', views.login, name='login'),

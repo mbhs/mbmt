@@ -61,13 +61,20 @@ class TeamForm(PrettyForm, forms.ModelForm):
 
 class StudentForm(forms.ModelForm):
 
-    def is_valid(self):
+    def clean(self):
         """Clean and validate student data."""
 
-        is_valid = super().is_valid()
-        if self.cleaned_data["name"].strip():
-            is_valid = is_valid and self.cleaned_data["subject1"] != self.cleaned_data["subject2"]
-        return is_valid
+        cleaned_data = super(StudentForm, self).clean()
+
+        if any(cleaned_data.values()):
+            if not cleaned_data["name"]:
+                raise ValidationError("A name is required.")
+            if not cleaned_data["subject1"] or not cleaned_data["subject2"]:
+                raise ValidationError("Two subjects are required.")
+            if cleaned_data["subject1"] == cleaned_data["subject2"]:
+                raise ValidationError("The two subjects must be different.")
+
+        return cleaned_data
 
     class Meta:
         model = models.Student
