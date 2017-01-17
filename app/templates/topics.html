@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load staticfiles %}
 
 {% block content %}
 
@@ -7,6 +8,7 @@
 <p>While all of the following topics will likely be tested on the competition, the bolded topics are most likely to appear. We have divided the topics into our subject test categories.</p>
 
 <h2>Algebra</h2>
+<img src="{% static 'images/topics/alg.svg' %}">
 <ul>
     <li><strong>Linear equations</strong></li>
     <li>Sequences and series</li>

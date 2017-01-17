@@ -145,5 +145,8 @@ footer {
 }
 
 .btn-register {
-    width: 100%;
+    width: 50%;
+    height: 5em;
+    vertical-align: middle;
+    margin: 0 25%;
 }
