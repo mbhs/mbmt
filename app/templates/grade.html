@@ -45,6 +45,7 @@
                     <th>Name</th>
                     <th>Number</th>
                     <th>School</th>
+                    <th>Division</th>
                     <th>Team</th>
                     <th>Guts</th>
                 </tr>
@@ -54,6 +55,7 @@
                         <td>{{ team.name }}</td>
                         <td>{{ team.id }}</td>
                         <td>{{ team.school.name }}</td>
+                        <td>{{ team.division_name }}</td>
                         <td><a href="{% url 'score' type='team' id=team.id %}">(edit)</a></td>
                         <td><a href="{% url 'score' type='guts' id=team.id %}">(edit)</a></td>
                     </tr>

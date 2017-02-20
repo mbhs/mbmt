@@ -44,6 +44,10 @@ class Team(models.Model):
     def __str__(self):
         return "Team[{}]".format(self.name)
 
+    @property
+    def division_name(self):
+        return dict(DIVISIONS).get(self.division)   
+
 
 class Student(models.Model):
     """A student participating in the competition."""
