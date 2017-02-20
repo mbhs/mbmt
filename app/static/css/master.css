@@ -1,8 +1,7 @@
 @import url('https://fonts.googleapis.com/css?family=Roboto:400,700|Slabo+27px');
 
 body {
-    margin-top: 50px;
-    overflow-y: scroll;
+    padding-top: 50px;
     font-family: 'Roboto';
 }
 
@@ -22,7 +21,13 @@ h1, h2, h3, h4, h5, h6 {
 
 #content {
     /*max-width: 720px;*/
-    margin-top: 1em;
+    padding-top: 1em;
+    padding-bottom: 70px;
+}
+
+.container {
+    padding-top: -50px;
+    min-height: 100%;
 }
 
 form { margin: 1.5em auto; }
@@ -51,7 +56,7 @@ input {
 
 .lower { margin-top: 1em; }
 .lowerer { margin-top: 0.5em; }
-.lowererer { margin-top: 3em; }
+.lowererer { margin-top: 1.5em; }
 
 h1.title {
     font-size: 10vw;
@@ -61,7 +66,7 @@ h1.title {
 }
 
 span.title-left {
-    background-color: red;
+    background-color: #ba2222;
     color: lightgray;
     padding: 0 .2em;
     border-radius: .2em 0 0 .2em;
@@ -69,14 +74,14 @@ span.title-left {
 
 span.title-right {
     background-color: lightgray;
-    color: red;
+    color: #ba2222;
     padding: 0 .2em;
     border-radius: 0 .2em .2em 0;
 }
 
 p.main-text {
     text-align: center;
-    font-size: 2em;
+    font-size: 1.7em;
 }
 
 .tagline { 
@@ -138,15 +143,24 @@ div.about-person img {
 }
 
 footer {
-    margin-top: 2em;
-    padding: 1em;
+    position: relative;
+    margin-top: -50px;
+    height: 50px;
+    clear: both;
+
+    line-height: 50px;
     background-color: #ccc;
     text-align: center;
+    width: 100%;
 }
 
 .btn-register {
-    width: 50%;
-    height: 5em;
+    width: 40%;
+    display: block;
+    height: 2em;
     vertical-align: middle;
-    margin: 0 25%;
+    font-size: 3em;
+    margin: 0 auto;
+    border-radius: 15px;
+    background-color: #ba2222;
 }

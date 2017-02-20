@@ -113,6 +113,7 @@ class StudentFormSet(NaiveStudentFormSet):
                 if count < 2:
                     raise ValidationError("There must be at least two students in subject {}.".format(subject))
 
+
 class LoginForm(PrettyForm):
     """Login form for graders and sponsors.
 
@@ -120,7 +121,7 @@ class LoginForm(PrettyForm):
     conform to email field standards. Login still works.
     """
 
-    username = forms.CharField()
+    username = forms.CharField(label="Email address")
     password = forms.CharField(widget=forms.PasswordInput)
 
     def __init__(self, *args, **kwargs):
