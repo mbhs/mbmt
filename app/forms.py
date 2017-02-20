@@ -43,6 +43,8 @@ class RegisterForm(PrettyForm, forms.ModelForm):
         cleaned_data = super().clean()
         if cleaned_data.get('password') != cleaned_data.get('password_duplicate'):
             raise ValidationError('Passwords do not match')
+        if models.User.objects.filter(username=cleaned_data["username"]).exists():
+            raise ValidationError("Username is already taken.")
         return cleaned_data
 
     class Meta:
@@ -56,7 +58,7 @@ class TeamForm(PrettyForm, forms.ModelForm):
 
     class Meta:
         model = models.Team
-        fields = ["name"]
+        fields = ["name", "division"]
 
 
 class StudentForm(forms.ModelForm):

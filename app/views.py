@@ -39,17 +39,19 @@ def register(request):
     """The registration page for school sponsors."""
 
     # Assert post and form is valid
+    form = forms.RegisterForm()
     if request.method == "POST":
         form = forms.RegisterForm(request.POST)
+
         if form.is_valid():
 
             # Create user and school
             user = User.objects.create_user(
                 form.cleaned_data["username"],
-                    email=form.cleaned_data["username"],
-                    password=form.cleaned_data["password"],
-                    first_name=form.cleaned_data["first_name"],
-                    last_name=form.cleaned_data["last_name"])
+                email=form.cleaned_data["username"],
+                password=form.cleaned_data["password"],
+                first_name=form.cleaned_data["first_name"],
+                last_name=form.cleaned_data["last_name"])
             school = models.School(user=user, name=form.cleaned_data["school_name"])
             school.save()
 
@@ -59,7 +61,6 @@ def register(request):
             return redirect('teams')
 
     # Render the form to the page
-    form = forms.RegisterForm()
     return render(request, "register.html", {"form": form})
 
 

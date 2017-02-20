@@ -16,6 +16,11 @@ QUESTION_TYPES = (
     ("es", "Estimation")
 )
 
+DIVISIONS = (
+    (1, "Pascal"),
+    (2, "Ramanujan")
+)
+
 
 class School(models.Model):
     """A simple school model that is represented by a teacher."""
@@ -34,6 +39,7 @@ class Team(models.Model):
 
     name = models.CharField(max_length=256)
     school = models.ForeignKey(School, related_name="teams")
+    division = models.IntegerField(choices=DIVISIONS)
 
     def __str__(self):
         return "Team[{}]".format(self.name)

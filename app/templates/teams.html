@@ -12,7 +12,7 @@
     {% for team in request.user.school.teams.all %}
     <tr>
         <td>
-            {{ team.name }}<br>
+            {{ team.name }}{% if not team.division %} (Please select a division!){% endif %}<br>
             <a href="{% url 'edit_team' team.id %}">Edit</a> |
             <a href="{% url 'remove_team' team.id %}">Remove</a>
         </td>
