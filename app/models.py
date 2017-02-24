@@ -4,22 +4,24 @@ from django.db import models
 from django.contrib.auth.models import User
 
 
-SUBJECT_CHOICES = (
+_SUBJECT_CHOICES = (
     ("al", "Algebra"),
     ("nt", "Number Theory"),
     ("ge", "Geometry"),
-    ("cp", "Counting and Probability")
-)
+    ("cp", "Counting and Probability"))
 
-QUESTION_TYPES = (
+_ROUND_GROUPINGS = (
+    (0, "individual"),
+    (1, "team"))
+ROUND_GROUPINGS = {"individual": 0, "team": 1}
+
+_QUESTION_TYPES = (
     ("co", "Correct"),
-    ("es", "Estimation")
-)
+    ("es", "Estimation"))
 
-DIVISIONS = (
+_DIVISIONS = (
     (1, "Pascal"),
-    (2, "Ramanujan")
-)
+    (2, "Ramanujan"))
 
 
 class School(models.Model):
@@ -39,22 +41,22 @@ class Team(models.Model):
 
     name = models.CharField(max_length=256)
     school = models.ForeignKey(School, related_name="teams")
-    division = models.IntegerField(choices=DIVISIONS)
+    division = models.IntegerField(choices=_DIVISIONS)
 
     def __str__(self):
         return "Team[{}]".format(self.name)
 
     @property
     def division_name(self):
-        return dict(DIVISIONS).get(self.division)   
+        return dict(_DIVISIONS).get(self.division)
 
 
 class Student(models.Model):
     """A student participating in the competition."""
 
     name = models.CharField(max_length=256, blank=True)
-    subject1 = models.CharField(max_length=2, blank=True, choices=SUBJECT_CHOICES, verbose_name="Subject 1")
-    subject2 = models.CharField(max_length=2, blank=True, choices=SUBJECT_CHOICES, verbose_name="Subject 2")
+    subject1 = models.CharField(max_length=2, blank=True, choices=_SUBJECT_CHOICES, verbose_name="Subject 1")
+    subject2 = models.CharField(max_length=2, blank=True, choices=_SUBJECT_CHOICES, verbose_name="Subject 2")
     team = models.ForeignKey(Team, related_name="students")
 
     class Meta:
@@ -68,7 +70,9 @@ class Competition(models.Model):
     """An competition question container."""
 
     name = models.CharField(max_length=128)
+    nick = models.CharField(max_length=12)
     year = models.IntegerField()
+    active = models.BooleanField()
 
     def __init__(self, name, year):
         """Initialize a new competition."""
@@ -83,15 +87,15 @@ class Round(models.Model):
 
     competition = models.ForeignKey(Competition, related_name="rounds")
     name = models.CharField(max_length=64)
-    individual = models.BooleanField()
+    grouping = models.IntegerField(choices=_ROUND_GROUPINGS)
 
-    def __init__(self, competition, name, individual):
+    def __init__(self, competition, name, grouping):
         """Initialize a new round."""
 
         super().__init__()
         self.competition = competition
         self.name = name
-        self.individual = individual
+        self.grouping = ROUND_GROUPINGS[grouping]
 
 
 class Question(models.Model):
@@ -99,7 +103,7 @@ class Question(models.Model):
 
     round = models.ForeignKey(Round, related_name="questions")
     label = models.CharField(max_length=32)
-    type = models.CharField(max_length=2, choices=QUESTION_TYPES)
+    type = models.CharField(max_length=2, choices=_QUESTION_TYPES)
 
     def __init__(self, round, label, type):
         """Initialize a new question."""

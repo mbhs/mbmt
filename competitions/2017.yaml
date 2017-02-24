@@ -1,7 +1,7 @@
 name: MBMT 2017
 rounds:
   - name: Individual Round 1
-    individual: true
+    grouping: individual
     questions:
       - label: 1
         type: correct
@@ -20,7 +20,7 @@ rounds:
       - label: 8
         type: correct
   - name: Individual Round 2
-    individual: true
+    grouping: individual
     questions:
       - label: 1
         type: correct
@@ -39,7 +39,7 @@ rounds:
       - label: 8
         type: correct
   - name: Team Round
-    individual: false
+    grouping: team
     questions:
       - label: 1
         type: correct
@@ -72,7 +72,7 @@ rounds:
       - label: 15
         type: correct
   - name: Guts Round
-    individual: false
+    grouping: team
     questions:
       - label: 1
         type: correct

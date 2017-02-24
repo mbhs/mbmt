@@ -20,7 +20,7 @@ def load(path, deserializer=yaml.load):
 
     competition = models.Competition(tree["name"], datetime.datetime.now().year)
     for r in tree["rounds"]:
-        round = models.Round(competition, r["name"], r["individual"])
+        round = models.Round(competition, r["name"], r["grouping"])
         for q in tree["questions"]:
             question = models.Question(round, q["label"], TYPES[q["type"]])
             question.save()
