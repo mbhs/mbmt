@@ -1,6 +1,7 @@
 {
+  "id": "mbmt2017",
   "name": "MBMT 2017",
-  "nick": "mbmt2017",
+  "year": 2017,
   "rounds": [
     {
       "name": "Individual Round 1",
