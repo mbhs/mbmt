@@ -12,8 +12,18 @@
 
 <div>
     <ul class="nav nav-tabs nav-justified" role="tablist">
-        <li role="presentation" class="active"><a href="#students" aria-controls="students" role="tab" data-toggle="tab">Students</a></li>
-        <li role="presentation"><a href="#teams" aria-controls="teams" role="tab" data-toggle="tab">Teams</a></li>
+        <li role="presentation" class="active">
+            <a href="#students" aria-controls="students" role="tab" data-toggle="tab">
+                Students
+                ({{ students.count }})
+            </a>
+        </li>
+        <li role="presentation">
+            <a href="#teams" aria-controls="teams" role="tab" data-toggle="tab">
+                Teams
+                ({{ teams.count }})
+            </a>
+        </li>
     </ul>
 
     <div class="tab-content">
