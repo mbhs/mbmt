@@ -8,6 +8,7 @@
 Welcome to the 3rd Annual MBMT, held on April 1st, 2017! We highly encourage schools' math team coaches or math resource department chairs to act as sponsors; however, any adult who is willing to supervise the team is fine.
 </p>
 
+{% if allow_registration %}
 <form name="registration" data-toggle="validator" role="form" method="post">
     <script src="/static/js/validator.min.js"></script>
 
@@ -18,5 +19,11 @@ Welcome to the 3rd Annual MBMT, held on April 1st, 2017! We highly encourage sch
         <input id="cancel" type="button" value="Cancel" class="btn btn-secondary right" onclick="window.location = '{% url 'index' %}';"/>
     </div>
 </form>
+{% else %}
+<p>
+    Sorry, registration is closed! Please email
+    <script type="text/javascript">email("mbhsmathteam", "gmail.com")</script> for more information.
+</p>
+{% endif %}
 
 {% endblock %}

@@ -29,21 +29,22 @@
     <div class="tab-content">
         <div role="tabpanel" class="tab-pane active" id="students">
             <table class="table table-striped table-hover">
-                <tr>
-                    <th>Name</th>
-                    <th>School</th>
-                    <th>Team</th>
-                    <th>Subject 1</th>
-                    <th>Subject 2</th>
+                <tr class="students">
+                    <th class="number">#</th>
+                    <th class="name">Name</th>
+                    <th class="">Info</th>
+                    <!--th class="team">Team</th-->
+                    <th class="subject">Subject 1</th>
+                    <th class="subject">Subject 2</th>
                 </tr>
 
                 {% for student in students %}
                     <tr>
+                        <td>{{ forloop.counter }}</td>
                         <td>{{ student.name }}</td>
-                        <td>{{ student.team.school.name }} {{ student.team.school.id }}</td>
-                        <td>{{ student.team.name }}</td>
-                        <td>{{ student.subject1 }} {{ student.score1.args }} <a href="{% url 'score' type='subject1' id=student.id %}">(edit)</a></td>
-                        <td>{{ student.subject2 }} {{ student.score2.args }} <a href="{% url 'score' type='subject2' id=student.id %}">(edit)</a></td>
+                        <td>{{ student.team.name }} <br><span class="italics">{{ student.team.school.name }}</span></td>
+                        <td class="subject">{{ student.score1.args }} ({{ student.subject1|upper }}) <br> <a href="{% url 'score' type='subject1' id=student.id %}">edit</a></td>
+                        <td class="subject">{{ student.score2.args }} ({{ student.subject2|upper }}) <br> <a href="{% url 'score' type='subject2' id=student.id %}">edit</a></td>
                     </tr>
                 {% endfor %}
             </table>
@@ -51,23 +52,21 @@
 
         <div role="tabpanel" class="tab-pane" id="teams">
             <table class="table table-striped table-hover">
-                <tr>
-                    <th>Name</th>
-                    <th>Number</th>
-                    <th>School</th>
-                    <th>Division</th>
-                    <th>Team</th>
-                    <th>Guts</th>
+                <tr class="teams">
+                    <th class="number">#</th>
+                    <th class="">Info</th>
+                    <th class="division">Division</th>
+                    <th class="team">Team</th>
+                    <th class="guts">Guts</th>
                 </tr>
 
                 {% for team in teams %}
                     <tr>
-                        <td>{{ team.name }}</td>
-                        <td>{{ team.id }}</td>
-                        <td>{{ team.school.name }}</td>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ team.name }} <br> <span class="italics">{{ team.school.name }}</span></td>
                         <td>{{ team.division_name }}</td>
-                        <td><a href="{% url 'score' type='team' id=team.id %}">(edit)</a></td>
-                        <td><a href="{% url 'score' type='guts' id=team.id %}">(edit)</a></td>
+                        <td><br><a href="{% url 'score' type='team' id=team.id %}">edit</a></td>
+                        <td><br><a href="{% url 'score' type='guts' id=team.id %}">edit</a></td>
                     </tr>
                 {% endfor %}
             </table>

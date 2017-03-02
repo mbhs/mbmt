@@ -6,6 +6,9 @@ from django.contrib.auth.models import User
 from app import forms, models
 
 
+ALLOW_REGISTRATION = False
+
+
 def index(request):
     return render(request, "index.html")
 
@@ -60,7 +63,7 @@ def register(request):
             return redirect('teams')
 
     # Render the form to the page
-    return render(request, "register.html", {"form": form})
+    return render(request, "register.html", {"form": form, "allow_registration": ALLOW_REGISTRATION})
 
 
 def login(request):

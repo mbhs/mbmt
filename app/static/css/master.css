@@ -164,3 +164,21 @@ footer {
     border-radius: 15px;
     background-color: #ba2222;
 }
+
+table .subject {
+    width: 120px;
+}
+
+tr.students .number { width: 4%; }
+tr.students .name { width: 20%; }
+tr.students .subject { width: 12%; }
+
+tr.teams .number { width: 4%; }
+tr.teams .name { width: 25%; }
+tr.teams .school {width: 25%; }
+tr.teams .division { width: 15%; }
+tr.teams .guts { width: 12%; }
+tr.teams .team { width: 12%; }
+
+
+.italics { font-style: italic; }
