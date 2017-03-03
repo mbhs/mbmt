@@ -80,7 +80,7 @@ class StudentForm(forms.ModelForm):
 
     class Meta:
         model = models.Student
-        fields = ["name", "subject1", "subject2"]
+        fields = ["name", "subject1", "subject2", "size"]
 
 
 NaiveStudentFormSet = forms.modelformset_factory(

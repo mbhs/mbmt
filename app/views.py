@@ -155,7 +155,7 @@ def remove_team(request, pk=None):
 def grade(request):
     return render(request, "grade.html", {
         "teams": models.Team.objects.all(),
-        "students": models.Student.objects.all()
+        "students": models.Student.objects.all(),
     })
 
 
@@ -163,3 +163,11 @@ def grade(request):
 @permission_required("app.can_grade")
 def score(request, type, id):
     print("SCORING", type, id)
+
+@login_required
+@permission_required("app.can_grade")
+def shirts(request):
+    """Shirt sizes view."""
+
+    sizes = {size[1]: models.Student.objects.filter(size=i).count() for i, size in enumerate(models.SHIRT_SIZES)}
+    return render(request, "shirts.html", {"sizes": sizes})

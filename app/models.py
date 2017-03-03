@@ -30,6 +30,15 @@ _DIVISIONS = (
 DIVISIONS = {
     1: "Pascal", 2: "Ramanujan"}
 
+_SHIRT_SIZES = (
+    (0, "Default"),
+    (1, "Adult Small"),
+    (2, "Adult Medium"),
+    (3, "Adult Large"),
+    (4, "Adult Extra Large"))
+SHIRT_SIZES = _SHIRT_SIZES
+#SHIRT_SIZES = list(map(lambda x: x[1], _SHIRT_SIZES))
+
 
 class School(models.Model):
     """A simple school model that is represented by a teacher."""
@@ -65,6 +74,7 @@ class Student(models.Model):
     subject1 = models.CharField(max_length=2, blank=True, choices=_SUBJECT_CHOICES, verbose_name="Subject 1")
     subject2 = models.CharField(max_length=2, blank=True, choices=_SUBJECT_CHOICES, verbose_name="Subject 2")
     team = models.ForeignKey(Team, related_name="students")
+    size = models.IntegerField(choices=_SHIRT_SIZES, default=0)
 
     class Meta:
         ordering = ('name',)
