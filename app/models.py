@@ -62,10 +62,6 @@ class Team(models.Model):
     def __str__(self):
         return "Team[{}]".format(self.name)
 
-    @property
-    def division_name(self):
-        return dict(_DIVISIONS).get(self.division)
-
 
 class Student(models.Model):
     """A student participating in the competition."""
@@ -91,19 +87,16 @@ class Competition(models.Model):
     year = models.IntegerField()
     active = models.BooleanField(default=False)
 
-    def __init__(self, id, name, year, active=False):
-        """Initialize a new competition."""
-
-        super().__init__()
-        self.id = id
-        self.name = name
-        self.year = year
-        self.active = active
-
     def __repr__(self):
         """Represent the competition as a string."""
 
         return "Competition[{}]".format(self.name)
+
+    @staticmethod
+    def get_active():
+        """Get the active competition."""
+
+        return Competition.objects.filter(active=True).first()
 
     def save_all(self):
         """Save self and all rounds and questions."""
@@ -116,30 +109,23 @@ class Competition(models.Model):
 class Round(models.Model):
     """A single competition round."""
 
-    competition = models.ForeignKey(Competition, related_name="rounds")
+    id = models.CharField(max_length=12, primary_key=True)
     name = models.CharField(max_length=64)
-    _grouping = models.IntegerField(choices=_ROUND_GROUPINGS)
+    competition = models.ForeignKey(Competition, related_name="rounds")
+    grouping = models.IntegerField(choices=_ROUND_GROUPINGS)
 
-    def __init__(self, competition, name, grouping):
-        """Initialize a new round."""
+    @staticmethod
+    def new(competition, id, name, grouping):
+        """Make a new round."""
 
-        super().__init__()
-        self.competition = competition
-        self.name = name
-        self.grouping = grouping
+        round = Round(competition=competition, id=id, name=name, grouping=grouping)
+        round.save()
+        return round
 
-    @property
-    def grouping(self):
-        """Get the grouping as a string."""
+    def __repr__(self):
+        """Represent the round as a string."""
 
-        return ROUND_GROUPINGS[self._grouping]
-
-    @grouping.setter
-    def grouping(self, value):
-        """Set the value of grouping as a string."""
-
-        assert type(value) == str
-        self._grouping = ROUND_GROUPINGS[value]
+        return "Round[{}]".format(self.name)
 
     def save_all(self):
         """Save self and all questions."""
@@ -153,35 +139,22 @@ class Question(models.Model):
     """A question container model."""
 
     round = models.ForeignKey(Round, related_name="questions")
+    order = models.IntegerField()
     label = models.CharField(max_length=32)
-    _type = models.IntegerField(choices=_QUESTION_TYPES)
+    type = models.IntegerField(choices=_QUESTION_TYPES)
 
-    def __init__(self, round, label, type):
-        """Initialize a new question."""
+    @staticmethod
+    def new(round, order, label, type):
+        """Instantiate a new question."""
 
-        super().__init__()
-        self.round = round
-        self.label = label
-        self.type = type
-
-    @property
-    def type(self):
-        """Get the type of question."""
-
-        return QUESTION_TYPES[self._type]
-
-    @type.setter
-    def type(self, value):
-        """Set the type of question as a string."""
-
-        assert type(value) == str
-        self._type = QUESTION_TYPES[value]
+        question = Question(round=round, order=order, label=label, type=type)
+        question.save()
 
 
 class Answer(models.Model):
     """An answer to a question."""
 
     question = models.ForeignKey(Question, related_name="answers")
-    student = models.ForeignKey(Student, related_name="answers")
-    team = models.ForeignKey(Team, related_name="answers")
-    value = models.FloatField()
+    student = models.ForeignKey(Student, related_name="answers", null=True, blank=True)
+    team = models.ForeignKey(Team, related_name="answers", null=True, blank=True)
+    value = models.FloatField(null=True, blank=True)

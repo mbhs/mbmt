@@ -7,7 +7,6 @@
     <label for="search">Search:</label>
     <input class="form-control" id="search" name="search" oninput="update();">
 </div>
-
 <br/>
 
 <div>
@@ -28,12 +27,12 @@
 
     <div class="tab-content">
         <div role="tabpanel" class="tab-pane active" id="students">
-            <table class="table table-striped table-hover">
-                <tr class="students">
+            <table class="students table table-striped table-hover">
+                <tr>
                     <th class="number">#</th>
                     <th class="name">Name</th>
-                    <th class="">Info</th>
-                    <!--th class="team">Team</th-->
+                    <th class="info_">Info</th>
+                    <th class="division">Division</th>
                     <th class="subject">Subject 1</th>
                     <th class="subject">Subject 2</th>
                 </tr>
@@ -42,17 +41,27 @@
                     <tr>
                         <td>{{ forloop.counter }}</td>
                         <td>{{ student.name }}</td>
-                        <td>{{ student.team.name }} <br><span class="italics">{{ student.team.school.name }}</span></td>
-                        <td class="subject">{{ student.score1.args }} ({{ student.subject1|upper }}) <br> <a href="{% url 'score' type='subject1' id=student.id %}">edit</a></td>
-                        <td class="subject">{{ student.score2.args }} ({{ student.subject2|upper }}) <br> <a href="{% url 'score' type='subject2' id=student.id %}">edit</a></td>
+                        <td>
+                            <span class="ellipsis">{{ student.team.name }}</span>
+                            <span class="italics">{{ student.team.school.name }}</span>
+                        </td>
+                        <td class="division">{{ student.team.get_division_display }}</td>
+                        <td class="subject">
+                            {{ student.score1.args }} ({{ student.subject1|upper }}) <br>
+                            <a href="{% url 'score' grouping="individual" id=student.id round='subject1' %}">edit</a>
+                        </td>
+                        <td class="subject">
+                            {{ student.score2.args }} ({{ student.subject2|upper }}) <br>
+                            <a href="{% url 'score' grouping="individual" id=student.id round='subject2' %}">edit</a>
+                        </td>
                     </tr>
                 {% endfor %}
             </table>
         </div>
 
         <div role="tabpanel" class="tab-pane" id="teams">
-            <table class="table table-striped table-hover">
-                <tr class="teams">
+            <table class="teams table table-striped table-hover">
+                <tr>
                     <th class="number">#</th>
                     <th class="">Info</th>
                     <th class="division">Division</th>
@@ -64,9 +73,15 @@
                     <tr>
                         <td>{{ forloop.counter }}</td>
                         <td>{{ team.name }} <br> <span class="italics">{{ team.school.name }}</span></td>
-                        <td>{{ team.division_name }}</td>
-                        <td><br><a href="{% url 'score' type='team' id=team.id %}">edit</a></td>
-                        <td><br><a href="{% url 'score' type='guts' id=team.id %}">edit</a></td>
+                        <td class="division">{{ team.get_division_display }}</td>
+                        <td class="team">
+                            <br>
+                            <a href="{% url "score" grouping="team" id=team.id round="team" %}">edit</a>
+                        </td>
+                        <td class="guts">
+                            <br>
+                            <a href="{% url "score" grouping="team" id=team.id round="guts" %}">edit</a>
+                        </td>
                     </tr>
                 {% endfor %}
             </table>

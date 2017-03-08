@@ -4,6 +4,7 @@
   "year": 2017,
   "rounds": [
     {
+      "id": "subject1",
       "name": "Individual Round 1",
       "grouping": "individual",
       "questions": [
@@ -18,6 +19,7 @@
       ]
     },
     {
+      "id": "subject2",
       "name": "Individual Round 2",
       "grouping": "individual",
       "questions": [
@@ -32,6 +34,7 @@
       ]
     },
     {
+      "id": "team",
       "name": "Team Round",
       "grouping": "team",
       "questions": [
@@ -53,6 +56,7 @@
       ]
     },
     {
+      "id": "guts",
       "name": "Guts Round",
       "grouping": "team",
       "questions": [

@@ -169,14 +169,37 @@ table .subject {
     width: 120px;
 }
 
-tr.students .number { width: 4%; }
-tr.students .name { width: 20%; }
-tr.students .subject { width: 12%; }
+table .number { width: 50px; }
 
-tr.teams .number { width: 4%; }
-tr.teams .division { width: 15%; }
-tr.teams .guts { width: 12%; }
-tr.teams .team { width: 12%; }
+table.students .subject,
+table.students .division,
+table.teams .team,
+table.teams .guts,
+table.teams .division { width: 130px; }
 
+.grading .round {
+    padding-top: 0.5em;
+    margin: 0;
+}
+
+.grading .team {
+    padding-bottom: 1em;
+    font-size: 20px;
+}
+
+.grading .grader { width: 50%; }
+.grading .grader .qlabel { text-align: right; width: 40px; }
+.grading .grader td input[type="radio"] { margin-left: 20px; }
+.grading .grader td input[type="number"] { margin: 0; margin-left: 20px; font-size: 12px; }
+.grading .grader td span { margin-left: 20px; }
 
 .italics { font-style: italic; }
+.gray { color: gray; }
+.ellipsis {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 100%;
+    display: block;
+    margin: 0;
+}

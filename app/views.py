@@ -161,13 +161,74 @@ def grade(request):
 
 @login_required
 @permission_required("app.can_grade")
-def score(request, type, id):
-    print("SCORING", type, id)
+def score(request, grouping, id, round):
+    """Scoring view."""
+
+    competition = models.Competition.get_active()
+    round = competition.rounds.filter(id=round).first()
+
+    if grouping == "team":
+        team = models.Team.objects.filter(id=id).first()
+        answers = []
+        question_answer = []
+        for question in round.questions.order_by("order").all():
+            answer = models.Answer.objects.filter(team=team, question=question).first()
+            if not answer:
+                answer = models.Answer(team=team, question=question)
+                answer.save()
+            answers.append(answer)
+            question_answer.append((question, answer))
+
+        if request.method == "POST":
+            update_answers(request, answers)
+            return redirect(request.META.get('HTTP_REFERER', '/'))
+
+        return render(request, "grader.html", {
+            "name": team.name,
+            "division": team.get_division_display,
+            "round": round,
+            "question_answer": question_answer})
+
+    elif grouping == "individual":
+        student = models.Student.objects.filter(id=id).first()
+        answers = []
+        question_answer = []
+        for question in round.questions.order_by("order").all():
+            answer = models.Answer.objects.filter(student=student, question=question).first()
+            if not answer:
+                answer = models.Answer(student=student, question=question)
+                answer.save()
+            answers.append(answer)
+            question_answer.append((question, answer))
+
+        if request.method == "POST":
+            update_answers(request, answers)
+            return redirect(request.META.get('HTTP_REFERER', '/'))
+
+        return render(request, "grader.html", {
+            "name": student.name,
+            "division": student.team.get_division_display,
+            "round": round,
+            "question_answer": question_answer})
+
+
+def update_answers(request, answers):
+    """Score a team."""
+
+    print(request.POST)
+    for answer in answers:
+        id = str(answer.question.id)
+        if id in request.POST:
+            value = None if str(request.POST[id]) == "" else float(request.POST[id])
+            print(value)
+            answer.value = value
+            answer.save()
+
 
 @login_required
 @permission_required("app.can_grade")
 def shirts(request):
     """Shirt sizes view."""
 
-    sizes = {size[1]: models.Student.objects.filter(size=i).count() for i, size in enumerate(models.SHIRT_SIZES)}
+    sizes = [(size[1], models.Student.objects.filter(size=i).count()) for i, size in enumerate(models.SHIRT_SIZES)]
     return render(request, "shirts.html", {"sizes": sizes})

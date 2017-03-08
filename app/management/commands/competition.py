@@ -13,15 +13,13 @@ def load(path, loader=json.load):
     with open(path, "r") as file:
         c = loader(file)
 
-    competition = models.Competition(c["id"], c["name"], c["year"])
+    competition = models.Competition(c["id"], c["name"], int(c["year"]))
     competition.save()
     for r in c["rounds"]:
-        round = models.Round(competition, r["name"], r["grouping"])
-        round.save()
+        round = models.Round.new(competition, r["id"], r["name"], models.ROUND_GROUPINGS[r["grouping"]])
         qc = 0
-        for q in r["questions"]:
-            question = models.Question(round, q["label"], q["type"])
-            question.save()
+        for i, q in enumerate(r["questions"]):
+            models.Question.new(round, i+1, q["label"], models.QUESTION_TYPES[q["type"]])
             qc += 1
         print("{0.name}: {1} questions".format(round, qc))
 
