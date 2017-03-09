@@ -4,7 +4,11 @@
 {% block content %}
 <script>
     function back() {
-        window.location.href = "{% url "grade" %}";
+        {% if mode == "student" %}
+        window.location.href = "{% url "grade_students" %}";
+        {% elif mode == "team" %}
+        window.location.href = "{% url "grade_teams" %}";
+        {% endif %}
     }
 </script>
 

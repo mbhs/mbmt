@@ -10,8 +10,8 @@
         <script type="text/javascript" src="{% static 'js/jquery.min.js' %}"></script>
         <script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>
         <script type="text/javascript" src="{% static 'js/email.js' %}"></script>
+        {% block extrahead %}{% endblock %}
     </head>
-
     <body>
         <nav id="menu" class="navbar navbar-default navbar-fixed-top navbar-xs">
             <div class="container-fluid">
@@ -37,7 +37,7 @@
                     <ul class="nav navbar-nav navbar-right">
                     {% if request.user.is_authenticated %}
                     {% if perms.app.can_grade %}
-                        <li><a href="{% url 'grade' %}">Grading</a></li>
+                        <li><a href="{% url 'grade_students' %}">Grading</a></li>
                     {% else %}
                         <li><a href="{% url 'teams' %}">My Teams</a></li>
                     {% endif %}

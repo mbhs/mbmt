@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block extrahead %}
+<style>body { overflow-y: scroll; }</style>
+{% endblock %}
+
+{% block content %}
+
+<h1 class="grader-title">Teams ({{ teams.count }})</h1>
+<p class="grader-switcher">Go to <a href="{% url "grade_students" %}">students</a> &rarr;</p>
+
+<div class="form-group">
+    <input class="form-control" id="search" name="search" placeholder="search" oninput="update();">
+</div>
+
+<table id="teams" class="teams table table-striped table-hover">
+    <tr>
+        <th class="number">#</th>
+        <th class="information">Info</th>
+        <th class="division">Division</th>
+        <th class="team">Team</th>
+        <th class="guts">Guts</th>
+    </tr>
+
+    {% for team in teams %}
+        <tr>
+            <td class="number">{{ forloop.counter }}</td>
+            <td class="name">{{ team.name }} <br> <span class="italics">{{ team.school.name }}</span></td>
+            <td class="division">{{ team.get_division_display }}</td>
+            <td class="team">
+                <br>
+                <a href="{% url "score" grouping="team" id=team.id round="team" %}">edit</a>
+            </td>
+            <td class="guts">
+                <br>
+                <a href="{% url "score" grouping="team" id=team.id round="guts" %}">edit</a>
+            </td>
+        </tr>
+    {% endfor %}
+</table>
+
+<script type="text/javascript" src="{% static "js/grade.js" %}"></script>
+{% endblock %}

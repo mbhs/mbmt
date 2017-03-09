@@ -109,11 +109,11 @@ class StudentFormSet(NaiveStudentFormSet):
                 if count < 1:
                     raise ValidationError("There must be at least one student in subject {}.".format(subject))
                 if count > 3:
-                    raise ValidationError("There can be at most three students in subject {}.".format(subject))
+                    raise ValidationError("There can be at most three items in subject {}.".format(subject))
         elif len(students) == 5:
             for subject, count in subjects.items():
                 if count < 2:
-                    raise ValidationError("There must be at least two students in subject {}.".format(subject))
+                    raise ValidationError("There must be at least two items in subject {}.".format(subject))
 
 
 class LoginForm(PrettyForm):

@@ -53,7 +53,7 @@ class School(models.Model):
 
 
 class Team(models.Model):
-    """Represents a team of students competing in the competition."""
+    """Represents a team of items competing in the competition."""
 
     name = models.CharField(max_length=256)
     school = models.ForeignKey(School, related_name="teams")
@@ -69,7 +69,7 @@ class Student(models.Model):
     name = models.CharField(max_length=256, blank=True)
     subject1 = models.CharField(max_length=2, blank=True, choices=_SUBJECT_CHOICES, verbose_name="Subject 1")
     subject2 = models.CharField(max_length=2, blank=True, choices=_SUBJECT_CHOICES, verbose_name="Subject 2")
-    team = models.ForeignKey(Team, related_name="students")
+    team = models.ForeignKey(Team, related_name="items")
     size = models.IntegerField(choices=_SHIRT_SIZES, default=0)
 
     class Meta:

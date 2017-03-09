@@ -169,7 +169,8 @@ table .subject {
     width: 120px;
 }
 
-table .number { width: 50px; }
+table.students .number,
+table.teams .number { width: 50px; }
 
 table.students .subject,
 table.students .division,
@@ -193,13 +194,15 @@ table.teams .division { width: 130px; }
 .grading .grader td input[type="number"] { margin: 0; margin-left: 20px; font-size: 12px; }
 .grading .grader td span { margin-left: 20px; }
 
+.grader-title { margin-bottom: 0; }
+.grader-switcher { font-size: 20px; margin-bottom: 1em; }
+
 .italics { font-style: italic; }
 .gray { color: gray; }
 .ellipsis {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    width: 100%;
     display: block;
     margin: 0;
 }

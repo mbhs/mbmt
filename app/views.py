@@ -152,11 +152,16 @@ def remove_team(request, pk=None):
 
 @login_required
 @permission_required("app.can_grade")
-def grade(request):
-    return render(request, "grade.html", {
-        "teams": models.Team.objects.all(),
-        "students": models.Student.objects.all(),
-    })
+def grade_students(request):
+    return render(request, "grade_students.html", {
+        "students": models.Student.objects.all()})
+
+
+@login_required
+@permission_required("app.can_grade")
+def grade_teams(request):
+    return render(request, "grade_teams.html", {
+        "teams": models.Team.objects.all()})
 
 
 @login_required
@@ -187,7 +192,8 @@ def score(request, grouping, id, round):
             "name": team.name,
             "division": team.get_division_display,
             "round": round,
-            "question_answer": question_answer})
+            "question_answer": question_answer,
+            "mode": "team"})
 
     elif grouping == "individual":
         student = models.Student.objects.filter(id=id).first()
@@ -209,7 +215,8 @@ def score(request, grouping, id, round):
             "name": student.name,
             "division": student.team.get_division_display,
             "round": round,
-            "question_answer": question_answer})
+            "question_answer": question_answer,
+            "mode": "student"})
 
 
 def update_answers(request, answers):

@@ -8,7 +8,8 @@ urlpatterns = [
     url(r'^about/$', views.about, name='about'),
     url(r'^archive/$', views.archive, name='archive'),
 
-    url(r'^grade/all$', views.grade, name='grade'),
+    url(r'^grade/students', views.grade_students, name='grade_students'),
+    url(r'^grade/teams', views.grade_teams, name="grade_teams"),
     url(r'^grade/(?P<grouping>\w+)/(?P<id>\d+)/(?P<round>\w+)$', views.score, name='score'),
 
     url(r'^topics/$', views.topics, name='topics'),
