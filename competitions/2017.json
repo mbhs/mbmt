@@ -8,7 +8,7 @@
       "name": "Individual Round 1",
       "grouping": "individual",
       "questions": [
-        {"label": 1, "type": "correct"},
+        {"label": 1, "type": "correct", "weight": 3.0},
         {"label": 2, "type": "correct"},
         {"label": 3, "type": "correct"},
         {"label": 4, "type": "correct"},
