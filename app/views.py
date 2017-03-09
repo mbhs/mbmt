@@ -3,7 +3,7 @@ from django.contrib import auth
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.models import User
 
-from app import forms, models
+from app import forms, models, grading
 
 
 ALLOW_REGISTRATION = False
@@ -169,7 +169,7 @@ def grade_teams(request):
 def score(request, grouping, id, round):
     """Scoring view."""
 
-    competition = models.Competition.get_active()
+    competition = models.Competition.current()
     round = competition.rounds.filter(id=round).first()
 
     if grouping == "team":
@@ -219,15 +219,21 @@ def score(request, grouping, id, round):
             "mode": "student"})
 
 
+def scoreboard(request):
+    """Do final scoreboard calculations."""
+
+    if request.method == "POST":
+        grading.grade()
+    return render(request, "scoreboard.html", models.Scoreboard.last)
+
+
 def update_answers(request, answers):
     """Score a team."""
 
-    print(request.POST)
     for answer in answers:
         id = str(answer.question.id)
         if id in request.POST:
             value = None if str(request.POST[id]) == "" else float(request.POST[id])
-            print(value)
             answer.value = value
             answer.save()
 

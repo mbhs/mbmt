@@ -12,6 +12,8 @@ urlpatterns = [
     url(r'^grade/teams', views.grade_teams, name="grade_teams"),
     url(r'^grade/(?P<grouping>\w+)/(?P<id>\d+)/(?P<round>\w+)$', views.score, name='score'),
 
+    url(r'^scoreboard/$', views.scoreboard, name="scoreboard"),
+
     url(r'^topics/$', views.topics, name='topics'),
     url(r'^registration/$', views.registration, name='registration'),
 

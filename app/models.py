@@ -93,7 +93,7 @@ class Competition(models.Model):
         return "Competition[{}]".format(self.name)
 
     @staticmethod
-    def get_active():
+    def current():
         """Get the active competition."""
 
         return Competition.objects.filter(active=True).first()
@@ -158,3 +158,17 @@ class Answer(models.Model):
     student = models.ForeignKey(Student, related_name="answers", null=True, blank=True)
     team = models.ForeignKey(Team, related_name="answers", null=True, blank=True)
     value = models.FloatField(null=True, blank=True)
+
+
+class Scoreboard(models.Model):
+    """A completed scoreboard calculation."""
+
+    competition = models.ForeignKey(Competition)
+    datetime = models.DateTimeField(auto_created=True)
+    content = models.TextField()
+
+    @staticmethod
+    def last():
+        """Get the most recent scoreboard."""
+
+        return Scoreboard.objects.order_by("datetime").first().content
