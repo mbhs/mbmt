@@ -30,7 +30,7 @@
                     <span class="gray">Correct | Incorrect | Unanswered</span>
                 {% endif %}
             {% elif question.get_type_display == "estimation" %}
-                <input type="number" name="{{ question.id }}" value="{{ answer.value|default:"" }}">
+                <input type="number" step="any" name="{{ question.id }}" value="{{ answer.value|default:"" }}">
             {% endif %}
             </td>
         </tr>
