@@ -19,7 +19,7 @@ def load(path, loader=json.load):
         round = models.Round.new(competition, r["id"], r["name"], models.ROUND_GROUPINGS[r["grouping"]])
         qc = 0
         for i, q in enumerate(r["questions"]):
-            models.Question.new(round, i+1, q["label"], models.QUESTION_TYPES[q["type"]])
+            models.Question.new(round, i+1, q["label"], models.QUESTION_TYPES[q["type"]], weight=q.get("weight", 0))
             qc += 1
         print("{0.name}: {1} questions".format(round, qc))
 

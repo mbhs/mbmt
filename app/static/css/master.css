@@ -178,6 +178,11 @@ table.teams .team,
 table.teams .guts,
 table.teams .division { width: 130px; }
 
+table.attendance { margin-top: 1.5em; }
+table.attendance .attending { width: 1px; }
+
+.save { width: 100%; }
+
 .grading .round {
     padding-top: 0.5em;
     margin: 0;

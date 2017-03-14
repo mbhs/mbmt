@@ -71,6 +71,7 @@ class Student(models.Model):
     subject2 = models.CharField(max_length=2, blank=True, choices=_SUBJECT_CHOICES, verbose_name="Subject 2")
     team = models.ForeignKey(Team, related_name="students")
     size = models.IntegerField(choices=_SHIRT_SIZES, default=0)
+    attending = models.BooleanField(default=False)
 
     class Meta:
         ordering = ('name',)
@@ -142,12 +143,13 @@ class Question(models.Model):
     order = models.IntegerField()
     label = models.CharField(max_length=32)
     type = models.IntegerField(choices=_QUESTION_TYPES)
+    weight = models.FloatField(default=1.0)
 
     @staticmethod
-    def new(round, order, label, type):
+    def new(round, order, label, type, weight=1.0):
         """Instantiate a new question."""
 
-        question = Question(round=round, order=order, label=label, type=type)
+        question = Question(round=round, order=order, label=label, type=type, weight=weight)
         question.save()
 
 
@@ -158,17 +160,3 @@ class Answer(models.Model):
     student = models.ForeignKey(Student, related_name="answers", null=True, blank=True)
     team = models.ForeignKey(Team, related_name="answers", null=True, blank=True)
     value = models.FloatField(null=True, blank=True)
-
-
-class Scoreboard(models.Model):
-    """A completed scoreboard calculation."""
-
-    competition = models.ForeignKey(Competition)
-    datetime = models.DateTimeField(auto_created=True)
-    content = models.TextField()
-
-    @staticmethod
-    def last():
-        """Get the most recent scoreboard."""
-
-        return Scoreboard.objects.order_by("datetime").first().content

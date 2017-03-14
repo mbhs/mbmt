@@ -146,8 +146,25 @@ def remove_team(request, pk=None):
 
     if pk:
         models.Team.objects.filter(id=pk).delete()
-
     return redirect("teams")
+
+
+@login_required
+@permission_required("app.can_grade")
+def attendance(request):
+    if request.method == "POST":
+        for iid in filter(lambda x: x.isnumeric(), request.POST):
+            student = models.Student.objects.filter(id=iid).first()
+            if student and request.POST[iid] in ("0", "1"):
+                student.attending = bool(int(request.POST[iid]))
+                student.save()
+        return redirect("attendance")
+
+    students = models.Student.objects.all()
+    return render(request, "attendance.html", {
+        "students": zip(students[:len(students)//3+1],
+                        students[len(students)//3+1:2*len(students)//3+1],
+                        students[2*len(students)//3+1:])})
 
 
 @login_required
@@ -222,9 +239,8 @@ def score(request, grouping, id, round):
 def scoreboard(request):
     """Do final scoreboard calculations."""
 
-    if request.method == "POST":
-        grading.grade()
-    return render(request, "scoreboard.html", models.Scoreboard.last)
+    scores = grading.grade()
+    return render(request, "scoreboard.html", {})
 
 
 def update_answers(request, answers):

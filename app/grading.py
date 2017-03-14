@@ -2,6 +2,44 @@ import json
 from app import models
 
 
+grading = {}
+bonus_cache = {}
+
+
+def for_round(*names):
+    def decorator(function):
+        for name in names:
+            grading[name] = function
+        return function
+    return decorator
+
+
+def calculate_bonuses(round):
+    """Calculate the point bonuses for an individual round."""
+
+    for question in round.questions:
+        pass
+
+
+def grade_subject_test(round, student):
+    """Grade an individual subject test by round."""
+
+    score = 0
+    for question in round.questions:
+        answer = models.Answer.objects.filter(question=question, student=student).first()
+        if not answer:
+            return None
+        if question.type == models.QUESTION_TYPES["correct"]:
+            score += 1
+
+
+@for_round("subject1", "subject2")
+def grade_subject_tests(competition=None):
+    """Grade all individual scores."""
+
+
+
+
 def grade(competition=None):
     """Do grading."""
 
