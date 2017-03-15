@@ -7,14 +7,14 @@
     <table id="attendance" class="attendance table table-striped">
         <tr>
             <th class="attending">&nbsp;?</th>
-            <th class="name" colspan="5">Name</th>
+            <th class="name" colspan="100%">Name</th>
         </tr>
         {% for row in students %}
             <tr>
             {% for student in row %}
                 <td class="attending">
-                    <input name="{{ student.id }}" type="hidden" value="1">
-                    <input name="{{ student.id }}" type="checkbox" value="0" {% if student.attending %}checked{% endif %}>
+                    <input name="{{ student.id }}" type="checkbox" value="present" {% if student.attending %}checked{% endif %}>
+                    <input name="{{ student.id }}" type="hidden" value="absent">
                 </td>
                 <td class="name">{{ student.name }}</td>
             {% endfor %}

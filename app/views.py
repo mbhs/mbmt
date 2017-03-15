@@ -152,19 +152,24 @@ def remove_team(request, pk=None):
 @login_required
 @permission_required("app.can_grade")
 def attendance(request):
+
     if request.method == "POST":
+
         for iid in filter(lambda x: x.isnumeric(), request.POST):
             student = models.Student.objects.filter(id=iid).first()
-            if student and request.POST[iid] in ("0", "1"):
-                student.attending = bool(int(request.POST[iid]))
-                student.save()
+            if student:
+                values = request.POST.getlist(iid)
+                if "absent" in values:
+                    attending = "present" in request.POST.getlist(iid)
+                    if student.attending != attending:
+                        student.attending = attending
+                        student.save()
         return redirect("attendance")
 
     students = models.Student.objects.all()
-    return render(request, "attendance.html", {
-        "students": zip(students[:len(students)//3+1],
-                        students[len(students)//3+1:2*len(students)//3+1],
-                        students[2*len(students)//3+1:])})
+    count = 4
+    columns = zip(*(students[(i*len(students))//count:((i+1)*len(students))//count+1] for i in range(count)))
+    return render(request, "attendance.html", {"students": columns})
 
 
 @login_required
@@ -241,6 +246,13 @@ def scoreboard(request):
 
     scores = grading.grade()
     return render(request, "scoreboard.html", {})
+
+
+def live(request):
+    """Get the live guts scoreboard."""
+
+    scores = grading.grade_guts()
+
 
 
 def update_answers(request, answers):

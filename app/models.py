@@ -144,6 +144,7 @@ class Question(models.Model):
     label = models.CharField(max_length=32)
     type = models.IntegerField(choices=_QUESTION_TYPES)
     weight = models.FloatField(default=1.0)
+    answer = models.FloatField(blank=True, null=True)
 
     @staticmethod
     def new(round, order, label, type, weight=1.0):
