@@ -85,11 +85,11 @@
         {"label": 23, "type": "correct", "weight": 9},
         {"label": 24, "type": "correct", "weight": 9},
         {"label": 25, "type": "correct", "weight": 9},
-        {"label": 26, "type": "estimation", "weight": 12},
-        {"label": 27, "type": "estimation", "weight": 12},
-        {"label": 28, "type": "estimation", "weight": 12},
-        {"label": 29, "type": "estimation", "weight": 12},
-        {"label": 30, "type": "estimation", "weight": 12}
+        {"label": 26, "type": "estimation", "weight": 12, "answer": 100},
+        {"label": 27, "type": "estimation", "weight": 12, "answer": 200},
+        {"label": 28, "type": "estimation", "weight": 12, "answer": 300},
+        {"label": 29, "type": "estimation", "weight": 12, "answer": 400},
+        {"label": 30, "type": "estimation", "weight": 12, "answer": 500}
       ]
     }
   ]
