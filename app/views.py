@@ -7,6 +7,7 @@ from app import forms, models, grading
 
 
 ALLOW_REGISTRATION = False
+ALLOW_ADD_TEAMS = False
 
 
 def index(request):
@@ -92,7 +93,7 @@ def logout(request):
 
 @login_required
 def teams(request):
-    return render(request, "teams.html")
+    return render(request, "teams.html", {"allow_add_teams": ALLOW_ADD_TEAMS})
 
 
 @login_required

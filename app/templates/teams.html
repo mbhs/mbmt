@@ -47,7 +47,11 @@
         </td>    </tr>
     {% endfor %}
     <tr>
-        <td><a href="{% url 'edit_team' %}">+ Add Team</a></td>
+        <td>
+            {% if allow_add_teams %}
+                <a href="{% url 'edit_team' %}">+ Add Team</a>
+            {% endif %}
+        </td>
         <td></td>
         <td></td>
         <td></td>
