@@ -47,6 +47,8 @@ class Competition(models.Model):
 
         return "Competition[{}]".format(self.name)
 
+    __str__ = __repr__
+
     @staticmethod
     def current():
         """Get the active competition."""
@@ -95,17 +97,24 @@ class Team(models.Model):
 
         return Team.objects.filter(competition=Competition.current())
 
+    def get_students_display(self):
+        """Get the comma separated list of students."""
+
+        return ", ".join(map(lambda x: x.name, self.students.all()))
+
 
 class Student(models.Model):
     """A student participating in the competition."""
 
-    name = models.CharField(max_length=256, blank=True)
     # TODO: possibly implement first and last name
     # first_name = models.CharField(max_length=64)
     # last_name = models.CharField(max_length=64)
+
+    name = models.CharField(max_length=256, blank=True)
+    team = models.ForeignKey(Team, related_name="students")
     subject1 = models.CharField(max_length=2, blank=True, choices=SUBJECT_CHOICES, verbose_name="Subject 1")
     subject2 = models.CharField(max_length=2, blank=True, choices=SUBJECT_CHOICES, verbose_name="Subject 2")
-    team = models.ForeignKey(Team, related_name="students")
+
     size = models.IntegerField(choices=SHIRT_SIZES, default=0)
     attending = models.BooleanField(default=False)
 

@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load staticfiles %}
+{% load grading_status %}
 
 {% block extrahead %}
 <style>body { overflow-y: scroll; }</style>
@@ -34,11 +35,17 @@
             </td>
             <td class="division">{{ student.team.get_division_display }}</td>
             <td class="subject">
-                {{ student.score1.args }} ({{ student.subject1|upper }}) <br>
+                {% autoescape off %}
+                {{ student|grading_status:"subject1" }}
+                {% endautoescape %}
+                ({{ student.subject1|upper }}) <br>
                 <a href="{% url 'score' grouping="individual" id=student.id round='subject1' %}">edit</a>
             </td>
             <td class="subject">
-                {{ student.score2.args }} ({{ student.subject2|upper }}) <br>
+                {% autoescape off %}
+                {{ student|grading_status:"subject2" }}
+                {% endautoescape %}
+                ({{ student.subject2|upper }}) <br>
                 <a href="{% url 'score' grouping="individual" id=student.id round='subject2' %}">edit</a>
             </td>
         </tr>

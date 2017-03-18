@@ -26,15 +26,15 @@ def score(request, grouping, id, round):
     """Scoring view."""
 
     competition = models.Competition.current()
-    round = competition.rounds.filter(id=round).first()
+    round = competition.rounds.filter(ref=round).first()
 
     if grouping == "team":
-        return score_team(request, round)
+        return score_team(request, id, round)
     elif grouping == "individual":
-        return score_individual(request, round)
+        return score_individual(request, id, round)
 
 
-def score_team(request, round):
+def score_team(request, id, round):
     """Scoring view for a team."""
 
     # Iterate questions and get answers
@@ -63,7 +63,7 @@ def score_team(request, round):
         "mode": "team"})
 
 
-def score_individual(request, round):
+def score_individual(request, id, round):
     """Scoring view for an individual."""
 
     # Iterate questions and get answers

@@ -30,6 +30,13 @@ def load(path, loader=json.load):
         date_shirt_order_end=date(c["dates"]["shirt_order_end"]))
     competition.save()
 
+    # Clear old stuff
+    print("Clearing old competition data...")
+    for round in competition.rounds.all():
+        for question in round.questions.all():
+            question.delete()
+        round.delete()
+
     # Add rounds
     for r in c["rounds"]:
         round = models.Round.new(
@@ -73,6 +80,9 @@ class Command(BaseCommand):
         if kwargs["command"] == "list":
             for competition in models.Competition.objects.all():
                 print("  {1:<2} {0.id:<12} {0.name:<20}".format(competition, "*" if competition.active else ""))
+
+        if kwargs["command"] == "delete":
+            models.Competition.current().delete()
 
         if kwargs["command"] == "load":
             start = time.time()
