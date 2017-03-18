@@ -49,7 +49,7 @@ def load(path, loader=json.load):
             models.Question.new(
                 round, i+1, label=q["label"],
                 type=models.QUESTION_TYPES[q["type"]],
-                weight=q.get("weight", 0))
+                weight=q.get("weight", 1))
             qc += 1
         print("{0.name}: {1} questions".format(round, qc))
 

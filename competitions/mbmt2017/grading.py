@@ -39,39 +39,35 @@ def grade_subject_tests(scores):
     pass
 
 
+@register(QUESTION, round__ref="guts")
+def grade_guts_question(question, answer):
+    """Grade an individual question from the guts round."""
+
+
 @register(ROUND, ref="guts")
 def grade_guts(questions, answers):
     """Grade guts rounds for all teams."""
 
-    competition = competition or Competition.current()
-    guts = competition.rounds.filter(id="guts")
-    scores = {}
+    score = 0
 
-    for team in Team.objects.all():
-        score = 0
-        for question in guts.questions:
+    for question in questions:
+        answer = Answer.objects.filter(team=team, question=question).first()
+        if not answer:
+            score = None
+            break
 
-            answer = Answer.objects.filter(team=team, question=question).first()
-            if not answer:
-                score = None
-                break
+        value = 0
+        if question.type == QUESTION_TYPES["correct"]:
+            value = answer.value
+        elif question.type == QUESTION_TYPES["estimation"]:
+            e = answer.value
+            a = question.answer
+            value = max(0, 12 - math.log10(max(e/a, a/e)))
 
-            value = 0
-            if question.type == QUESTION_TYPES["correct"]:
-                value = answer.value
-            elif question.type == QUESTION_TYPES["estimation"]:
-                e = answer.value
-                a = question.answer
-                value = max(0, 12 - math.log10(max(e/a, a/e)))
+        score += value * question.weight
 
-            score += value * question.weight
+    try:
+        scores[team.division][team.name] = score
+    except IndexError:
+        scores[team.division] = {}
 
-        try:
-            scores[team.division][team.name] = score
-        except IndexError:
-            scores[team.division] = {}
-
-    for division in scores:
-        scores[division] = list(sorted(((team, scores[division][team]) for team in scores[division])))
-
-    return scores
