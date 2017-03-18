@@ -1,18 +1,9 @@
-import json
-from app import models
 import math
 
+from grading import grading
 
-grading = {}
+
 individual_bonus_cache = {}
-
-
-def for_round(*names):
-    def decorator(function):
-        for name in names:
-            grading[name] = function
-        return function
-    return decorator
 
 
 def calculate_bonuses(round):
@@ -31,17 +22,18 @@ def grade_subject_test(round, student):
         if not answer:
             return None
         if question.type == models.QUESTION_TYPES["correct"]:
-            score += 1
+            score   += 1
 
 
-@for_round("subject1", "subject2")
+@grade_for("subject1")
+@grade_for("subject2")
 def grade_subject_tests(competition=None):
     """Grade all individual scores."""
 
     pass
 
 
-@for_round("guts")
+@grade_for("guts")
 def grade_guts(competition=None):
     """Grade guts rounds for all teams."""
 
@@ -73,20 +65,7 @@ def grade_guts(competition=None):
         except IndexError:
             scores[team.division] = {}
 
+    for division in scores:
+        scores[division] = list(sorted(((team, scores[division][team]) for team in scores[division])))
+
     return scores
-
-
-def grade(competition=None):
-    """Do grading."""
-
-    competition = competition or models.Competition.current()
-    scoreboard = {"individual": {}, "team": {}}
-
-    individual_rounds = competition.rounds.filter(models.ROUND_GROUPINGS["individual"]).all()
-    individual_correct = {r: {q: 0 for q in r.questions} for r in individual_rounds}
-    for r in individual_rounds:
-        for q in r.questions.all():
-            individual_correct[r][q] = sum([a.value for a in models.Answer.filter(question=q).all()])
-
-    for student in models.Student.objects.all():
-        pass

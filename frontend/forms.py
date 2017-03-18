@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from crispy_forms.helper import FormHelper
 
-from app import models
+from frontend import models
 
 
 class PrettyHelper(FormHelper):
@@ -28,8 +28,7 @@ class RegisterForm(PrettyForm, forms.ModelForm):
     """School sponsor registration form.
 
     To simplify registration and team management, the username field
-    has effectively been replaced by the email field. In other words,
-    users log in with their emails. This form makes that work.
+    has effectively been replaced by the email field.
     """
 
     username = forms.EmailField(max_length=64, label="Email address")
@@ -48,6 +47,8 @@ class RegisterForm(PrettyForm, forms.ModelForm):
         return cleaned_data
 
     class Meta:
+        """Form metadata and formatting."""
+
         model = User
         exclude = ["email"]
         fields = ["username", "password", "password_duplicate", "first_name", "last_name", "school_name"]
@@ -57,17 +58,19 @@ class TeamForm(PrettyForm, forms.ModelForm):
     """Form for creating a new team."""
 
     class Meta:
+        """Form metadata and formatting."""
+
         model = models.Team
         fields = ["name", "division"]
 
 
 class StudentForm(forms.ModelForm):
+    """Inline form for a single student."""
 
     def clean(self):
         """Clean and validate student data."""
 
-        cleaned_data = super(StudentForm, self).clean()
-
+        cleaned_data = super().clean()
         if any(cleaned_data.values()):
             if not cleaned_data["name"]:
                 raise ValidationError("A name is required.")
@@ -75,14 +78,16 @@ class StudentForm(forms.ModelForm):
                 raise ValidationError("Two subjects are required.")
             if cleaned_data["subject1"] == cleaned_data["subject2"]:
                 raise ValidationError("The two subjects must be different.")
-
         return cleaned_data
 
     class Meta:
+        """Form metadata and formatting."""
+
         model = models.Student
         fields = ["name", "subject1", "subject2", "size"]
 
 
+# Form factory for multiple students on a single team
 NaiveStudentFormSet = forms.modelformset_factory(
     models.Student,
     form=StudentForm,
@@ -91,15 +96,17 @@ NaiveStudentFormSet = forms.modelformset_factory(
 
 
 class StudentFormSet(NaiveStudentFormSet):
-    def clean(self):
-        students = [form.instance for form in self if form.instance.name]
+    """Multiple student editor for the main team editing form."""
 
+    def clean(self):
+        """Clean and validate student data."""
+
+        students = [form.instance for form in self if form.instance.name]
         if len(students) == 0:
             raise ValidationError("There must be at least one student.")
-
-        subjects = {subject: len(list(filter(lambda student: student.subject1 == code or
-                               student.subject2 == code, students))) for code, subject in models._SUBJECT_CHOICES}
-
+        subjects = {
+            subject: len(list(filter(lambda student: code in (student.subject1, student.subject2), students)))
+            for code, subject in models.SUBJECT_CHOICES}
         if len(students) == 3:
             for subject, count in subjects.items():
                 if count < 1:
@@ -140,4 +147,3 @@ class LoginForm(PrettyForm):
             password=self.cleaned_data['password'])
         if self.user is None:
             raise forms.ValidationError("Login was unsuccessful!")
-        return self.cleaned_data

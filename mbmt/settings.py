@@ -31,6 +31,8 @@ ALLOWED_HOSTS = ["127.0.0.1"]
 # Application definition
 
 INSTALLED_APPS = [
+    'grading',
+    'frontend',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -38,7 +40,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'crispy_forms',
-    'app'
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -126,9 +127,9 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-STATIC_ROOT = os.path.join(BASE_DIR, "static")
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'app', 'static')]
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'frontend/static')]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
 
