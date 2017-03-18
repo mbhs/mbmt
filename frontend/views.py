@@ -1,9 +1,10 @@
 from django.contrib import auth
-from django.contrib.auth.decorators import login_required, permission_required
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect, get_object_or_404
 
 from functools import partial
+import datetime
 
 from frontend import forms, models
 
@@ -32,7 +33,7 @@ def register(request):
                 form.cleaned_data["username"],
                 email=form.cleaned_data["username"],
                 password=form.cleaned_data["password"],
-                first_name=form.cleaned_data["first_name"],
+                first_name=form.cleaned_data["name"],
                 last_name=form.cleaned_data["last_name"])
             school = models.School(user=user, name=form.cleaned_data["school_name"])
             school.save()
@@ -40,10 +41,14 @@ def register(request):
             # Login the user and redirect
             user = auth.authenticate(username=user.get_username(), password=form.cleaned_data["password"])
             auth.login(request, user)
-            return redirect('teams')
+            return redirect("teams")
+
+    if request.user.is_authenticated:
+        return redirect("teams")
 
     # Render the form to the page
-    return render(request, "register.html", {"form": form, "allow_registration": ALLOW_REGISTRATION})
+    allow_registration = datetime.date.today() <= models.Competition.current().date_registration_end
+    return render(request, "register.html", {"form": form, "allow_registration": allow_registration})
 
 
 def login(request):
@@ -74,7 +79,8 @@ def logout(request):
 def display_teams(request):
     """Display current teams."""
 
-    return render(request, "teams.html", {"allow_add_teams": ALLOW_ADD_TEAMS})
+    allow_add_teams = datetime.date.today() <= models.Competition.current().date_team_add_end
+    return render(request, "teams.html", {"allow_add_teams": allow_add_teams})
 
 
 @login_required
@@ -118,8 +124,7 @@ def edit_team(request, pk=None):
     return render(request, "team.html", {
         "team_form": team_form,
         "student_forms": student_forms,
-        "student_helper": forms.PrettyHelper()
-    })
+        "student_helper": forms.PrettyHelper()})
 
 
 @login_required

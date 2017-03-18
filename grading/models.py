@@ -1,6 +1,6 @@
 from django.db import models
-from django.dispatch import receiver
-from django.db.models.signals import post_save
+# from django.dispatch import receiver
+# from django.db.models.signals import post_save
 
 import frontend.models
 from frontend.models import Competition
@@ -21,18 +21,20 @@ QUESTION_TYPES = {
     "correct": 0, "estimation": 1}
 
 
-@receiver(post_save, sender=Competition)
-def save_rounds(sender: type, instance: Competition, **options):
-    """Save rounds when a competition is saved"""
-
-    for round in instance.rounds:
-        round.save()
+# Unnecessary at the moment
+#
+# @receiver(post_save, sender=Competition)
+# def save_rounds(sender: type, instance: Competition, **options):
+#     """Save rounds when a competition is saved"""
+#
+#     for round in instance.rounds.all():
+#         round.save()
 
 
 class Round(models.Model):
     """A single competition round."""
 
-    id = models.CharField(max_length=12, primary_key=True)
+    ref = models.CharField(max_length=12)
     name = models.CharField(max_length=64)
     competition = models.ForeignKey(Competition, related_name="rounds")
     grouping = models.IntegerField(choices=_ROUND_GROUPINGS)
@@ -43,21 +45,23 @@ class Round(models.Model):
         return "Round[{}]".format(self.name)
 
     @staticmethod
-    def new(competition: Competition, iid: str, save: bool=True, **options):
+    def new(competition: Competition, ref: str, save: bool=True, **options):
         """Initialize the new round as part of the competition."""
 
-        round = Round(competition=competition, id=iid, **options)
+        round = Round(competition=competition, ref=ref, **options)
         if save:
             round.save()
         return round
 
 
-@receiver(post_save, sender=Round)
-def save_rounds(sender: type, instance: Round, **options):
-    """Save rounds when a competition is saved"""
-
-    for question in instance.questions:
-        question.save()
+# Unnecessary at the moment
+#
+# @receiver(post_save, sender=Round)
+# def save_rounds(sender: type, instance: Round, **options):
+#     """Save rounds when a competition is saved"""
+#
+#     for question in instance.questions.all():
+#         question.save()
 
 
 class Question(models.Model):
@@ -71,10 +75,10 @@ class Question(models.Model):
     answer = models.FloatField(blank=True, null=True)
 
     @staticmethod
-    def new(round: Round, iid: str, save: bool=True, **options):
+    def new(round: Round, order: int, save: bool=True, **options):
         """Create a new question within the round."""
 
-        question = Question(round=round, id=iid, **options)
+        question = Question(round=round, order=order, **options)
         if save:
             question.save()
         return question

@@ -2,8 +2,8 @@ from django.contrib.auth.decorators import login_required, permission_required
 from django.shortcuts import render, redirect
 
 import frontend.models
+from competitions.mbmt2017 import grading
 from . import models
-import grade
 
 
 @login_required
@@ -161,7 +161,7 @@ def attendance_post(request):
 def scoreboard(request):
     """Do final scoreboard calculations."""
 
-    scores = grade.grade()
+    scores = grading.grade()
     return render(request, "scoreboard.html", {})
 
 
@@ -169,7 +169,7 @@ def live(request, round):
     """Get the live guts scoreboard."""
 
     if round == "guts":
-        scores = grade.grade("guts")
+        scores = grading.grade("guts")
         return render("live_guts.html", {"scores": scores})
     else:
         return redirect("scoreboard")

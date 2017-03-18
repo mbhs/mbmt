@@ -1,13 +1,16 @@
 {
   "id": "mbmt2017",
   "name": "MBMT 2017",
-  "date": "2017-4-1",
-  "signup_window": ["2017-2-1", "2017-3-13"],
-  "team_registration_window": ["2017-2-1", "2017-3-6"],
-  "shirt_order_window": ["2017-2-1", "2017-3-15"],
+  "dates": {
+    "competition": "2017-04-01",
+    "registration_start": "2017-02-01",
+    "registration_end": "2017-03-06",
+    "team_add_end": "2017-03-06",
+    "shirt_order_end": "2017-03-15"
+  },
   "rounds": [
     {
-      "id": "subject1",
+      "ref": "subject1",
       "name": "Individual Round 1",
       "grouping": "individual",
       "questions": [
@@ -22,7 +25,7 @@
       ]
     },
     {
-      "id": "subject2",
+      "ref": "subject2",
       "name": "Individual Round 2",
       "grouping": "individual",
       "questions": [
@@ -37,7 +40,7 @@
       ]
     },
     {
-      "id": "team",
+      "ref": "team",
       "name": "Team Round",
       "grouping": "team",
       "questions": [
@@ -59,7 +62,7 @@
       ]
     },
     {
-      "id": "guts",
+      "ref": "guts",
       "name": "Guts Round",
       "grouping": "team",
       "questions": [

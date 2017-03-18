@@ -12,12 +12,11 @@ urlpatterns = [
     url(r'^about/$', views.about, name='about'),
     url(r'^archive/$', views.archive, name='archive'),
     url(r'^topics/$', views.topics, name='topics'),
-    url(r'^registration/$', views.registration, name='registration'),
 
     # Account actions
-    url(r'^accounts/register/$', views.register, name='register'),
-    url(r'^accounts/login/$', views.login, name='login'),
-    url(r'^accounts/logout/$', views.logout, name='logout'),
+    url(r'^register/$', views.register, name='register'),
+    url(r'^login/$', views.login, name='login'),
+    url(r'^logout/$', views.logout, name='logout'),
 
     # Team editing
     url(r'^teams/$', views.display_teams, name='teams'),
