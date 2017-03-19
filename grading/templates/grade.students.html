@@ -30,7 +30,7 @@
             <td class="number">{{ forloop.counter }}</td>
             <td class="name">{{ student.name }}</td>
             <td class="information">
-                <span class="ellipsis">{{ student.team.name }}</span>
+                <span class="team-name ellipsis">{{ student.team.name }}</span>
                 <span class="italics">{{ student.team.school.name }}</span>
             </td>
             <td class="division">{{ student.team.get_division_display }}</td>

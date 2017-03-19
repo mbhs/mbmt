@@ -193,6 +193,11 @@ table.attendance .attending { width: 1px; }
     font-size: 20px;
 }
 
+table#students .team-name {
+    max-width: 400px;
+    text-overflow: ellipsis;
+}
+
 .grading .grader { width: 50%; }
 .grading .grader .qlabel { text-align: right; width: 40px; }
 .grading .grader td input[type="radio"] { margin-left: 20px; }

@@ -3,6 +3,7 @@ from django import template
 import frontend.models
 from .. import models
 
+
 register = template.Library()
 
 
