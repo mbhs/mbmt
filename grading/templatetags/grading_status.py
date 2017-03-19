@@ -27,8 +27,8 @@ def grading_status(team_or_student, round):
         return tags
     if models.Answer.objects.filter(**search, question__round=round, value__isnull=False).exists():
         tags += ICON_YES
-        # if models.Answer.objects.filter(**search, question__round=round, value__isnull=True).exists():
-        #     tags += ICON_ALERT
+        if models.Answer.objects.filter(**search, question__round=round, value__isnull=True).exists():
+            tags += ICON_ALERT
     else:
         tags += ICON_NO
 
