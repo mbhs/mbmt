@@ -2,7 +2,6 @@ from django.contrib.auth.decorators import login_required, permission_required
 from django.shortcuts import render, redirect
 
 import frontend.models
-from competitions.mbmt2017 import grading
 from . import models
 
 
