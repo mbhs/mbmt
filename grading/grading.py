@@ -34,12 +34,14 @@ class CompetitionGrader:
             score = 0
             for question in round.questions.all():
                 answer = models.Answer.objects.filter(student=student, question=question).first()
-                score += self.question_graders.get(question.id, self.default_question_grader)(question, answer)
+                if answer:
+                    result = self.question_graders.get(question.id, self.default_question_grader)(question, answer)
+                    score += result or 0
 
             # Account division
             try:
                 scores[student.team.division][student] = score
-            except IndexError:
+            except KeyError:
                 scores[student.team.division] = {student: score}
 
         return scores
@@ -56,16 +58,14 @@ class CompetitionGrader:
             score = 0
             for question in round.questions.all():
                 answer = models.Answer.objects.filter(team=team, question=question).first()
-                if not answer:
-                    score += 0
-                    continue
-                result = self.question_graders.get(question.id, self.default_question_grader)(question, answer)
-                score += result or 0
+                if answer:
+                    result = self.question_graders.get(question.id, self.default_question_grader)(question, answer)
+                    score += result or 0
 
             # Account for division
             try:
                 scores[team.division][team] = score
-            except IndexError:
+            except KeyError:
                 scores[team.division] = {team: score}
 
         return scores
@@ -89,7 +89,7 @@ class CompetitionGrader:
     def register_round_grader(self, query, function):
         """Register a round grading function to a set of questions."""
 
-        for round in models.Question.objects.filter(query, round__competition__id=self.COMPETITION).all():
+        for round in models.Round.objects.filter(query, competition__id=self.COMPETITION).all():
             self.round_graders[round.id] = function
 
     def grade_round(self, round):

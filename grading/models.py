@@ -12,6 +12,8 @@ _ROUND_GROUPINGS = (
 ROUND_GROUPINGS = {
     0: "individual", 1: "team",
     "individual": 0, "team": 1}
+INDIVIDUAL = 0
+TEAM = 1
 
 _QUESTION_TYPES = (
     (0, "correct"),
@@ -19,7 +21,8 @@ _QUESTION_TYPES = (
 QUESTION_TYPES = {
     0: "correct", 1: "estimation",
     "correct": 0, "estimation": 1}
-
+CORRECT = 0
+ESTIMATION = 1
 
 # Unnecessary at the moment
 #

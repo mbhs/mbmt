@@ -38,6 +38,7 @@
                     {% if request.user.is_authenticated %}
                     {% if perms.app.can_grade %}
                         <li><a href="{% url 'attendance' %}">Attendance</a></li>
+                        <li><a href="{% url 'name_tags' %}">Nametags</a></li>
                         <li><a href="{% url 'grade_students' %}">Grading</a></li>
                     {% else %}
                         <li><a href="{% url 'teams' %}">My Teams</a></li>

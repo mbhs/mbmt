@@ -6,21 +6,21 @@ from . import models
 
 
 @login_required
-@permission_required("app.can_grade")
+@permission_required("grading.can_grade")
 def view_students(request):
     return render(request, "grade.students.html", {
-        "students": frontend.models.Student.objects.all()})
+        "students": frontend.models.Student.current()})
 
 
 @login_required
-@permission_required("app.can_grade")
+@permission_required("grading.can_grade")
 def view_teams(request):
     return render(request, "grade.teams.html", {
         "teams": frontend.models.Team.objects.all()})
 
 
 @login_required
-@permission_required("app.can_grade")
+@permission_required("grading.can_grade")
 def score(request, grouping, id, round):
     """Scoring view."""
 
@@ -51,7 +51,7 @@ def score_team(request, id, round):
     # Update the answers
     if request.method == "POST":
         update_answers(request, answers)
-        return redirect(request.META.get('HTTP_REFERER', '/'))
+        return redirect("grade_teams")
 
     # Render the grading view
     return render(request, "grader.html", {
@@ -80,7 +80,7 @@ def score_individual(request, id, round):
     # Update the answers
     if request.method == "POST":
         update_answers(request, answers)
-        return redirect(request.META.get('HTTP_REFERER', '/'))
+        return redirect("grade_students")
 
     # Render the grading view
     return render(request, "grader.html", {
@@ -104,17 +104,17 @@ def update_answers(request, answers):
 
 
 @login_required
-@permission_required("app.can_grade")
+@permission_required("grading.can_grade")
 def shirts(request):
     """Shirt sizes view."""
 
-    sizes = [(size[1], frontend.models.Student.objects.filter(size=i).count())
+    sizes = [(size[1], frontend.models.Student.objects.filter(team__competition__active=True, size=i).count())
              for i, size in enumerate(frontend.models.SHIRT_SIZES)]
     return render(request, "shirts.html", {"sizes": sizes})
 
 
 @login_required
-@permission_required("app.can_grade")
+@permission_required("grading.can_grade")
 def attendance(request):
     """Display the attendance page."""
 
@@ -157,6 +157,13 @@ def attendance_post(request):
                     student.save()
 
 
+@permission_required("grading.can_grade")
+def name_tags(request):
+    """Display a table from which student name tags can be generated."""
+
+    return render(request, "nametags.html", {"students": frontend.models.Student.current()})
+
+
 def scoreboard(request):
     """Do final scoreboard calculations."""
 
@@ -169,7 +176,7 @@ def live(request, round):
 
     if round == "guts":
         scores = grading.grade("guts")
-        return render("live_guts.html", {"scores": scores})
+        return render("guts.html", {"scores": scores})
     else:
         return redirect("scoreboard")
 

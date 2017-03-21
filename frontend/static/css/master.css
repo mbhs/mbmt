@@ -1,12 +1,20 @@
+/***********/
+/* Imports */
+/***********/
+
 @import url('https://fonts.googleapis.com/css?family=Roboto:400,700|Slabo+27px');
 
+
+/*******************/
+/* Universal rules */
+/*******************/
+
 body {
-    padding-top: 50px;
-    font-family: 'Roboto';
+    font-family: 'Roboto', serif;
 }
 
 h1, h2, h3, h4, h5, h6 {
-    font-family: 'Slabo 27px';
+    font-family: 'Slabo 27px', sans-serif;
 }
 
 #menu {
@@ -14,14 +22,10 @@ h1, h2, h3, h4, h5, h6 {
     padding-bottom: 0;
 }
 
-#splash {
-    width: 100%;
-    box-sizing: border-box;
-}
-
 #content {
     /*max-width: 720px;*/
-    padding-top: 1em;
+    /*padding-top: 1em;*/
+    padding-top: 65px;
     padding-bottom: 70px;
 }
 
@@ -58,6 +62,24 @@ input {
 .lowerer { margin-top: 0.5em; }
 .lowererer { margin-top: 1.5em; }
 
+footer {
+    position: relative;
+    margin-top: -50px;
+    height: 50px;
+    clear: both;
+
+    line-height: 50px;
+    background-color: #ccc;
+    text-align: center;
+    width: 100%;
+}
+
+
+
+/**************/
+/* Title page */
+/**************/
+
 h1.title {
     font-size: 10vw;
     text-align: center;
@@ -90,12 +112,6 @@ p.main-text {
     margin-top: 0; 
 }
 
-/*.center {*/
-    /*max-width: 720px;*/
-    /*text-align: center;*/
-    /*margin: 2em auto;*/
-/*}*/
-
 .asteriskField {
     display: none;
 }
@@ -104,7 +120,21 @@ ol.top > li {
     margin-top: 0.3em;
 }
 
-/* .red { color: red; } */
+.btn-register {
+    width: 40%;
+    display: block;
+    height: 2em;
+    vertical-align: middle;
+    font-size: 3em;
+    margin: 0 auto;
+    border-radius: 15px;
+    background-color: #ba2222;
+}
+
+
+/********************/
+/* Information page */
+/********************/
 
 table.schedule {
     font-size: 14px;
@@ -127,47 +157,34 @@ table.schedule td:last-of-type {
 }
 
 
-table#teams {
-    margin-top: 1em;
-}
-
-table#teams ul {
-    margin-bottom: 0;
-    padding-left: 0px;
-    list-style-type: none;
-}
+/**************/
+/* About page */
+/**************/
 
 div.about-person img {
     border-radius: 50%;
     width: 100%;
 }
 
-footer {
-    position: relative;
-    margin-top: -50px;
-    height: 50px;
-    clear: both;
 
-    line-height: 50px;
-    background-color: #ccc;
-    text-align: center;
-    width: 100%;
+/***********/
+/* Grading */
+/***********/
+
+table#teams {
+    margin-top: 1em;
 }
 
-.btn-register {
-    width: 40%;
-    display: block;
-    height: 2em;
-    vertical-align: middle;
-    font-size: 3em;
-    margin: 0 auto;
-    border-radius: 15px;
-    background-color: #ba2222;
+table#teams ul {
+    margin-bottom: 0;
+    padding-left: 0;
+    list-style-type: none;
 }
 
 table .subject {
     width: 120px;
 }
+
 
 table.students .number,
 table.teams .number { width: 50px; }
@@ -196,6 +213,20 @@ table.attendance .attending { width: 1px; }
 table#students .team-name {
     max-width: 400px;
     text-overflow: ellipsis;
+}
+
+table#tags {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+table#tags th {
+    text-align: left;
+}
+
+table#tags td {
+    border: 1px solid black;
+    padding: 2px;
 }
 
 .grading .grader { width: 50%; }

@@ -1,0 +1,26 @@
+<html>
+    <head>
+        <title>Name tags</title>
+        <link rel="stylesheet" type="text/css" href="/static/css/master.css">
+    </head>
+    <body>
+        <table id="tags">
+            <tr>
+                <th>Name</th>
+                <th>Team</th>
+                <th>School</th>
+                <th>Division</th>
+                <th>Subjects</th>
+            </tr>
+            {% for student in students %}
+            <tr>
+                <td>{{ student.name }}</td>
+                <td>{{ student.team.name }}</td>
+                <td>{{ student.team.school.name }}</td>
+                <td>{{ student.team.division }}</td>
+                <td>{{ student.get_subject1_display }}, {{ student.get_subject2_display }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </body>
+</html>

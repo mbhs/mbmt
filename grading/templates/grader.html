@@ -23,18 +23,9 @@
             <td class="qlabel">{{ question.label }}</td>
             <td>
             {% if question.get_type_display == "correct" %}
-                <div class="btn-group" data-toggle="buttons">
-                  <label class="btn btn-success {% if answer.value == 1 %} active {% endif %}">
-                    <input type="radio" name="{{ question.id }}" value="1" autocomplete="off" {% if answer.value == 1 %} checked {% endif %}> &#10004;
-                  </label>
-                  <label class="btn btn-danger {% if answer.value == 0 %} active {% endif %}">
-                    <input type="radio" name="{{ question.id }}" value="2" autocomplete="off"> {% if answer.value == 0 %} checked {% endif %}> &#10006;
-                  </label>
-                  <label class="btn btn-primary {% if answer.value == None %} active {% endif %}">
-                    <input type="radio" name="{{ question.id }}" value="" autocomplete="off" {% if answer.value == None %} checked {% endif %}> &#10067;
-                  </label>
-                </div>
-
+                <input type="radio" name="{{ question.id }}" value="1" {% if answer.value == 1 %} checked {% endif %}>
+                <input type="radio" name="{{ question.id }}" value="0" {% if answer.value == 0 %} checked {% endif %}>
+                <input type="radio" name="{{ question.id }}" value="" {% if answer.value is None %} checked {% endif %}>
                 {% if forloop.counter == 1 %}
                     <span class="gray">Correct | Incorrect | Unanswered</span>
                 {% endif %}

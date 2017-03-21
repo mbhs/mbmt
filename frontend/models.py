@@ -95,7 +95,7 @@ class Team(models.Model):
     def current():
         """Get the teams for the current competition."""
 
-        return Team.objects.filter(competition=Competition.current())
+        return Team.objects.filter(competition__active=True)
 
     def get_students_display(self):
         """Get the comma separated list of students."""
@@ -127,3 +127,9 @@ class Student(models.Model):
         """Represent the student as a string."""
 
         return "Student[{}]".format(self.name)
+
+    @staticmethod
+    def current():
+        """Get the students in the current competition."""
+
+        return Student.objects.filter(team__competition__active=True)
