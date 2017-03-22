@@ -115,9 +115,8 @@ class Grader(CompetitionGrader):
                 if problemAnswer > maxBelow and problemAnswer <= e:
                     maxBelow = e
             value = e - maxBelow
-            
             # Problem 27 
-            value = 12 * 2 ** (abs(e-a)/60)
+            value = 12 * 2 ** (-abs(e-a)/60)
             # Problem 28 
             if e <= 0:
                 value = 0
