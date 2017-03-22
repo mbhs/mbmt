@@ -109,7 +109,30 @@ class Grader(CompetitionGrader):
         elif question.type == g.QUESTION_TYPES["estimation"]:
             e = answer.value
             a = question.answer
-            value = max(0, 12 - math.log10(max(e/a, a/e)))
+            # Problem 26
+            for problemAnswer in allAnswers:
+                maxBelow = 0
+                if problemAnswer > maxBelow and problemAnswer <= e:
+                    maxBelow = e
+            value = e - maxBelow
+            
+            # Problem 27 
+            value = 12 * 2 ** (abs(e-a)/60)
+            # Problem 28 
+            if e <= 0:
+                value = 0
+            else:
+                value = 12 * (16 * math.log10(max(e/a, a/e)) + 1) ** (-0.5)
+            # Problem 29
+            if e <= 0:
+                value = 0
+            else:
+                value = 12 * min(e/a, a/e) ** 0.5
+            # Problem 30
+            if e <= 0:
+                value = 0
+            else:
+                value = max(0, 12 - 4 * math.log10(max(e/a, a/e)))
         return value * question.weight
 
     def grade_competition(self, competition):
