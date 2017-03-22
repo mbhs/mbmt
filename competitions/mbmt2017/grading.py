@@ -11,13 +11,11 @@ from django.db.models import Q
 
 import math
 
-# For normies, we'll let it slide
 import grading.models as g
 from grading.grading import CompetitionGrader
-
-
-# Redefine useful constants
 from grading.models import CORRECT, ESTIMATION
+
+
 SUBJECT1 = "subject1"
 SUBJECT2 = "subject2"
 GUTS = "guts"
@@ -85,8 +83,8 @@ class Grader(CompetitionGrader):
         """Grade an individual question."""
 
         # Answer value is 1 if correct, 0 if incorrect
-        return (question.weight * answer.value) #*
-                #self.individual_bonus[answer.student.team.division][answer.student.subject1])
+        return (question.weight * answer.value *
+                self.individual_bonus[answer.student.team.division][answer.student.subject1])
 
     def subject2_question_grader(self, question, answer):
         """Grade an individual question."""
@@ -109,6 +107,7 @@ class Grader(CompetitionGrader):
         elif question.type == g.QUESTION_TYPES["estimation"]:
             e = answer.value
             a = question.answer
+
             # Problem 26
             for problemAnswer in allAnswers:
                 maxBelow = 0
