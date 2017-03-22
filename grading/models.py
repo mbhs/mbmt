@@ -71,7 +71,7 @@ class Question(models.Model):
     """A question container model."""
 
     round = models.ForeignKey(Round, related_name="questions")
-    order = models.IntegerField()
+    number = models.IntegerField()
     label = models.CharField(max_length=32)
     type = models.IntegerField(choices=_QUESTION_TYPES)
     weight = models.FloatField(default=1.0)

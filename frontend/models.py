@@ -42,6 +42,9 @@ class Competition(models.Model):
     date_team_add_end = models.DateField()
     date_shirt_order_end = models.DateField()
 
+    # Grader cache
+    _graders = {}
+
     def __repr__(self):
         """Represent the competition as a string."""
 
@@ -64,6 +67,18 @@ class Competition(models.Model):
             active.save()
         competition.active = True
         competition.save()
+
+    @property
+    def grader(self):
+        """Instantiate a grader of the competition type."""
+
+        try:
+            return self._graders[self.id]
+        except KeyError:
+            import importlib
+            grader = importlib.import_module("competitions.{}.grading".format(self.id)).Grader()
+            self._graders[self.id] = grader
+            return grader
 
 
 class School(models.Model):

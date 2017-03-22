@@ -40,7 +40,7 @@ def score_team(request, id, round):
     team = frontend.models.Team.objects.filter(id=id).first()
     answers = []
     question_answer = []
-    for question in round.questions.order_by("order").all():
+    for question in round.questions.order_by("number").all():
         answer = models.Answer.objects.filter(team=team, question=question).first()
         if not answer:
             answer = models.Answer(team=team, question=question)
@@ -69,7 +69,7 @@ def score_individual(request, id, round):
     student = frontend.models.Student.objects.filter(id=id).first()
     answers = []
     question_answer = []
-    for question in round.questions.order_by("order").all():
+    for question in round.questions.order_by("number").all():
         answer = models.Answer.objects.filter(student=student, question=question).first()
         if not answer:
             answer = models.Answer(student=student, question=question)
