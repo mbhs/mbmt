@@ -1,3 +1,19 @@
+"""Framework for defining custom grading schemes for competitions.
+
+The competition grader is intended to be sub-classed in the custom
+file structure under the competitions directory, from which it will be
+dynamically imported into into the view that handles grading.
+
+competitions/
+  my_competition/
+    competition.json
+    grading.py
+
+The competition grader resolution order is first to grade a question
+provided its answer, and second to grade rounds based on the result of
+the values returned.
+"""
+
 from django.db.models import Q
 
 import frontend.models
@@ -8,12 +24,25 @@ ROUND = "round"
 QUESTION = "question"
 
 
-def cached(cache, name):
-    """Decorator that caches the return of a function to the object."""
+def cached(cache: dict, name: object):
+    """Decorator that caches the return of a function.
+
+    Intended as a quick way to save on computation. Since decorators
+    within class declarations cannot reference the class, the cache
+    container must be passed manually.
+
+    In addition to caching the output every time the function is
+    called, the decorator adds the `cached` keyword argument to the
+    function declaration. If the cached flag is set to true, the
+    output from the last call to the function, if available, is
+    returned. Otherwise, the function is called again.
+    """
 
     def decorator(function):
-        def wrapper(*args, **kwargs):
-            result = function()
+        def wrapper(*args, cached: bool=True, **kwargs):
+            if cached and name in cache:
+                return cache[name]
+            result = function(*args, **kwargs)
             cache[name] = result
             return result
         return wrapper
@@ -21,51 +50,40 @@ def cached(cache, name):
 
 
 class CompetitionGrader:
-    """Base class for a competition grader."""
+    """Base class for a competition grader.
 
-    COMPETITION = ""
+    The competition grader should be instantiated by the corresponding
+    competition object. The functionality for this is already provided
+    in the model declaration.
+    """
 
-    def __init__(self):
+    def __init__(self, competition: models.Competition):
         """Initialize the competition grader."""
 
+        self.competition = competition
         self.question_graders = {}
         self.round_graders = {}
+
+    ####################
+    # Question graders #
+    ####################
 
     def default_question_grader(self, question: models.Question, answer: models.Answer):
         """Default action for grading a question."""
 
         return question.weight * (answer.value or 0)
 
-    def default_individual_round_grader(self, round: models.Round):
-        """Grade an individual round.
+    def default_round_grader(self, round: models.Round):
+        """Default action for grading a round."""
 
-        Return a dictionary mapping team division to student to the
-        student score.
-        """
-
-        scores = {}
-        for student in frontend.models.Student.current():
-            score = 0
-            for question in round.questions.all():
-                answer = models.Answer.objects.filter(student=student, question=question).first()
-                if answer:
-                    result = self.get_question_grader(question)(question, answer)
-                    score += result or 0
-
-            # Account division
-            try:
-                scores[student.team.division][student] = score
-            except KeyError:
-                scores[student.team.division] = {student: score}
-
-        return scores
-
-    def default_team_round_grader(self, round: models.Round):
-        """Grade a team round.
-
-        Return a dictionary mapping team division to team to the
-        team score.
-        """
+        if round.grouping == models.ROUND_GROUPINGS["individual"]:
+            model = frontend.models.Student
+            group = "student"
+        elif round.grouping == models.ROUND_GROUPINGS["team"]:
+            model = frontend.models.Team
+            group = "team"
+        else:
+            return None
 
         scores = {}
         for team in frontend.models.Team.current():
@@ -84,15 +102,9 @@ class CompetitionGrader:
 
         return scores
 
-    def default_round_grader(self, round: models.Round):
-        """Default action for grading a round."""
-
-        if round.get_grouping_display() == "individual":
-            return self.default_individual_round_grader(round)
-        elif round.get_grouping_display() == "team":
-            return self.default_team_round_grader(round)
-        else:
-            return None
+    #######################
+    # Grader registration #
+    #######################
 
     def register_question_grader(self, query: Q, function):
         """Register a question grading function to a set of questions."""
@@ -106,6 +118,10 @@ class CompetitionGrader:
         for round in models.Round.objects.filter(query, competition__id=self.COMPETITION).all():
             self.round_graders[round.id] = function
 
+    #####################
+    # Grader resolution #
+    #####################
+
     def get_question_grader(self, question: models.Question):
         """Get the registered question grader by the question model."""
 
@@ -116,20 +132,19 @@ class CompetitionGrader:
 
         return self.round_graders.get(round.id, self.default_round_grader)
 
+    ##################
+    # Actual graders #
+    ##################
+
     def grade_round(self, round: models.Round):
         """Grade a round."""
 
         return self.get_round_grader(round)(round)
 
-    def grade_competition(self, competition: models.Competition):
+    def grade_competition(self):
         """Grade a competition."""
 
-        if not self.COMPETITION == competition.id:
-            print("Competition does not match grader type.")
-            return None
-
         results = {}
-        for round in competition.rounds.all():
+        for round in self.competition.rounds.all():
             results[round.ref] = self.grade_round(round)
-
         return results

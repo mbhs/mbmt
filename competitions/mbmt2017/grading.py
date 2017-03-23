@@ -13,6 +13,7 @@ import math
 import statistics
 
 import grading.models as g
+import frontend.models as f
 from grading.grading import CompetitionGrader, cached
 from grading.models import CORRECT, ESTIMATION
 
@@ -26,16 +27,14 @@ TEAM = "team"
 class Grader(CompetitionGrader):
     """Grader specific to MBMT 2017."""
 
-    COMPETITION = "mbmt2017"
-
     LAMBDA = 0.52
 
     cache = {}
 
-    def __init__(self):
+    def __init__(self, competition: g.Competition):
         """Initialize the MBMT 2017 grader."""
 
-        super().__init__()
+        super().__init__(competition)
         self.individual_bonus = {}
 
         # Question graders
@@ -140,11 +139,11 @@ class Grader(CompetitionGrader):
         return self.team_z_round_grader(round)
 
     @cached(cache, "individual_scores")
-    def calculate_individual_scores(self, competition: g.Competition):
+    def calculate_individual_scores(self):
         """Custom function that groups both subject rounds together."""
 
-        subject1 = competition.rounds.filter(ref="subject1").first()
-        subject2 = competition.rounds.filter(ref="subject2").first()
+        subject1 = self.competition.rounds.filter(ref="subject1").first()
+        subject2 = self.competition.rounds.filter(ref="subject2").first()
         self._calculate_individual_bonuses(subject1, subject2)
         raw_scores1 = self.grade_round(subject1)
         raw_scores2 = self.grade_round(subject2)
@@ -163,7 +162,19 @@ class Grader(CompetitionGrader):
     def calculate_team_individual_scores(self, competition: g.Competition):
         """Custom function that combines team and guts scores."""
 
-        # Fuck my life
+        raw_scores = self.calculate_individual_scores(cache=True)
+        final_scores = {}
+        for team in f.Team.current():
+            score = 0
+            count = 0
+            for student in team:
+                score += raw_scores[team.division][student]
+                count += 1
+            try:
+                final_scores[team.division][team] = score / count
+            except KeyError:
+                final_scores[team.division] = {}
+        return final_scores
 
     @cached(cache, "team_scores")
     def calculate_team_scores(self, competition: g.Competition):
