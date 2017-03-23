@@ -10,9 +10,10 @@ optionally a question ID.
 from django.db.models import Q
 
 import math
+import statistics
 
 import grading.models as g
-from grading.grading import CompetitionGrader
+from grading.grading import CompetitionGrader, cached
 from grading.models import CORRECT, ESTIMATION
 
 
@@ -29,14 +30,15 @@ class Grader(CompetitionGrader):
 
     LAMBDA = 0.52
 
+    cache = {}
+
     def __init__(self):
         """Initialize the MBMT 2017 grader."""
 
         super().__init__()
         self.individual_bonus = {}
-        self.register_round_grader(
-            Q(ref=SUBJECT1) | Q(ref=SUBJECT2),
-            self.subject_round_grader)
+
+        # Question graders
         self.register_question_grader(
             Q(round__ref=SUBJECT1),
             self.subject1_question_grader)
@@ -82,23 +84,16 @@ class Grader(CompetitionGrader):
     def subject1_question_grader(self, question, answer):
         """Grade an individual question."""
 
-        # Answer value is 1 if correct, 0 if incorrect
-        return (question.weight * answer.value *
+        return (question.weight * (answer.value or 0) *
                 self.individual_bonus[answer.student.team.division][answer.student.subject1])
 
     def subject2_question_grader(self, question, answer):
         """Grade an individual question."""
 
-        # Answer value is 1 if correct, 0 if incorrect
-        return (question.weight * answer.value *
+        return (question.weight * (answer.value or 0) *
                 self.individual_bonus[answer.student.team.division][answer.student.subject2])
 
-    def subject_round_grader(self, round: g.Round):
-        """Grade an individual subject test by round."""
-
-        return self.default_round_grader(round)
-
-    def guts_question_grader(self, question, answer):
+    def guts_question_grader(self, question: g.Question, answer: g.Answer):
         """Grade a guts question."""
 
         value = 0
@@ -120,10 +115,63 @@ class Grader(CompetitionGrader):
                 value = 0 if e <= 0 else max(0, 12 - 4 * math.log10(max(e/a, a/e)))
         return value * question.weight
 
-    def grade_competition(self, competition):
-        """Grade the entire competition."""
+    def team_z_round_grader(self, round: g.Round):
+        """General team round grader based on Z score."""
+
+        raw_scores = self.grade_round(round)
+        for division in raw_scores:
+            data = list(map(lambda team: raw_scores[division][team], raw_scores[division]))
+            mean = statistics.mean(data)
+            dev = statistics.stdev(data, mean)
+            for team in raw_scores[division]:
+                raw_scores[division][team] = (raw_scores[division][team] - mean) / dev
+        return raw_scores
+
+    def team_round_grader(self, round: g.Round):
+        """Grader for the team round."""
+
+        return self.team_z_round_grader(round)
+
+    # Cached for use in live grading
+    @cached(cache, "guts_scores")
+    def guts_round_grader(self, round: g.Round):
+        """Grader for the guts round."""
+
+        return self.team_z_round_grader(round)
+
+    @cached(cache, "individual_scores")
+    def calculate_individual_scores(self, competition: g.Competition):
+        """Custom function that groups both subject rounds together."""
 
         subject1 = competition.rounds.filter(ref="subject1").first()
         subject2 = competition.rounds.filter(ref="subject2").first()
         self._calculate_individual_bonuses(subject1, subject2)
-        super().grade_competition(competition)
+        raw_scores1 = self.grade_round(subject1)
+        raw_scores2 = self.grade_round(subject2)
+        final_scores = {}
+
+        # TODO: not silently ignore missing students or divisions
+        # This ignores students who received answers for one test but not another
+        for division in set(raw_scores1.keys()) & set(raw_scores2.keys()):
+            final_scores[division] = {}
+            for student in set(raw_scores2[division].keys()) & set(raw_scores2[division].keys()):
+                final_scores[division][student] = (raw_scores1[division][student] + raw_scores2[division][student]) / 2
+
+        return final_scores
+
+    @cached(cache, "team_individual_scores")
+    def calculate_team_individual_scores(self, competition: g.Competition):
+        """Custom function that combines team and guts scores."""
+
+        # Fuck my life
+
+    @cached(cache, "team_scores")
+    def calculate_team_scores(self, competition: g.Competition):
+        """Calculate the team scores."""
+
+        # Fuck you
+
+    def grade_competition(self, competition: g.Competition):
+        """Grade the entire competition."""
+
+        # Why
