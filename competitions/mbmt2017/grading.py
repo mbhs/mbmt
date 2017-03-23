@@ -12,9 +12,11 @@ from django.db.models import Q
 import math
 import statistics
 
+import scipy.optimize
+
 import grading.models as g
 import frontend.models as f
-from grading.grading import CompetitionGrader, cached
+from grading.grading import CompetitionGrader, ChillDictionary, cached
 from grading.models import CORRECT, ESTIMATION
 
 
@@ -36,6 +38,7 @@ class Grader(CompetitionGrader):
 
         super().__init__(competition)
         self.individual_bonus = {}
+        self.individual_exponents = {}
 
         # Question graders
         self.register_question_grader(
@@ -53,7 +56,7 @@ class Grader(CompetitionGrader):
 
         self.individual_bonus = {}
 
-        factors = {}
+        factors = ChillDictionary()
         for i, round in enumerate((round1, round2)):
             for question in round.questions.all():
                 for answer in g.Answer.objects.filter(question=question).all():
@@ -62,23 +65,30 @@ class Grader(CompetitionGrader):
                     division = answer.student.team.division
                     subject = answer.student.subject1 if i == 0 else answer.student.subject2
 
-                    if division not in factors:
-                        factors[division] = {}
-                        self.individual_bonus[division] = {}
-                    if subject not in factors[division]:
-                        factors[division][subject] = {}
-                        self.individual_bonus[division][subject] = {}
-                    if question.id not in factors[division][subject]:
-                        factors[division][subject][question.id] = [0, 0]  # Correct, total
-                    factors[division][subject][question.id][0] += answer.value or 0
-                    factors[division][subject][question.id][1] += 1
+                    # Set atomic factor to correct and total values
+                    if question not in factors[division][subject]:
+                        factors[division][subject][question] = [0, 0]  # Correct, total
+                    factors[division][subject][question][0] += answer.value or 0
+                    factors[division][subject][question][1] += 1
 
         for division in factors:
             for subject in factors[division]:
                 for question in factors[division][subject]:
                     correct, total = factors[division][subject][question]
                     self.individual_bonus[division][subject] = (
-                        0 if correct == 0 else self.LAMBDA * math.log(total / correct))
+                        self.LAMBDA * math.log(total / (correct+1)))
+
+    def _power_average_partial(self, scores):
+        """Return a partial that averages scores raised to a power."""
+
+        def power_average(d):
+            return 1.0/len(scores) * sum(pow(score, d) for score in scores) - 0.375
+        return power_average
+
+    def _calculate_individual_exponent(self, scores):
+        """Determines the exponent for an individual subject test."""
+
+        return scipy.optimize.newton(self._power_average_partial(scores), 1, tol=0.0001, maxiter=1000)
 
     def subject1_question_grader(self, question, answer):
         """Grade an individual question."""
@@ -101,8 +111,11 @@ class Grader(CompetitionGrader):
         elif question.type == g.QUESTION_TYPES["estimation"]:
             e = answer.value
             a = question.answer
-            if question.number == 26:
-                max_below = g.Answer.objects.filter(value__lte=e).exclude(answer).order_by("value").first()
+            if a is None:
+                value = 0
+            elif question.number == 26:
+                max_below = g.Answer.objects.filter(
+                    value__isnull=False, value__lte=e).exclude(answer).order_by("value").first()
                 value = min(12, e - max_below)
             elif question.number == 27:
                 value = 12 * 2 ** (-abs(e-a)/60)
@@ -123,7 +136,7 @@ class Grader(CompetitionGrader):
             mean = statistics.mean(data)
             dev = statistics.stdev(data, mean)
             for team in raw_scores[division]:
-                raw_scores[division][team] = (raw_scores[division][team] - mean) / dev
+                raw_scores[division][team] = 0 if dev == 0 else (raw_scores[division][team] - mean) / dev
         return raw_scores
 
     def team_round_grader(self, round: g.Round):
@@ -147,40 +160,43 @@ class Grader(CompetitionGrader):
         self._calculate_individual_bonuses(subject1, subject2)
         raw_scores1 = self.grade_round(subject1)
         raw_scores2 = self.grade_round(subject2)
-        final_scores = {}
+        final_scores = ChillDictionary()
 
-        # TODO: not silently ignore missing students or divisions
         # This ignores students who received answers for one test but not another
         for division in set(raw_scores1.keys()) & set(raw_scores2.keys()):
-            final_scores[division] = {}
             for student in set(raw_scores2[division].keys()) & set(raw_scores2[division].keys()):
                 final_scores[division][student] = (raw_scores1[division][student] + raw_scores2[division][student]) / 2
 
         return final_scores
 
     @cached(cache, "team_individual_scores")
-    def calculate_team_individual_scores(self, competition: g.Competition):
+    def calculate_team_individual_scores(self):
         """Custom function that combines team and guts scores."""
 
         raw_scores = self.calculate_individual_scores(cache=True)
-        final_scores = {}
+        final_scores = ChillDictionary()
         for team in f.Team.current():
             score = 0
             count = 0
             for student in team:
                 score += raw_scores[team.division][student]
                 count += 1
-            try:
-                final_scores[team.division][team] = score / count
-            except KeyError:
-                final_scores[team.division] = {}
+            final_scores[team.division][team] = score / count
         return final_scores
 
-    @cached(cache, "team_scores")
-    def calculate_team_scores(self, competition: g.Competition):
+    @cached(cache, "team_overall_scores")
+    def calculate_team_scores(self):
         """Calculate the team scores."""
 
-        # Fuck you
+        team_round = self.competition.rounds.filter(ref=TEAM).first()
+        guts_round = self.competition.rounds.filter(ref=GUTS).first()
+        individual_scores = self.calculate_team_individual_scores(cache=True)
+        team_round_scores = self.team_round_grader(team_round)
+        guts_round_scores = self.guts_round_grader(guts_round)
+        final_scores = ChillDictionary()
+        for team in f.Team.current():
+            score = 0.5*individual_scores[team] + 0.25*team_round_scores[team] + 0.25*guts_round_scores[team]
+            final_scores[team.division][team] = score
 
     def grade_competition(self, competition: g.Competition):
         """Grade the entire competition."""

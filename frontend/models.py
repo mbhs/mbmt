@@ -76,7 +76,7 @@ class Competition(models.Model):
             return self._graders[self.id]
         except KeyError:
             import importlib
-            grader = importlib.import_module("competitions.{}.grading".format(self.id)).Grader()
+            grader = importlib.import_module("competitions.{}.grading".format(self.id)).Grader(self)
             self._graders[self.id] = grader
             return grader
 

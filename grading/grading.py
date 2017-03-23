@@ -49,6 +49,17 @@ def cached(cache: dict, name: object):
     return decorator
 
 
+class ChillDictionary(dict):
+    """Dictionary that sets empty keys to chill dictionaries."""
+
+    def __missing__(self, key):
+        """Called when a missing key is invoked."""
+
+        new = ChillDictionary()
+        self[key] = new
+        return new
+
+
 class CompetitionGrader:
     """Base class for a competition grader.
 
@@ -85,20 +96,25 @@ class CompetitionGrader:
         else:
             return None
 
-        scores = {}
-        for team in frontend.models.Team.current():
+        # Iterate through teams or students
+        scores = ChillDictionary()
+        for thing in model.current():
             score = 0
             for question in round.questions.all():
-                answer = models.Answer.objects.filter(team=team, question=question).first()
+                answer = models.Answer.objects.filter(**{group: thing}, question=question).first()
                 if answer:
                     result = self.get_question_grader(question)(question, answer)
                     score += result or 0
 
-            # Account for division
-            try:
-                scores[team.division][team] = score
-            except KeyError:
-                scores[team.division] = {team: score}
+            # Separate by division
+            division = None
+            if group == "student":
+                division = thing.team.division
+            elif group == "team":
+                division = thing.division
+
+            # Save score
+            scores[division][thing] = score
 
         return scores
 
@@ -109,13 +125,13 @@ class CompetitionGrader:
     def register_question_grader(self, query: Q, function):
         """Register a question grading function to a set of questions."""
 
-        for question in models.Question.objects.filter(query, round__competition__id=self.COMPETITION).all():
+        for question in models.Question.objects.filter(query, round__competition=self.competition).all():
             self.question_graders[question.id] = function
 
     def register_round_grader(self, query: Q, function):
         """Register a round grading function to a set of questions."""
 
-        for round in models.Round.objects.filter(query, competition__id=self.COMPETITION).all():
+        for round in models.Round.objects.filter(query, competition=self.competition).all():
             self.round_graders[round.id] = function
 
     #####################
