@@ -17,7 +17,7 @@
                 <td>{{ student.name }}</td>
                 <td>{{ student.team.name }}</td>
                 <td>{{ student.team.school.name }}</td>
-                <td>{{ student.team.division }}</td>
+                <td>{{ student.team.get_division_display }}</td>
                 <td>{{ student.get_subject1_display }}, {{ student.get_subject2_display }}</td>
             </tr>
             {% endfor %}
