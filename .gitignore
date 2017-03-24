@@ -1,6 +1,8 @@
 .idea/
 __pycache__/
 db.sqlite3
-migrations/
-!migrations/__init__.py
+/frontend/migrations/*
+/grading/migrations/*
+!/frontend/migrations/__init__.py
+!/grading/migrations/__init__.py
 /static/
