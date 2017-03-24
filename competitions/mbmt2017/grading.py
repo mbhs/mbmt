@@ -122,7 +122,7 @@ class Grader(CompetitionGrader):
             elif question.number == 28:
                 value = 0 if e <= 0 else 12 * (16 * math.log10(max(e/a, a/e)) + 1) ** (-0.5)
             elif question.number == 29:
-                value = 0 if e <= 0 else 12 * min(e/a, a/e) ** 0.5
+                value = 0 if e <= 0 else 12 * min(e/a, a/e)
             elif question.number == 30:
                 value = 0 if e <= 0 else max(0, 12 - 4 * math.log10(max(e/a, a/e)))
         return value * question.weight
