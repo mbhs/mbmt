@@ -51,7 +51,7 @@ class Grader(CompetitionGrader):
             Q(type=ESTIMATION),
             self.guts_question_grader)
 
-    def _calculate_individual_bonuses(self, round1, round2):
+    def _calculate_individual_modifiers(self, round1, round2):
         """Calculate the point bonuses for an individual round."""
 
         self.individual_bonus = {}
@@ -157,17 +157,32 @@ class Grader(CompetitionGrader):
 
         subject1 = self.competition.rounds.filter(ref="subject1").first()
         subject2 = self.competition.rounds.filter(ref="subject2").first()
-        self._calculate_individual_bonuses(subject1, subject2)
+        self._calculate_individual_modifiers(subject1, subject2)
         raw_scores1 = self.grade_round(subject1)
         raw_scores2 = self.grade_round(subject2)
-        final_scores = ChillDictionary()
+        split_scores = ChillDictionary()
+        subject_scores = ChillDictionary()
 
         # This ignores students who received answers for one test but not another
         for division in set(raw_scores1.keys()) & set(raw_scores2.keys()):
             for student in set(raw_scores2[division].keys()) & set(raw_scores2[division].keys()):
-                final_scores[division][student] = (raw_scores1[division][student] + raw_scores2[division][student]) / 2
+                score1 = raw_scores1[division][student]
+                score2 = raw_scores2[division][student]
+                split_scores[division][student] = [score1, score2]
+                try:
+                    subject_scores[division][student.subject1].append(score1)
+                except KeyError:
+                    subject_scores[division][student.subject1] = [score1]
+                try:
+                    subject_scores[division][student.subject2].append(score2)
+                except KeyError:
+                    subject_scores[division][student.subject2] = [score2]
 
-        return final_scores
+        for division in subject_scores:
+            for subject in subject_scores[division]:
+                power = self._calculate_individual_exponent(subject_scores[division][subject])
+
+        return split_scores
 
     @cached(cache, "team_individual_scores")
     def calculate_team_individual_scores(self):
@@ -201,4 +216,4 @@ class Grader(CompetitionGrader):
     def grade_competition(self, competition):
         """Grade the entire competition."""
 
-        # Why
+        pass
