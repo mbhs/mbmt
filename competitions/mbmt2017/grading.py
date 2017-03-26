@@ -210,7 +210,7 @@ class Grader(CompetitionGrader):
         guts_round_scores = self.guts_round_grader(guts_round)
         final_scores = ChillDictionary()
         for team in f.Team.current():
-            score = 0.5*individual_scores[team] + 0.25*team_round_scores[team] + 0.25*guts_round_scores[team]
+            score = 0.4*individual_scores[team] + 0.3*team_round_scores[team] + 0.3*guts_round_scores[team]
             final_scores[team.division][team] = score
 
     def grade_competition(self, competition):
