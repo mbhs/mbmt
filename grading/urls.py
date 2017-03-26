@@ -13,7 +13,8 @@ urlpatterns = [
     # Logistics
     url(r'^shirts/$', views.shirts, name="shirts"),
     url(r'^attendance/$', views.attendance, name="attendance"),
-    url(r'^tags/$', views.name_tags, name="name_tags"),
+    url(r'^tags/student/$', views.student_name_tags, name="student_name_tags"),
+    url(r'^tags/teacher/$', views.teacher_name_tags, name="teacher_name_tags"),
 
     # Scoring
     url(r'^scoreboard/$', views.scoreboard, name="scoreboard"),

@@ -158,10 +158,20 @@ def attendance_post(request):
 
 
 @permission_required("grading.can_grade")
-def name_tags(request):
+def student_name_tags(request):
     """Display a table from which student name tags can be generated."""
 
-    return render(request, "nametags.html", {"students": frontend.models.Student.current()})
+    return render(request, "tags.students.html", {"students": frontend.models.Student.current()})
+
+
+@permission_required("grading.can_grade")
+def teacher_name_tags(request):
+    """Display a table from which student name tags can be generated."""
+
+    users = frontend.models.User.objects.filter(
+        is_staff=False, is_superuser=False, school__isnull=False).order_by("school__name")
+    users = list(filter(lambda user: user.school and user.school.teams.count(), users))
+    return render(request, "tags.teacher.html", {"teachers": users})
 
 
 def scoreboard(request):
