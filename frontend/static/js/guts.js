@@ -17,30 +17,37 @@ function request(url) {
     });
 }
 
-var scoreboards = {
-    Ramanujan: document.getElementById("ramanujan").getElementsByTagName("tbody")[0],
-    Pascal: document.getElementById("pascal").getElementsByTagName("tbody")[0],
-};
+var scoreboards;
 
 function update() {
-    request("/live/guts/update/").then(function(scoreboard) {
-        for (var division in scoreboard) {
-            if (scoreboard.hasOwnProperty(division)) {
+    request("/live/guts/update/").then(function(scores) {
+        for (var division in scores) {
+            if (scores.hasOwnProperty(division)) {
                 var teams = [];
-                for (var team in scoreboard[division])
-                    if (scoreboard[division].hasOwnProperty(team))
+                for (var team in scores[division])
+                    if (scores[division].hasOwnProperty(team))
                         teams.push(team);
                 teams.sort(function(a, b) {
-                    return scoreboard[division][b] - scoreboard[division][a];
+                    return scores[division][b] - scores[division][a];
                 });
+
                 while (scoreboards[division].firstChild)
                     scoreboards[division].removeChild(scoreboards[division].firstChild);
+                console.log(scoreboards[division]);
                 for (var i = 0; i < teams.length; i++)
-                    scoreboards[division].innerHTML += (
-                        "<tr><td>" + teams[i] + "</td><td>" +
-                        Math.round(scoreboard[division][teams[i]]*1000)/1000 +
-                        "</td></tr>");
+                    scoreboards[division].insertRow().innerHTML += (
+                        "<td>" + teams[i] + "</td><td>" +
+                        Math.round(scores[division][teams[i]]*1000)/1000 +
+                        "</td>");
             }
         }
     });
 }
+
+window.onload = function() {
+    scoreboards = {
+        Ramanujan: document.getElementById("ramanujan").getElementsByTagName("tbody")[0],
+        Pascal: document.getElementById("pascal").getElementsByTagName("tbody")[0]};
+    update();
+    setInterval(update, 30*1000);
+};
