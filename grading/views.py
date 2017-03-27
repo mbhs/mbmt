@@ -2,6 +2,7 @@ from django.contrib.auth.decorators import login_required, permission_required
 from django.shortcuts import render, redirect, HttpResponse
 
 import json
+import collections
 
 import frontend.models
 from . import models
@@ -110,9 +111,21 @@ def update_answers(request, answers):
 def shirts(request):
     """Shirt sizes view."""
 
-    sizes = [(size[1], frontend.models.Student.objects.filter(team__competition__active=True, size=i).count())
-             for i, size in enumerate(frontend.models.SHIRT_SIZES)]
-    return render(request, "shirts.html", {"sizes": sizes})
+    teams = frontend.models.Team.current()
+    teachers = {}
+    totals = collections.Counter()
+    for team in teams:
+        if team.school.user not in teachers:
+            teachers[team.school.user] = [team.school.user, [], collections.Counter()]
+        teachers[team.school.user][1].extend(list(team.students.all()))
+        for student in team.students.all():
+            teachers[team.school.user][2][student.get_size_display()] += 1
+            totals[student.get_size_display()] += 1
+    for teacher in teachers:
+        teachers[teacher][1].sort(key=lambda x: x.name)
+    return render(request, "shirts.html", {
+        "teachers": list(teachers.values()),
+        "totals": totals})
 
 
 @login_required
@@ -126,7 +139,7 @@ def attendance(request):
         return redirect("attendance")
 
     # Format students into nice columns
-    students = frontend.models.Student.objects.all()
+    students = frontend.models.Student.current()
     count = request.GET.get("columns", 4)
     columns = zip(*(students[(i*len(students))//count:((i+1)*len(students))//count+1] for i in range(count)))
     return render(request, "attendance.html", {"students": columns})
@@ -192,7 +205,8 @@ def live_update(request, round):
     if round == "guts":
         grader = models.Competition.current().grader
         scores = grader.guts_round_grader()
-        return HttpResponse(json.dumps(scores))
+        print(scores)
+        return HttpResponse(json.dumps(scores).encode())
     else:
         return HttpResponse("{}")
 

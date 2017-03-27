@@ -1,0 +1,36 @@
+{% load fancy_dict %}
+
+<html>
+    <head>
+        <title>Name tags</title>
+        <link rel="stylesheet" type="text/css" href="/static/css/master.css">
+    </head>
+    <body>
+        <table id="tags">
+            <tr>
+                <th>Teacher</th>
+                <th>School, students</th>
+                <th>Shirt sizes</th>
+            </tr>
+            <tr>
+                <td>Defaults</td>
+                <td>All</td>
+                <td>{{ totals|fancy_dict }}</td>
+            </tr>
+            {% for teacher, students, sizes in teachers %}
+            <tr>
+                <td>{{ teacher.get_full_name }}</td>
+                <td>{{ teacher.school.name }}</td>
+                <td>{{ sizes|fancy_dict }}</td>
+            </tr>
+            {% for student in students %}
+            <tr>
+                <td style="border: none; width: 50px;"></td>
+                <td>{{ student.name }}</td>
+                <td>{{ student.get_size_display }}</td>
+            </tr>
+            {% endfor %}
+            {% endfor %}
+        </table>
+    </body>
+</html>
