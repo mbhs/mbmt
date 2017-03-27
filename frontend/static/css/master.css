@@ -238,6 +238,30 @@ table#tags td {
 .grader-title { margin-bottom: 0; }
 .grader-switcher { font-size: 20px; margin-bottom: 1em; }
 
+
+/***************/
+/* Scoreboard. */
+/***************/
+
+.divisions {
+    width: 100%;
+    border-collapse: separate;
+    table-layout: fixed;
+    vertical-align: top;
+    border-spacing: 20px;
+}
+
+.divisions div {
+    display: inline-block;
+    flex-grow: 1;
+}
+
+.divisions div.spacer {
+    width: 20px;
+    flex-grow: 0;
+}
+
+
 .italics { font-style: italic; }
 .gray { color: gray; }
 .ellipsis {

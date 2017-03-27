@@ -205,8 +205,13 @@ def live_update(request, round):
     if round == "guts":
         grader = models.Competition.current().grader
         scores = grader.guts_round_grader()
-        print(scores)
-        return HttpResponse(json.dumps(scores).encode())
+        named_scores = dict()
+        for division in scores:
+            division_name = frontend.models.DIVISIONS_MAP[division]
+            named_scores[division_name] = {}
+            for team in scores[division]:
+                named_scores[division_name][team.name] = scores[division][team]
+        return HttpResponse(json.dumps(named_scores).encode())
     else:
         return HttpResponse("{}")
 
