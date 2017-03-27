@@ -168,21 +168,24 @@ class Grader(CompetitionGrader):
             for student in set(raw_scores2[division].keys()) & set(raw_scores2[division].keys()):
                 score1 = raw_scores1[division][student]
                 score2 = raw_scores2[division][student]
-                split_scores[division][student] = [score1, score2]
-                try:
-                    subject_scores[division][student.subject1].append(score1)
-                except KeyError:
-                    subject_scores[division][student.subject1] = [score1]
-                try:
-                    subject_scores[division][student.subject2].append(score2)
-                except KeyError:
-                    subject_scores[division][student.subject2] = [score2]
+                split_scores[division][student] = {student.subject1: score1, student.subject2: score2}
+                subject_scores[division].set(student.subject1, []).append(score1)
+                subject_scores[division].set(student.subject2, []).append(score2)
 
+        powers = ChillDictionary()
         for division in subject_scores:
             for subject in subject_scores[division]:
-                power = self._calculate_individual_exponent(subject_scores[division][subject])
+                powers[division][subject] = self._calculate_individual_exponent(subject_scores[division][subject])
 
-        return split_scores
+        final_scores = ChillDictionary()
+        for division in split_scores:
+            for student in split_scores[division]:
+                score = 0
+                for subject in split_scores[division][student]:
+                    score += pow(split_scores[division][student][subject], powers[division][subject])
+                final_scores[division][student] = score
+
+        return final_scores.dict()
 
     @cached(cache, "team_individual_scores")
     def calculate_team_individual_scores(self):
@@ -197,7 +200,7 @@ class Grader(CompetitionGrader):
                 score += raw_scores[team.division][student]
                 count += 1
             final_scores[team.division][team] = score / count
-        return final_scores
+        return final_scores.dict()
 
     @cached(cache, "team_overall_scores")
     def calculate_team_scores(self):
@@ -210,8 +213,9 @@ class Grader(CompetitionGrader):
         guts_round_scores = self.guts_round_grader(guts_round)
         final_scores = ChillDictionary()
         for team in f.Team.current():
-            score = 0.5*individual_scores[team] + 0.25*team_round_scores[team] + 0.25*guts_round_scores[team]
+            score = 0.4*individual_scores[team] + 0.3*team_round_scores[team] + 0.3*guts_round_scores[team]
             final_scores[team.division][team] = score
+        return final_scores.dict()
 
     def grade_competition(self, competition):
         """Grade the entire competition."""

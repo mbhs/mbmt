@@ -59,6 +59,26 @@ class ChillDictionary(dict):
         self[key] = new
         return new
 
+    def set(self, key, default):
+        """Similar to get, except sets the internal key to the default."""
+
+        try:
+            return self[key]
+        except KeyError:
+            self[key] = default
+            return default
+
+    def dict(self):
+        """Cast to a dictionary."""
+
+        out = dict()
+        for key in self:
+            if isinstance(self[key], ChillDictionary):
+                out[key] = self[key].dict()
+            else:
+                out[key] = self[key]
+        return out
+
 
 class CompetitionGrader:
     """Base class for a competition grader.
