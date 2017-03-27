@@ -18,6 +18,9 @@ urlpatterns = [
 
     # Scoring
     url(r'^scoreboard/$', views.scoreboard, name="scoreboard"),
-    url(r'^live/(?P<round>\w+)/', views.live, name='live'),
+    url(r'^live/(?P<round>\w+)/$', views.live, name='live'),
+
+    # Scoring API
+    url(r'^live/(?P<round>\w+)/update/$', views.live_update, name='live_update'),
 
 ]

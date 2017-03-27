@@ -1,5 +1,7 @@
 from django.contrib.auth.decorators import login_required, permission_required
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, HttpResponse
+
+import json
 
 import frontend.models
 from . import models
@@ -174,19 +176,29 @@ def teacher_name_tags(request):
     return render(request, "tags.teacher.html", {"teachers": users})
 
 
+def live(request, round):
+    """Get the live guts scoreboard."""
+
+    if round == "guts":
+        return render(request, "guts.html")
+    else:
+        return redirect("grade_students")
+
+
+@permission_required("grading.can_grade")
+def live_update(request, round):
+    """Get the live scoreboard update."""
+
+    if round == "guts":
+        grader = models.Competition.current().grader
+        scores = grader.guts_round_grader()
+        return HttpResponse(json.dumps(scores))
+    else:
+        return HttpResponse("{}")
+
+
 def scoreboard(request):
     """Do final scoreboard calculations."""
 
     scores = grading.grade()
     return render(request, "scoreboard.html", {})
-
-
-def live(request, round):
-    """Get the live guts scoreboard."""
-
-    if round == "guts":
-        scores = grading.grade("guts")
-        return render("guts.html", {"scores": scores})
-    else:
-        return redirect("scoreboard")
-
