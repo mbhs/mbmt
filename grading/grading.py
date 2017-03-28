@@ -16,12 +16,24 @@ the values returned.
 
 from django.db.models import Q
 
+import time
+
 import frontend.models
 from . import models
 
 
 ROUND = "round"
 QUESTION = "question"
+
+
+class CachedGrade:
+    """Meta container object that stores cached results and timing."""
+
+    def __init__(self, result, when=None):
+        """Initialize a cache object."""
+
+        self.result = result
+        self.time = when or time.time()
 
 
 def cached(cache: dict, name: object):
@@ -32,18 +44,30 @@ def cached(cache: dict, name: object):
     container must be passed manually.
 
     In addition to caching the output every time the function is
-    called, the decorator adds the `cached` keyword argument to the
-    function declaration. If the cached flag is set to true, the
+    called, the decorator adds the `use_cache` keyword argument to the
+    function declaration. If the `use_cache` flag is set to true, the
     output from the last call to the function, if available, is
-    returned. Otherwise, the function is called again.
+    returned. Otherwise, the function is called again. In order to
+    provide a global caching mechanism, `use_cache_before` can be set
+    instead, which uses the cached value until a number of seconds
+    since the last recalculation.
     """
 
     def decorator(function):
-        def wrapper(*args, cached: bool=True, **kwargs):
-            if cached and name in cache:
-                return cache[name]
+        def wrapper(*args, use_cache: bool=True, use_cache_before: int=0, **kwargs):
+
+            # Use cache time before normal cache
+            if use_cache_before > 0 and name in cache:
+                print(use_cache_before, cache[name].time)
+                if cache[name].time >= time.time() - use_cache_before:
+                    return cache[name].result
+
+            # Then check cache normally, only if use_cache_before is 0
+            elif use_cache and name in cache:
+                return cache[name].result
+
             result = function(*args, **kwargs)
-            cache[name] = result
+            cache[name] = CachedGrade(result, time.time())
             return result
         return wrapper
     return decorator

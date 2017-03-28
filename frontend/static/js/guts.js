@@ -6,7 +6,6 @@ function request(url) {
             if (this.state < 200 || this.status >= 300)
                 reject({staus: this.status, statusText: this.statusText});
             else if (this.readyState == 4) {
-                console.log(JSON.parse(this.responseText));
                 resolve(JSON.parse(this.responseText));
             }
         };
@@ -33,7 +32,6 @@ function update() {
 
                 while (scoreboards[division].firstChild)
                     scoreboards[division].removeChild(scoreboards[division].firstChild);
-                console.log(scoreboards[division]);
                 for (var i = 0; i < teams.length; i++)
                     scoreboards[division].insertRow().innerHTML += (
                         "<td>" + (i+1) + "</td>" +
@@ -41,6 +39,7 @@ function update() {
                         "<td>" + Math.round(scores[division][teams[i]]*1000)/1000 + "</td>");
             }
         }
+        console.log("Updated scoreboard!");
     });
 }
 

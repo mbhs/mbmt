@@ -204,7 +204,7 @@ def live_update(request, round):
 
     if round == "guts":
         grader = models.Competition.current().grader
-        scores = grader.guts_round_grader(cached=False, use_z_score=False)
+        scores = grader.guts_live_round_scores(use_cache_before=25)
         named_scores = dict()
         for division in scores:
             division_name = frontend.models.DIVISIONS_MAP[division]
