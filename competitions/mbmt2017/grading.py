@@ -146,12 +146,14 @@ class Grader(CompetitionGrader):
 
     # Cached for use in live grading
     @cached(cache, "guts_scores")
-    def guts_round_grader(self, round: g.Round=None):
+    def guts_round_grader(self, round: g.Round=None, use_z_score=True):
         """Grader for the guts round."""
 
         if round is None:
             round = self.competition.rounds.filter(ref="guts").first()
-        return self.team_z_round_grader(round)
+        if use_z_score:
+            return self.team_z_round_grader(round)
+        return self.grade_round(round)
 
     @cached(cache, "individual_scores")
     def calculate_individual_scores(self):
