@@ -228,8 +228,9 @@ def scoreboard(request):
         grader.calculate_team_individual_scores(use_cache=False)
         grader.calculate_individual_scores(use_cache=False)
         return redirect("scoreboard")
-    return render(request, "scoreboard.html", {
+    context = {
         "team_scores": grader.calculate_team_scores(use_cache=True),
         "team_individual_scores": grader.calculate_team_individual_scores(use_cache=True),
-        "individual_scores": grader.calculate_individual_scores(use_cache=True),
-    })
+        "individual_scores": grader.calculate_individual_scores(use_cache=True)}
+    print(context)
+    return render(request, "scoreboard.html", context)

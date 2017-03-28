@@ -61,6 +61,10 @@ class Grader(CompetitionGrader):
             for question in round.questions.all():
                 for answer in g.Answer.objects.filter(question=question).all():
 
+                    # Ignore absent students
+                    if not answer.student.attending:
+                        continue
+
                     # Ignores people whose grading view is not opened
                     division = answer.student.team.division
                     subject = answer.student.subject1 if i == 0 else answer.student.subject2
@@ -72,6 +76,7 @@ class Grader(CompetitionGrader):
                     factors[division][subject][question][1] += 1
 
         for division in factors:
+            self.individual_bonus[division] = {}
             for subject in factors[division]:
                 for question in factors[division][subject]:
                     correct, total = factors[division][subject][question]
@@ -206,15 +211,17 @@ class Grader(CompetitionGrader):
     def calculate_team_individual_scores(self):
         """Custom function that combines team and guts scores."""
 
-        raw_scores = self.calculate_individual_scores(cache=True)
+        raw_scores = self.calculate_individual_scores(use_cache=True)
+        print(raw_scores)
         final_scores = ChillDictionary()
         for team in f.Team.current():
             score = 0
             count = 0
-            for student in team:
-                score += raw_scores[team.division][student]
-                count += 1
-            final_scores[team.division][team] = score / count
+            for student in team.students.all():
+                if student.attending and team.division in raw_scores and student in raw_scores[team.division]:
+                    score += raw_scores[team.division][student]
+                    count += 1
+            final_scores[team.division][team] = 0 if count == 0 else score / count
         return final_scores.dict()
 
     @cached(cache, "team_overall_scores")
@@ -223,13 +230,14 @@ class Grader(CompetitionGrader):
 
         team_round = self.competition.rounds.filter(ref=TEAM).first()
         guts_round = self.competition.rounds.filter(ref=GUTS).first()
-        individual_scores = self.calculate_team_individual_scores(cache=True)
+        individual_scores = self.calculate_team_individual_scores(use_cache=True)
         team_round_scores = self.team_round_grader(team_round)
         guts_round_scores = self.guts_round_grader(guts_round)
         final_scores = ChillDictionary()
         for team in f.Team.current():
-            score = 0.4*individual_scores[team] + 0.3*team_round_scores[team] + 0.3*guts_round_scores[team]
-            final_scores[team.division][team] = score
+            if team in individual_scores and team in team_round_scores and team in guts_round_scores:
+                score = 0.4*individual_scores[team] + 0.3*team_round_scores[team] + 0.3*guts_round_scores[team]
+                final_scores[team.division][team] = score
         return final_scores.dict()
 
     def grade_competition(self, competition):

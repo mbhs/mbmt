@@ -86,11 +86,10 @@ class ChillDictionary(dict):
     def set(self, key, default):
         """Similar to get, except sets the internal key to the default."""
 
-        try:
+        if key in self:
             return self[key]
-        except KeyError:
-            self[key] = default
-            return default
+        self[key] = default
+        return default
 
     def dict(self):
         """Cast to a dictionary."""
@@ -143,6 +142,10 @@ class CompetitionGrader:
         # Iterate through teams or students
         scores = ChillDictionary()
         for thing in model.current():
+
+            if group == "student" and not thing.attending:
+                continue
+
             score = 0
             for question in round.questions.all():
                 answer = models.Answer.objects.filter(**{group: thing}, question=question).first()
