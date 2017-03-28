@@ -36,9 +36,9 @@ function update() {
                 console.log(scoreboards[division]);
                 for (var i = 0; i < teams.length; i++)
                     scoreboards[division].insertRow().innerHTML += (
-                        "<td>" + teams[i] + "</td><td>" +
-                        Math.round(scores[division][teams[i]]*1000)/1000 +
-                        "</td>");
+                        "<td>" + (i+1) + "</td>" +
+                        "<td class=\"team\">" + teams[i] + "</td>" +
+                        "<td>" + Math.round(scores[division][teams[i]]*1000)/1000 + "</td>");
             }
         }
     });

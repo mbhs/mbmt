@@ -261,6 +261,13 @@ table#tags td {
     flex-grow: 0;
 }
 
+.divisions td.team {
+    max-width: 320px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
 
 .italics { font-style: italic; }
 .gray { color: gray; }
