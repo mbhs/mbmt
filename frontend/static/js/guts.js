@@ -48,5 +48,5 @@ window.onload = function() {
         Ramanujan: document.getElementById("ramanujan").getElementsByTagName("tbody")[0],
         Pascal: document.getElementById("pascal").getElementsByTagName("tbody")[0]};
     update();
-    setInterval(update, 30*1000);
+    setInterval(update, 25*1000);
 };

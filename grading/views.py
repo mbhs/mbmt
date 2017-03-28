@@ -2,7 +2,9 @@ from django.contrib.auth.decorators import login_required, permission_required
 from django.shortcuts import render, redirect, HttpResponse
 
 import json
+import math
 import collections
+import itertools
 
 import frontend.models
 from . import models
@@ -141,7 +143,8 @@ def attendance(request):
     # Format students into nice columns
     students = frontend.models.Student.current()
     count = request.GET.get("columns", 4)
-    columns = zip(*(students[(i*len(students))//count:((i+1)*len(students))//count+1] for i in range(count)))
+    size = math.ceil(len(students) / count)
+    columns = list(itertools.zip_longest(*[students[i:i+size] for i in range(0, len(students), size)]))
     return render(request, "attendance.html", {"students": columns})
 
 
@@ -204,7 +207,7 @@ def live_update(request, round):
 
     if round == "guts":
         grader = models.Competition.current().grader
-        scores = grader.guts_live_round_scores(use_cache_before=25)
+        scores = grader.guts_live_round_scores(use_cache_before=20)
         named_scores = dict()
         for division in scores:
             division_name = frontend.models.DIVISIONS_MAP[division]
@@ -219,5 +222,14 @@ def live_update(request, round):
 def scoreboard(request):
     """Do final scoreboard calculations."""
 
-    scores = grading.grade()
-    return render(request, "scoreboard.html", {})
+    grader = models.Competition.current().grader
+    if request.method == "" and "recalculate" in request.POST:
+        grader.calculate_team_scores(use_cache=False)
+        grader.calculate_team_individual_scores(use_cache=False)
+        grader.calculate_individual_scores(use_cache=False)
+        return redirect("scoreboard")
+    return render(request, "scoreboard.html", {
+        "team_scores": grader.calculate_team_scores(use_cache=True),
+        "team_individual_scores": grader.calculate_team_individual_scores(use_cache=True),
+        "individual_scores": grader.calculate_individual_scores(use_cache=True),
+    })

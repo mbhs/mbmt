@@ -176,6 +176,11 @@ class Grader(CompetitionGrader):
         # This ignores students who received answers for one test but not another
         for division in set(raw_scores1.keys()) & set(raw_scores2.keys()):
             for student in set(raw_scores2[division].keys()) & set(raw_scores2[division].keys()):
+
+                # Skip students not attending
+                if student.attending:
+                    continue
+
                 score1 = raw_scores1[division][student]
                 score2 = raw_scores2[division][student]
                 split_scores[division][student] = {student.subject1: score1, student.subject2: score2}
