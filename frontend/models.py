@@ -9,9 +9,9 @@ SUBJECT_CHOICES = (
     ("cp", "Counting and Probability"))
 
 DIVISIONS = (
-    (1, "Pascal"),
-    (2, "Ramanujan"))
-DIVISIONS_MAP = {1: "Pascal", 2: "Ramanujan"}
+    (1, "pascal"),
+    (2, "ramanujan"))
+DIVISIONS_MAP = {1: "pascal", 2: "ramanujan"}
 
 SHIRT_SIZES = (
     (0, "Default"),

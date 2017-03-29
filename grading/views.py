@@ -5,6 +5,7 @@ import json
 import math
 import collections
 import itertools
+import traceback
 
 import frontend.models
 from . import models
@@ -224,10 +225,11 @@ def prepare_scores(scores):
 
     divisions = {}
     for division in scores:
-        divisions[division] = []
+        division_name = frontend.models.DIVISIONS_MAP[division]
+        divisions[division_name] = []
         for thing in scores[division]:
-            divisions[division].append([thing.name, scores[division][thing]])
-        divisions[division].sort(key=lambda x: x[1])
+            divisions[division_name].append([thing.name, scores[division][thing]])
+        divisions[division_name].sort(key=lambda x: x[1])
     return divisions
 
 
@@ -242,9 +244,12 @@ def scoreboard(request):
         grader.calculate_team_individual_scores(use_cache=False)
         grader.calculate_individual_scores(use_cache=False)
         return redirect("scoreboard")
-    print(grader.calculate_individual_scores())
-    context = {
-        "team_scores": prepare_scores(grader.calculate_team_scores(use_cache=True)),
-        "team_individual_scores": prepare_scores(grader.calculate_team_individual_scores(use_cache=True)),
-        "individual_scores": prepare_scores(grader.calculate_individual_scores(use_cache=True))}
+    try:
+        context = {
+            "team_scores": prepare_scores(grader.calculate_team_scores(use_cache=True)),
+            "team_individual_scores": prepare_scores(grader.calculate_team_individual_scores(use_cache=True)),
+            "individual_scores": prepare_scores(grader.calculate_individual_scores(use_cache=True))}
+        print(context)
+    except Exception:
+        context = {"error": traceback.format_exc().replace("\n", "<br>")}
     return render(request, "scoreboard.html", context)

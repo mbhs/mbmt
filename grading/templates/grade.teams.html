@@ -29,8 +29,7 @@
         <tr>
             <td class="number">{{ forloop.counter }}</td>
             <td class="name">{{ team.name }} <br> <span class="italics">{{ team.school.name }}</span></td>
-            <!--td class="students">{{ team.get_students_display }}</td-->
-            <td class="division">{{ team.get_division_display }}</td>
+            <td class="division">{{ team.get_division_display|capfirst }}</td>
             <td class="team">
                 {% autoescape off %}
                 {{ team|grading_status:"team" }}

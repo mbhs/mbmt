@@ -6,8 +6,13 @@
 <form action="{% url 'scoreboard' %}" method="POST">
     {% csrf_token %}
     <input type="hidden" name="recalculate">
-    <input type="submit" value="Submit">
+    <button type="submit" class="btn btn-primary save">Recalculate</button>
 </form>
+{% if error %}
+    {% autoescape off %}
+        <span class="red">{{ error }}</span>
+    {% endautoescape %}
+{% endif %}
 <table class="divisions">
     <tr>
         <td valign="top">

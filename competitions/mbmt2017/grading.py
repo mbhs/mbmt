@@ -194,17 +194,17 @@ class Grader(CompetitionGrader):
         powers = ChillDictionary()
         for division in subject_scores:
             for subject in subject_scores[division]:
-                print(subject, division)
-                print(subject_scores[division][subject])
-                powers[division][subject] = self._calculate_individual_exponent(subject_scores[division][subject])
+                powers[division][subject] = self._calculate_individual_exponent(
+                    list(filter(lambda x: x > 0, subject_scores[division][subject])))
 
         final_scores = ChillDictionary()
         for division in split_scores:
             for student in split_scores[division]:
                 score = 0
                 for subject in split_scores[division][student]:
-                    score += pow(split_scores[division][student][subject], powers[division][subject])
-                final_scores[division][student] = score.real
+                    if split_scores[division][student][subject] != 0:
+                        score += pow(split_scores[division][student][subject], powers[division][subject])
+                final_scores[division][student] = score
 
         return final_scores.dict()
 

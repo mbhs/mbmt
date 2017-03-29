@@ -33,7 +33,7 @@
                 <span class="team-name ellipsis">{{ student.team.name }}</span>
                 <span class="italics">{{ student.team.school.name }}</span>
             </td>
-            <td class="division">{{ student.team.get_division_display }}</td>
+            <td class="division">{{ student.team.get_division_display|capfirst }}</td>
             <td class="subject">
                 {% autoescape off %}
                 {{ student|grading_status:"subject1" }}
