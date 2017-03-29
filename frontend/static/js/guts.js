@@ -45,8 +45,8 @@ function update() {
 
 window.onload = function() {
     scoreboards = {
-        Ramanujan: document.getElementById("ramanujan").getElementsByTagName("tbody")[0],
-        Pascal: document.getElementById("pascal").getElementsByTagName("tbody")[0]};
+        ramanujan: document.getElementById("ramanujan"),
+        pascal: document.getElementById("pascal")};
     update();
     setInterval(update, 25*1000);
 };

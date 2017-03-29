@@ -58,7 +58,6 @@ def cached(cache: dict, name: object):
 
             # Use cache time before normal cache
             if use_cache_before > 0 and name in cache:
-                print(use_cache_before, cache[name].time, name)
                 if cache[name].time >= time.time() - use_cache_before:
                     return cache[name].result
 

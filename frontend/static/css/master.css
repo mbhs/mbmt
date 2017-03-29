@@ -230,10 +230,25 @@ table#tags td {
 }
 
 .grading .grader { width: 50%; }
-.grading .grader .qlabel { text-align: right; width: 40px; }
-.grading .grader td input[type="radio"] { margin-left: 20px; }
-.grading .grader td input[type="number"] { margin: 0; margin-left: 20px; font-size: 12px; }
-.grading .grader td span { margin-left: 20px; }
+.grading .grader td.qlabel {
+    text-align: right;
+    width: 40px;
+    vertical-align: middle;
+}
+.grading .grader td input[type="radio"] {
+    margin-left: 20px;
+    border: 0;
+    width: 1.2em;
+    height: 1.2em;
+}
+.grading .grader td input[type="number"] {
+    margin: 0;
+    margin-left: 20px;
+    font-size: 12px;
+}
+.grading .grader td.help {
+    vertical-align: middle;
+}
 
 .grader-title { margin-bottom: 0; }
 .grader-switcher { font-size: 20px; margin-bottom: 1em; }
@@ -262,10 +277,13 @@ table#tags td {
 }
 
 .divisions td.team {
-    max-width: 320px;
     text-overflow: ellipsis;
+    word-break: break-all;
+    word-wrap: break-word;
     overflow: hidden;
     white-space: nowrap;
+    min-width: 280px;
+    max-width: 280px;
 }
 
 

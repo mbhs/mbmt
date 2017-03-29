@@ -26,12 +26,14 @@
                 <input type="radio" name="{{ question.id }}" value="1" {% if answer.value == 1 %} checked {% endif %}>
                 <input type="radio" name="{{ question.id }}" value="0" {% if answer.value == 0 %} checked {% endif %}>
                 <input type="radio" name="{{ question.id }}" value="" {% if answer.value is None %} checked {% endif %}>
-                {% if forloop.counter == 1 %}
-                    <span class="gray">Correct | Incorrect | Ungraded</span>
-                {% endif %}
             {% elif question.get_type_display == "estimation" %}
                 <input type="number" step="any" name="{{ question.id }}" value="{{ answer.value|default:"" }}">
             {% endif %}
+            </td>
+            <td class="help gray">
+                {% if forloop.counter == 1 %}
+                    Correct | Incorrect | Ungraded
+                {% endif %}
             </td>
         </tr>
     {% endfor %}

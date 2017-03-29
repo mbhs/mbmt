@@ -17,24 +17,24 @@
     <tr>
         <td valign="top">
             <h2>Individual - Ramanujan</h2>
-            <table id="ramanujan" class="table table-striped">
+            <table class="table table-striped">
                 {% for name, score in individual_scores.ramanujan %}
                     <tr>
                         <td>{{ forloop.counter }}</td>
-                        <td>{{ name }}</td>
-                        <td>{{ score }}</td>
+                        <td class="team">{{ name }}</td>
+                        <td>{{ score|floatformat:3 }}</td>
                     </tr>
                 {% endfor %}
             </table>
         </td>
         <td valign="top">
             <h2>Individual - Pascal</h2>
-            <table id="pascal" class="table table-striped">
+            <table class="table table-striped">
                 {% for name, score in individual_scores.pascal %}
                     <tr>
                         <td>{{ forloop.counter }}</td>
-                        <td>{{ name }}</td>
-                        <td>{{ score }}</td>
+                        <td class="team">{{ name }}</td>
+                        <td>{{ score|floatformat:3 }}</td>
                     </tr>
                 {% endfor %}
             </table>
@@ -43,24 +43,24 @@
     <tr>
         <td valign="top">
             <h2>Team Individual - Ramanujan</h2>
-            <table id="ramanujan" class="table table-striped">
+            <table class="table table-striped">
                 {% for name, score in team_individual_scores.ramanujan %}
                     <tr>
                         <td>{{ forloop.counter }}</td>
-                        <td>{{ name }}</td>
-                        <td>{{ score }}</td>
+                        <td class="team">{{ name }}</td>
+                        <td>{{ score|floatformat:3 }}</td>
                     </tr>
                 {% endfor %}
             </table>
         </td>
         <td valign="top">
             <h2>Team Individual - Pascal</h2>
-            <table id="pascal" class="table table-striped">
+            <table class="table table-striped">
                 {% for name, score in team_individual_scores.pascal %}
                     <tr>
                         <td>{{ forloop.counter }}</td>
-                        <td>{{ name }}</td>
-                        <td>{{ score }}</td>
+                        <td class="team">{{ name }}</td>
+                        <td>{{ score|floatformat:3 }}</td>
                     </tr>
                 {% endfor %}
             </table>
@@ -69,24 +69,24 @@
     <tr>
         <td valign="top">
             <h2>Individual - Ramanujan</h2>
-            <table id="ramanujan" class="table table-striped">
+            <table class="table table-striped">
                 {% for name, score in team_scores.ramanujan %}
                     <tr>
                         <td>{{ forloop.counter }}</td>
-                        <td>{{ name }}</td>
-                        <td>{{ score }}</td>
+                        <td class="team">{{ name }}</td>
+                        <td>{{ score|floatformat:3 }}</td>
                     </tr>
                 {% endfor %}
             </table>
         </td>
         <td valign="top">
             <h2>Individual - Pascal</h2>
-            <table id="pascal" class="table table-striped">
+            <table class="table table-striped">
                 {% for name, score in team_scores.pascal %}
                     <tr>
                         <td>{{ forloop.counter }}</td>
-                        <td>{{ name }}</td>
-                        <td>{{ score }}</td>
+                        <td class="team">{{ name }}</td>
+                        <td>{{ score|floatformat:3 }}</td>
                     </tr>
                 {% endfor %}
             </table>
