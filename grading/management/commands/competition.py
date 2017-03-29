@@ -26,7 +26,7 @@ def load(path, loader=json.load):
         date=date(c["dates"]["competition"]),
         date_registration_start=date(c["dates"]["registration_start"]),
         date_registration_end=date(c["dates"]["registration_end"]),
-        date_team_add_end=date(c["dates"]["team_add_end"]),
+        date_team_edit_end=date(c["dates"]["team_edit_end"]),
         date_shirt_order_end=date(c["dates"]["shirt_order_end"]))
     competition.save()
 

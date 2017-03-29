@@ -7,16 +7,19 @@
 <table id="teams" class="table">
     <tr style="background-color: #f9f9f9;">
         <th>Name</th>
-        <th>Members</th>
-        <th>Tests</th>
+        <th>Students</th>
+        <th>Subject Tests</th>
         <th>Shirt Sizes</th>
     </tr>
     {% for team in request.user.school.teams.all %}
     <tr>
         <td>
-            {{ team.name }}{% if not team.division %} (Please select a division!){% endif %}<br>
+            {{ team.name }}{% if not team.division %} (Please select a division!){% endif %}
+            {% if allow_add_teams %}
+            <br>
             <a href="{% url 'edit_team' team.id %}">Edit</a> |
             <a href="{% url 'remove_team' team.id %}">Remove</a>
+            {% endif %}
         </td>
         <td>
             <ul>
@@ -44,11 +47,12 @@
                 </li>
                 {% endfor %}
             </ul>
-        </td>    </tr>
+        </td>
+    </tr>
     {% endfor %}
     <tr>
         <td>
-            {% if allow_add_teams %}
+            {% if allow_edit_teams %}
                 <a href="{% url 'edit_team' %}">+ Add Team</a>
             {% endif %}
         </td>

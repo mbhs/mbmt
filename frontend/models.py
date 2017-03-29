@@ -41,7 +41,7 @@ class Competition(models.Model):
     # Competition dates
     date_registration_start = models.DateField()
     date_registration_end = models.DateField()
-    date_team_add_end = models.DateField()
+    date_team_edit_end = models.DateField()
     date_shirt_order_end = models.DateField()
 
     # Grader cache

@@ -19,7 +19,6 @@ For a complete explanation regarding what team compositions are allowed, see the
     {{ student_forms.management_form|crispy }}
     {% for form in student_forms %}
         <h3>Student {{ forloop.counter }}</h3>
-
         {% crispy form student_helper %}
     {% endfor %}
 

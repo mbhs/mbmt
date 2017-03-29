@@ -19,6 +19,12 @@ topics = partial(render, template_name="topics.html")
 registration = partial(render, template_name="registration.html")
 
 
+def allow_edit_teams():
+    """Check if teams can be editing in this period."""
+
+    return datetime.date.today() <= models.Competition.current().date_team_edit_end
+
+
 def register(request):
     """The registration page for school sponsors."""
 
@@ -79,13 +85,15 @@ def logout(request):
 def display_teams(request):
     """Display current teams."""
 
-    allow_add_teams = datetime.date.today() <= models.Competition.current().date_team_add_end
-    return render(request, "teams.html", {"allow_add_teams": allow_add_teams})
+    return render(request, "teams.html", {"allow_edit_teams": allow_edit_teams()})
 
 
 @login_required
 def edit_team(request, pk=None):
     """Add a team to the list."""
+
+    if not allow_edit_teams():
+        return redirect("teams")
 
     team = None
     students = models.Student.objects.none()
