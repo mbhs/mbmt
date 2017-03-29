@@ -16,7 +16,7 @@ import scipy.optimize
 
 import grading.models as g
 import frontend.models as f
-from grading.grading import CompetitionGrader, ChillDictionary, cached
+from grading.grading import CompetitionGrader, ChillDictionary, cached, cache_get, cache_set
 from grading.models import CORRECT, ESTIMATION
 
 
@@ -156,7 +156,7 @@ class Grader(CompetitionGrader):
         """Grader for the team round."""
 
         raw_scores = self.grade_round(round)
-        self.cache["raw_team_scores"] = raw_scores
+        self.cache_set("raw_team_scores", raw_scores)
         return self.z_score(raw_scores)
 
     # Cached for use in live grading
@@ -165,7 +165,7 @@ class Grader(CompetitionGrader):
         """Grader for the guts round."""
 
         raw_scores = self.grade_round(round)
-        self.cache["raw_guts_scores"] = raw_scores
+        self.cache_set("raw_guts_scores", raw_scores)
         return self.z_score(raw_scores)
 
     @cached(cache, "raw_guts_score")
@@ -209,7 +209,7 @@ class Grader(CompetitionGrader):
                 subject_scores[division][student.subject1][student] = score1
                 subject_scores[division][student.subject2][student] = score2
 
-        self.cache["subject_scores"] = subject_scores
+        self.cache_set("subject_scores", subject_scores.dict())
 
         powers = ChillDictionary()
         max_scores = ChillDictionary()
@@ -245,7 +245,7 @@ class Grader(CompetitionGrader):
                 raw_scores[division][student] = score
                 final_scores[division][student] = score
 
-        self.cache["raw_individual_scores"] = raw_scores.dict()
+        self.cache_set("raw_individual_scores", raw_scores.dict())
 
         return final_scores.dict()
 
@@ -266,19 +266,24 @@ class Grader(CompetitionGrader):
         return final_scores.dict()
 
     @cached(cache, "team_overall_scores")
-    def calculate_team_scores(self):
+    def calculate_team_scores(self, use_cache=True):
         """Calculate the team scores."""
 
         team_round = self.competition.rounds.filter(ref=TEAM).first()
         guts_round = self.competition.rounds.filter(ref=GUTS).first()
-        individual_scores = self.calculate_team_individual_scores(use_cache=True)
-        team_round_scores = self.team_round_grader(team_round)
-        guts_round_scores = self.guts_round_grader(guts_round)
+        individual_scores = self.calculate_team_individual_scores(use_cache=use_cache)
+        team_round_scores = self.team_round_grader(team_round, use_cache=use_cache)
+        guts_round_scores = self.guts_round_grader(guts_round, use_cache=use_cache)
+
         final_scores = ChillDictionary()
-        for team in f.Team.current():
-            if team in individual_scores and team in team_round_scores and team in guts_round_scores:
-                score = 0.4*individual_scores[team] + 0.3*team_round_scores[team] + 0.3*guts_round_scores[team]
-                final_scores[team.division][team] = score
+        for division in f.DIVISIONS_MAP:
+            for team in f.Team.current():
+                if team in individual_scores[division] and team in team_round_scores[division] and team in guts_round_scores[division]:
+                    score = (
+                        0.4*individual_scores[division][team] +
+                        0.3*team_round_scores[division][team] +
+                        0.3*guts_round_scores[division][team])
+                    final_scores[team.division][team] = score
         return final_scores.dict()
 
     def grade_competition(self, competition):

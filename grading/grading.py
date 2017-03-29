@@ -36,6 +36,19 @@ class CachedGrade:
         self.time = when or time.time()
 
 
+def cache_set(cache, name, result):
+    """Set an item in the cache manually."""
+
+    cache[name] = CachedGrade(result, time.time())
+
+
+def cache_get(cache, name):
+    """Get an item from the cache."""
+
+    item = cache.get(name)
+    return None if item is None else item.result
+
+
 def cached(cache: dict, name: object):
     """Decorator that caches the return of a function.
 
@@ -59,14 +72,14 @@ def cached(cache: dict, name: object):
             # Use cache time before normal cache
             if use_cache_before > 0 and name in cache:
                 if cache[name].time >= time.time() - use_cache_before:
-                    return cache[name].result
+                    return cache_get(cache, name)
 
             # Then check cache normally, only if use_cache_before is 0
             elif use_cache and name in cache:
-                return cache[name].result
+                return cache_get(cache, name)
 
             result = function(*args, **kwargs)
-            cache[name] = CachedGrade(result, time.time())
+            cache_set(cache, name, result)
             return result
         return wrapper
     return decorator
@@ -110,12 +123,28 @@ class CompetitionGrader:
     in the model declaration.
     """
 
+    cache = {}
+
     def __init__(self, competition: models.Competition):
         """Initialize the competition grader."""
 
         self.competition = competition
         self.question_graders = {}
         self.round_graders = {}
+
+    ################
+    # Cache access #
+    ################
+
+    def cache_get(self, name):
+        """Get an item from the cache."""
+
+        return cache_get(self.cache, name)
+
+    def cache_set(self, name, result):
+        """Set an item in the cache."""
+
+        cache_set(self.cache, name, result)
 
     ####################
     # Question graders #

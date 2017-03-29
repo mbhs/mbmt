@@ -256,7 +256,7 @@ def prepare_composite_team_scores(guts_scores, guts_z, team_scores, team_z, over
     for division in sorted(overall_scores.keys()):
         division_name = frontend.models.DIVISIONS_MAP[division]
         teams = []
-        for team in division[division]:
+        for team in overall_scores[division]:
             teams.append((
                 team.name,
                 guts_scores[division][team],
@@ -305,8 +305,8 @@ def team_scoreboard(request):
         team_scores = grader.calculate_team_scores(use_cache=True)
         context = {
             "team_scores": prepare_composite_team_scores(
-                grader.cache["raw_guts_scores"], grader.cache["guts_scores"],
-                grader.cache["raw_team_scores"], grader.cache["team_scores"],
+                grader.cache_get("raw_guts_scores"), grader.cache_get("guts_scores"),
+                grader.cache_get("raw_team_scores"), grader.cache_get("team_scores"),
                 team_scores)}
     except Exception:
         context = {"error": traceback.format_exc().replace("\n", "<br>")}
