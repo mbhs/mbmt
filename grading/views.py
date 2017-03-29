@@ -229,7 +229,7 @@ def prepare_scores(scores):
         divisions[division_name] = []
         for thing in scores[division]:
             divisions[division_name].append([thing.name, scores[division][thing]])
-        divisions[division_name].sort(key=lambda x: x[1])
+        divisions[division_name].sort(key=lambda x: x[1], reverse=True)
     return divisions
 
 
@@ -247,9 +247,7 @@ def scoreboard(request):
     try:
         context = {
             "team_scores": prepare_scores(grader.calculate_team_scores(use_cache=True)),
-            "team_individual_scores": prepare_scores(grader.calculate_team_individual_scores(use_cache=True)),
             "individual_scores": prepare_scores(grader.calculate_individual_scores(use_cache=True))}
-        print(context)
     except Exception:
         context = {"error": traceback.format_exc().replace("\n", "<br>")}
     return render(request, "scoreboard.html", context)
