@@ -6,8 +6,8 @@ from . import views
 urlpatterns = [
 
     # Grading views
-    url(r'^grade/students/$', views.view_students, name='grade_students'),
-    url(r'^grade/teams/$', views.view_teams, name="grade_teams"),
+    url(r'^grade/students/$', views.view_students, name='student_view'),
+    url(r'^grade/teams/$', views.view_teams, name="teams_view"),
     url(r'^grade/(?P<grouping>\w+)/(?P<id>\d+)/(?P<round>\w+)/$', views.score, name='score'),
 
     # Logistics
@@ -17,7 +17,8 @@ urlpatterns = [
     url(r'^tags/teachers/$', views.teacher_name_tags, name="teacher_name_tags"),
 
     # Scoring
-    url(r'^scoreboard/$', views.scoreboard, name="scoreboard"),
+    url(r'^scoreboard/students/$', views.student_scoreboard, name="student_scoreboard"),
+    url(r'^scoreboard/teams/$', views.student_scoreboard, name="teams_scoreboard"),
     url(r'^live/(?P<round>\w+)/$', views.live, name='live'),
 
     # Scoring API

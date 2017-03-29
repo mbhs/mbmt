@@ -53,7 +53,8 @@
                                 Scoreboards <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu">
-                                <li><a href="{% url 'scoreboard' %}">Scoreboard</a></li>
+                                <li><a href="{% url 'teams_scoreboard' %}">Team scoreboard</a></li>
+                                <li><a href="{% url 'student_scoreboard' %}">Student scoreboard</a></li>
                                 <li><a href="{% url 'live' round="guts" %}">Live guts</a></li>
                             </ul>
                         </li>
@@ -62,8 +63,8 @@
                                 Grading <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu">
-                                <li><a href="{% url 'grade_students' %}">Students</a></li>
-                                <li><a href="{% url 'grade_teams' %}">Teams</a></li>
+                                <li><a href="{% url 'student_view' %}">Students</a></li>
+                                <li><a href="{% url 'teams_view' %}">Teams</a></li>
                             </ul>
                         </li>
                     {% else %}

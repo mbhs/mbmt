@@ -7,11 +7,13 @@ SUBJECT_CHOICES = (
     ("nt", "Number Theory"),
     ("ge", "Geometry"),
     ("cp", "Counting and Probability"))
+SUBJECT_CHOICES_MAP = dict(SUBJECT_CHOICES)
+
 
 DIVISIONS = (
     (1, "pascal"),
     (2, "ramanujan"))
-DIVISIONS_MAP = {1: "pascal", 2: "ramanujan"}
+DIVISIONS_MAP = dict(DIVISIONS)
 
 SHIRT_SIZES = (
     (0, "Default"),

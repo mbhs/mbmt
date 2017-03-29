@@ -56,7 +56,7 @@ class Grader(CompetitionGrader):
 
         self.individual_bonus = {}
 
-        factors = ChillDictionary()
+        factors = ChillDictionary({division: ChillDictionary() for division in f.DIVISIONS_MAP})
         for i, round in enumerate((round1, round2)):
             for question in round.questions.all():
                 for answer in g.Answer.objects.filter(question=question).all():
@@ -161,7 +161,6 @@ class Grader(CompetitionGrader):
     def guts_live_round_scores(self):
         """Guts live round."""
 
-        print("Guts score calculated!")
         round = self.competition.rounds.filter(ref="guts").first()
         return self.grade_round(round)
 
@@ -174,11 +173,19 @@ class Grader(CompetitionGrader):
         self._calculate_individual_modifiers(subject1, subject2)
         raw_scores1 = self.grade_round(subject1)
         raw_scores2 = self.grade_round(subject2)
+
         split_scores = ChillDictionary()
         subject_scores = ChillDictionary()
 
         # This ignores students who received answers for one test but not another
-        for division in set(raw_scores1.keys()) & set(raw_scores2.keys()):
+        for division in f.DIVISIONS_MAP:
+
+            # Set up dictionary so no missing keys
+            subject_scores[division] = ChillDictionary()
+            for subject in f.SUBJECT_CHOICES_MAP:
+                subject_scores[division][subject] = ChillDictionary()
+
+            split_scores[division] = ChillDictionary()
             for student in set(raw_scores2[division].keys()) & set(raw_scores2[division].keys()):
 
                 # Skip students not attending
@@ -188,13 +195,15 @@ class Grader(CompetitionGrader):
                 score1 = raw_scores1[division][student]
                 score2 = raw_scores2[division][student]
                 split_scores[division][student] = {student.subject1: score1, student.subject2: score2}
-                subject_scores[division].set(student.subject1, []).append(score1)
-                subject_scores[division].set(student.subject2, []).append(score2)
+                subject_scores[division][student.subject1][student] = score1
+                subject_scores[division][student.subject2][student] = score2
+
+        self.cache["subject_scores"] = subject_scores
 
         powers = ChillDictionary()
         for division in subject_scores:
             for subject in subject_scores[division]:
-                scores = list(filter(lambda x: x > 0, subject_scores[division][subject]))
+                scores = list(filter(lambda x: x > 0, subject_scores[division][subject].values()))
                 if len(scores) >= 2:
                     powers[division][subject] = self._calculate_individual_exponent(scores)
                 else:
@@ -202,6 +211,7 @@ class Grader(CompetitionGrader):
 
         final_scores = ChillDictionary()
         for division in split_scores:
+            final_scores[division] = ChillDictionary()
             for student in split_scores[division]:
                 score = 0
                 for subject in split_scores[division][student]:

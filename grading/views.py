@@ -11,21 +11,18 @@ import frontend.models
 from . import models
 
 
-@login_required
 @permission_required("grading.can_grade")
 def view_students(request):
-    return render(request, "grade.students.html", {
+    return render(request, "student_view.html", {
         "students": frontend.models.Student.current()})
 
 
-@login_required
 @permission_required("grading.can_grade")
 def view_teams(request):
-    return render(request, "grade.teams.html", {
+    return render(request, "team_view.html", {
         "teams": frontend.models.Team.objects.all()})
 
 
-@login_required
 @permission_required("grading.can_grade")
 def score(request, grouping, id, round):
     """Scoring view."""
@@ -223,30 +220,49 @@ def live_update(request, round):
 def prepare_scores(scores):
     """Prepare the scores from a question score calculation."""
 
-    divisions = {}
+    divisions = []
     for division in scores:
         division_name = frontend.models.DIVISIONS_MAP[division]
-        divisions[division_name] = []
+        things = []
         for thing in scores[division]:
-            divisions[division_name].append([thing.name, scores[division][thing]])
-        divisions[division_name].sort(key=lambda x: x[1], reverse=True)
+            things.append((thing.name, scores[division][thing]))
+        things.sort(key=lambda x: x[1], reverse=True)
+        divisions.append((division_name, things))
+    return divisions
+
+
+def prepare_subject_scores(scores):
+    """Prepare scores recursively."""
+
+    divisions = []
+    for division in scores:
+        division_name = frontend.models.DIVISIONS_MAP[division]
+        subjects = []
+        for subject in scores[division]:
+            students = []
+            for student in scores[division][subject]:
+                students.append((student.name, scores[division][subject][student]))
+            students.sort(key=lambda x: x[1], reverse=True)
+            subjects.append((frontend.models.SUBJECT_CHOICES_MAP[subject], students))
+        divisions.append((division_name, subjects))
     return divisions
 
 
 @permission_required("grading.can_grade")
-def scoreboard(request):
+def student_scoreboard(request):
     """Do final scoreboard calculations."""
 
     grader = models.Competition.current().grader
     if request.method == "POST" and "recalculate" in request.POST:
-        print("Recalculating")
-        grader.calculate_team_scores(use_cache=False)
         grader.calculate_individual_scores(use_cache=False)
         return redirect("scoreboard")
+
     try:
+        individual_scores = prepare_scores(grader.calculate_individual_scores(use_cache=True))
+        subject_scores = prepare_subject_scores(grader.cache["subject_scores"])
         context = {
-            "team_scores": prepare_scores(grader.calculate_team_scores(use_cache=True)),
-            "individual_scores": prepare_scores(grader.calculate_individual_scores(use_cache=True))}
+            "individual_scores": individual_scores,
+            "subject_scores": subject_scores}
     except Exception:
         context = {"error": traceback.format_exc().replace("\n", "<br>")}
-    return render(request, "scoreboard.html", context)
+    return render(request, "student_scoreboard.html", context)

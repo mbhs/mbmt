@@ -5,9 +5,9 @@
 <script>
     function back() {
         {% if mode == "student" %}
-        window.location.href = "{% url "grade_students" %}";
+        window.location.href = "{% url 'students_view' %}";
         {% elif mode == "team" %}
-        window.location.href = "{% url "grade_teams" %}";
+        window.location.href = "{% url 'teams_view' %}";
         {% endif %}
     }
 </script>

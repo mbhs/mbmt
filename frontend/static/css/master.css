@@ -258,7 +258,26 @@ table#tags td {
 /* Scoreboard. */
 /***************/
 
-.divisions {
+.scoreboard-header {
+    margin: 0 20px;
+    margin-top: 1em;
+}
+
+.subject-header {
+    margin: 0 20px;
+}
+
+.scoreboard h2, h3 {
+    margin-top: 0;
+}
+
+.recalculate {
+    display: inline-block;
+    margin: 0;
+    margin-top: 6px;
+}
+
+.scoreboard {
     width: 100%;
     border-collapse: separate;
     table-layout: fixed;
@@ -266,17 +285,17 @@ table#tags td {
     border-spacing: 20px;
 }
 
-.divisions div {
+.scoreboard div {
     display: inline-block;
     flex-grow: 1;
 }
 
-.divisions div.spacer {
+.scoreboard div.spacer {
     width: 20px;
     flex-grow: 0;
 }
 
-.divisions td.team {
+.scoreboard td.team {
     text-overflow: ellipsis;
     word-break: break-all;
     word-wrap: break-word;
@@ -284,6 +303,10 @@ table#tags td {
     white-space: nowrap;
     min-width: 280px;
     max-width: 280px;
+}
+
+.scoreboard td.name {
+    width: 99%;
 }
 
 

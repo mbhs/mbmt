@@ -9,7 +9,7 @@
 {% block content %}
 
 <h1 class="grader-title">Teams ({{ teams.count }})</h1>
-<p class="grader-switcher">Go to <a href="{% url "grade_students" %}">students</a> &rarr;</p>
+<p class="grader-switcher">Go to <a href="{% url 'students_view' %}">students</a> &rarr;</p>
 
 <div class="form-group">
     <input class="form-control" id="search" name="search" placeholder="search" oninput="update();">
