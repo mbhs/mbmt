@@ -35,14 +35,20 @@
         <td>
             <h2>{{ division|capfirst }}</h2>
             <table class="table table-striped">
+                <tr>
+                    <th>#</th>
+                    <th>Team</th>
+                    <th>Guts</th>
+                    <th>Team</th>
+                    <th>Overall</th>
+                </tr>
                 {% for name, guts, guts_z, team, team_z, overall in scores %}
                     <tr>
                         <td>{{ forloop.counter }}</td>
-                        <td>{{ name }}</td>
+                        <td class="team">{{ name }}</td>
                         <td>{{ guts|floatformat:3 }}<br>{{ guts_z|floatformat:3 }}</td>
                         <td>{{ team|floatformat:3 }}<br>{{ team_z|floatformat:3 }}</td>
                         <td>{{ overall|floatformat:3 }}</td>
-                        <td>{{ score|floatformat:3 }}</td>
                     </tr>
                 {% endfor %}
             </table>

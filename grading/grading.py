@@ -78,6 +78,9 @@ def cached(cache: dict, name: object):
             elif use_cache and name in cache:
                 return cache_get(cache, name)
 
+            if "use_cache" in function.__code__.co_varnames:
+                kwargs["use_cache"] = use_cache
+
             result = function(*args, **kwargs)
             cache_set(cache, name, result)
             return result

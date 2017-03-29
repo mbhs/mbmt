@@ -297,7 +297,6 @@ def team_scoreboard(request):
 
     grader = models.Competition.current().grader
     if request.method == "POST" and "recalculate" in request.POST:
-        grader.calculate_team_individual_scores(use_cache=False)
         grader.calculate_team_scores(use_cache=False)
         return redirect("team_scoreboard")
 
