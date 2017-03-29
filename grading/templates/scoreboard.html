@@ -42,9 +42,9 @@
     </tr>
     <tr>
         <td valign="top">
-            <h2>Team Individual - Ramanujan</h2>
+            <h2>Team - Ramanujan</h2>
             <table class="table table-striped">
-                {% for name, score in team_individual_scores.ramanujan %}
+                {% for name, score in team_scores.ramanujan %}
                     <tr>
                         <td>{{ forloop.counter }}</td>
                         <td class="team">{{ name }}</td>
@@ -54,9 +54,9 @@
             </table>
         </td>
         <td valign="top">
-            <h2>Team Individual - Pascal</h2>
+            <h2>Team - Pascal</h2>
             <table class="table table-striped">
-                {% for name, score in team_individual_scores.pascal %}
+                {% for name, score in team_scores.pascal %}
                     <tr>
                         <td>{{ forloop.counter }}</td>
                         <td class="team">{{ name }}</td>

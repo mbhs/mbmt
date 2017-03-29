@@ -241,7 +241,6 @@ def scoreboard(request):
     if request.method == "POST" and "recalculate" in request.POST:
         print("Recalculating")
         grader.calculate_team_scores(use_cache=False)
-        grader.calculate_team_individual_scores(use_cache=False)
         grader.calculate_individual_scores(use_cache=False)
         return redirect("scoreboard")
     try:
