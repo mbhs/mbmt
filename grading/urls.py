@@ -18,7 +18,7 @@ urlpatterns = [
 
     # Scoring
     url(r'^scoreboard/students/$', views.student_scoreboard, name="student_scoreboard"),
-    url(r'^scoreboard/teams/$', views.student_scoreboard, name="teams_scoreboard"),
+    url(r'^scoreboard/teams/$', views.team_scoreboard, name="teams_scoreboard"),
     url(r'^live/(?P<round>\w+)/$', views.live, name='live'),
 
     # Scoring API

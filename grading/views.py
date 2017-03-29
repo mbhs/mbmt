@@ -255,7 +255,7 @@ def student_scoreboard(request):
     grader = models.Competition.current().grader
     if request.method == "POST" and "recalculate" in request.POST:
         grader.calculate_individual_scores(use_cache=False)
-        return redirect("scoreboard")
+        return redirect("student_scoreboard")
 
     try:
         individual_scores = prepare_scores(grader.calculate_individual_scores(use_cache=True))
@@ -266,3 +266,10 @@ def student_scoreboard(request):
     except Exception:
         context = {"error": traceback.format_exc().replace("\n", "<br>")}
     return render(request, "student_scoreboard.html", context)
+
+
+@permission_required("grading.can_grade")
+def team_scoreboard(request):
+    """Show the team scoreboard view."""
+
+    return HttpResponse("Stop that")
