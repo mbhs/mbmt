@@ -280,7 +280,7 @@ def student_scoreboard(request):
 
     try:
         individual_scores = prepare_individual_scores(grader.calculate_individual_scores(use_cache=True))
-        subject_scores = prepare_subject_scores(grader.cache["subject_scores"])
+        subject_scores = prepare_subject_scores(grader.cache_get("subject_scores"))
         context = {
             "individual_scores": individual_scores,
             "subject_scores": subject_scores,

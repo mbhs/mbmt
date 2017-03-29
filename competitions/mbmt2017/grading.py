@@ -123,7 +123,7 @@ class Grader(CompetitionGrader):
         elif question.type == g.QUESTION_TYPES["estimation"]:
             e = answer.value
             a = question.answer
-            if a is None:
+            if e is None:
                 value = 0
             elif question.number == 26:
                 max_below = g.Answer.objects.filter(
