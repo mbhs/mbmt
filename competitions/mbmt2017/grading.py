@@ -84,9 +84,11 @@ class Grader(CompetitionGrader):
         for division in factors:
             self.individual_bonus[division] = {}
             for subject in factors[division]:
+                self.individual_bonus[division][subject] = {}
                 for question in factors[division][subject]:
                     correct, total = factors[division][subject][question]
-                    self.individual_bonus[division][subject] = (self.LAMBDA * math.log(total / (correct+1)))
+                    self.individual_bonus[division][subject][question.id] = (
+                        self.LAMBDA * math.log(total / (correct+1)))
 
     def _power_average_partial(self, scores):
         """Return a partial that averages scores raised to a power."""
@@ -104,13 +106,13 @@ class Grader(CompetitionGrader):
         """Grade an individual question."""
 
         return (question.weight * (answer.value or 0) * (1 +
-                self.individual_bonus[answer.student.team.division][answer.student.subject1]))
+                self.individual_bonus[answer.student.team.division][answer.student.subject1][question.id]))
 
     def subject2_question_grader(self, question, answer):
         """Grade an individual question."""
 
         return (question.weight * (answer.value or 0) * (1 +
-                self.individual_bonus[answer.student.team.division][answer.student.subject2]))
+                self.individual_bonus[answer.student.team.division][answer.student.subject2][question.id]))
 
     def guts_question_grader(self, question: g.Question, answer: g.Answer):
         """Grade a guts question."""
@@ -137,33 +139,36 @@ class Grader(CompetitionGrader):
                 value = 0 if e <= 0 else max(0, 12 - 4 * math.log10(max(e/a, a/e)))
         return value * question.weight
 
-    def team_z_round_grader(self, round: g.Round):
+    def z_score(self, raw_scores):
         """General team round grader based on Z score."""
 
-        raw_scores = self.grade_round(round)
+        scores = ChillDictionary()
         for division in raw_scores:
             data = list(map(lambda team: raw_scores[division][team], raw_scores[division]))
             mean = statistics.mean(data)
             dev = statistics.stdev(data, mean)
             for team in raw_scores[division]:
-                raw_scores[division][team] = 0 if dev == 0 else (raw_scores[division][team] - mean) / dev
-        return raw_scores
+                scores[division][team] = 0 if dev == 0 else (raw_scores[division][team] - mean) / dev
+        return scores.dict()
 
+    @cached(cache, "team_scores")
     def team_round_grader(self, round: g.Round):
         """Grader for the team round."""
 
-        return self.team_z_round_grader(round)
+        raw_scores = self.grade_round(round)
+        self.cache["raw_team_scores"] = raw_scores
+        return self.z_score(raw_scores)
 
     # Cached for use in live grading
     @cached(cache, "guts_scores")
-    def guts_round_grader(self, round: g.Round=None):
+    def guts_round_grader(self, round: g.Round):
         """Grader for the guts round."""
 
-        if round is None:
-            round = self.competition.rounds.filter(ref="guts").first()
-        return self.team_z_round_grader(round)
+        raw_scores = self.grade_round(round)
+        self.cache["raw_guts_scores"] = raw_scores
+        return self.z_score(raw_scores)
 
-    @cached(cache, "guts_live_score")
+    @cached(cache, "raw_guts_score")
     def guts_live_round_scores(self):
         """Guts live round."""
 
@@ -224,17 +229,23 @@ class Grader(CompetitionGrader):
                     powers[division][subject] = 0
         self.individual_powers = powers.dict()
 
+        raw_scores = ChillDictionary()
         final_scores = ChillDictionary()
         for division in split_scores:
             final_scores[division] = ChillDictionary()
             for student in split_scores[division]:
                 score = 0
+                raw_score = []
                 for subject in split_scores[division][student]:
                     if split_scores[division][student][subject] != 0:
                         score += pow(
                             split_scores[division][student][subject] / max_scores[division][subject],
                             powers[division][subject])
+                        raw_score.append(split_scores[division][student][subject])
+                raw_scores[division][student] = score
                 final_scores[division][student] = score
+
+        self.cache["raw_individual_scores"] = raw_scores.dict()
 
         return final_scores.dict()
 

@@ -7,7 +7,7 @@ urlpatterns = [
 
     # Grading views
     url(r'^grade/students/$', views.view_students, name='student_view'),
-    url(r'^grade/teams/$', views.view_teams, name="teams_view"),
+    url(r'^grade/teams/$', views.view_teams, name="team_view"),
     url(r'^grade/(?P<grouping>\w+)/(?P<id>\d+)/(?P<round>\w+)/$', views.score, name='score'),
 
     # Logistics
@@ -18,10 +18,8 @@ urlpatterns = [
 
     # Scoring
     url(r'^scoreboard/students/$', views.student_scoreboard, name="student_scoreboard"),
-    url(r'^scoreboard/teams/$', views.team_scoreboard, name="teams_scoreboard"),
-    url(r'^live/(?P<round>\w+)/$', views.live, name='live'),
-
-    # Scoring API
+    url(r'^scoreboard/teams/$', views.team_scoreboard, name="team_scoreboard"),
     url(r'^live/(?P<round>\w+)/update/$', views.live_update, name='live_update'),
+    url(r'^live/(?P<round>\w+)/$', views.live, name='live'),
 
 ]

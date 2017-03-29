@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block extrahead %}
+<style>
+    .container {
+        width: 100%;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<h1 class="scoreboard-header">
+    Team Scores
+    <form action="{% url 'team_scoreboard' %}" method="POST" class="recalculate right">
+        {% csrf_token %}
+        <input type="hidden" name="recalculate">
+        <button type="submit" class="btn btn-primary save padded">Recalculate</button>
+    </form>
+</h1>
+
+
+{% if error %}
+<code>
+{% autoescape off %}
+    <span class="red">{{ error }}</span>
+{% endautoescape %}
+</code>
+{% endif %}
+
+{% for division, scores in team_scores %}
+<h2>{{ division }}</h2>
+<table class="table table-striped scoreboard">
+    {% for name, guts, guts_z, team, team_z, overall in scores %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td class="name">{{ name }}</td>
+            <td>{{ guts }}<br>{{ guts_z }}</td>
+            <td>{{ team }}<br>{{ team_z }}</td>
+            <td>{{ overall }}</td>
+            <td>{{ score|floatformat:3 }}</td>
+        </tr>
+    {% endfor %}
+</table>
+{% endfor %}
+
+
+{% endblock %}

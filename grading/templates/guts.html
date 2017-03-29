@@ -1,9 +1,21 @@
 {% extends "base.html" %}
 {% load staticfiles %}
 
+{% block extrahead %}
+<style>
+    .container {
+        width: 100%;
+    }
+</style>
+{% endblock %}
+
 {% block content %}
 
-<table class="divisions">
+<h1 class="scoreboard-header">
+    MBMT Guts Round
+    <span class="right freeze">Freeze!</span>
+</h1>
+<table class="scoreboard">
     <tr>
         <td valign="top">
             <h2>Ramanujan</h2>

@@ -177,7 +177,7 @@ def attendance_post(request):
 def student_name_tags(request):
     """Display a table from which student name tags can be generated."""
 
-    return render(request, "tags.students.html", {"students": frontend.models.Student.current()})
+    return render(request, "tags_students.html", {"students": frontend.models.Student.current()})
 
 
 @permission_required("grading.can_grade")
@@ -187,7 +187,7 @@ def teacher_name_tags(request):
     users = frontend.models.User.objects.filter(
         is_staff=False, is_superuser=False, school__isnull=False).order_by("school__name")
     users = list(filter(lambda user: user.school and user.school.teams.count(), users))
-    return render(request, "tags.teacher.html", {"teachers": users})
+    return render(request, "tags_teacher.html", {"teachers": users})
 
 
 def live(request, round):
@@ -217,11 +217,11 @@ def live_update(request, round):
         return HttpResponse("{}")
 
 
-def prepare_scores(scores):
+def prepare_individual_scores(scores):
     """Prepare the scores from a question score calculation."""
 
     divisions = []
-    for division in scores:
+    for division in sorted(scores.keys()):
         division_name = frontend.models.DIVISIONS_MAP[division]
         things = []
         for thing in scores[division]:
@@ -235,7 +235,7 @@ def prepare_subject_scores(scores):
     """Prepare scores recursively."""
 
     divisions = []
-    for division in scores:
+    for division in sorted(scores.keys()):
         division_name = frontend.models.DIVISIONS_MAP[division]
         subjects = []
         for subject in scores[division]:
@@ -244,9 +244,28 @@ def prepare_subject_scores(scores):
                 students.append((student.name, scores[division][subject][student]))
             students.sort(key=lambda x: x[1], reverse=True)
             subjects.append((frontend.models.SUBJECT_CHOICES_MAP[subject], students))
-        print(subjects)
         subjects.sort(key=lambda x: x[0])
         divisions.append((division_name, subjects))
+    return divisions
+
+
+def prepare_composite_team_scores(guts_scores, guts_z, team_scores, team_z, overall_scores):
+    """Prepare team scores for scoreboard."""
+
+    divisions = []
+    for division in sorted(overall_scores.keys()):
+        division_name = frontend.models.DIVISIONS_MAP[division]
+        teams = []
+        for team in division[division]:
+            teams.append((
+                team.name,
+                guts_scores[division][team],
+                guts_z[division][team],
+                team_scores[division][team],
+                team_z[division][team],
+                overall_scores[division][team]))
+        teams.sort(key=lambda x: x[-1], reverse=True)
+        divisions.append((division_name, teams))
     return divisions
 
 
@@ -260,7 +279,7 @@ def student_scoreboard(request):
         return redirect("student_scoreboard")
 
     try:
-        individual_scores = prepare_scores(grader.calculate_individual_scores(use_cache=True))
+        individual_scores = prepare_individual_scores(grader.calculate_individual_scores(use_cache=True))
         subject_scores = prepare_subject_scores(grader.cache["subject_scores"])
         context = {
             "individual_scores": individual_scores,
@@ -276,4 +295,19 @@ def student_scoreboard(request):
 def team_scoreboard(request):
     """Show the team scoreboard view."""
 
-    return HttpResponse("Stop that")
+    grader = models.Competition.current().grader
+    if request.method == "POST" and "recalculate" in request.POST:
+        grader.calculate_team_individual_scores(use_cache=False)
+        grader.calculate_team_scores(use_cache=False)
+        return redirect("team_scoreboard")
+
+    try:
+        team_scores = grader.calculate_team_scores(use_cache=True)
+        context = {
+            "team_scores": prepare_composite_team_scores(
+                grader.cache["raw_guts_scores"], grader.cache["guts_scores"],
+                grader.cache["raw_team_scores"], grader.cache["team_scores"],
+                team_scores)}
+    except Exception:
+        context = {"error": traceback.format_exc().replace("\n", "<br>")}
+    return render(request, "team_scoreboard.html", context)

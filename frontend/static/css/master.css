@@ -326,3 +326,10 @@ table#tags td {
     margin: 0;
 }
 .red { color: red; }
+
+.freeze {
+    display: inline-block;
+    font-family: 'Roboto', serif;
+    font-size: 20px;
+    margin-top: 7px;
+}

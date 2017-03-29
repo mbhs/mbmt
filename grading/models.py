@@ -77,11 +77,16 @@ class Question(models.Model):
     weight = models.FloatField(default=1.0)
     answer = models.FloatField(blank=True, null=True)
 
+    def __repr__(self):
+        """Represent the question as a string."""
+
+        return "Question[#{}]".format(self.number)
+
     @staticmethod
-    def new(round: Round, order: int, save: bool=True, **options):
+    def new(round: Round, number: int, save: bool=True, **options):
         """Create a new question within the round."""
 
-        question = Question(round=round, order=order, **options)
+        question = Question(round=round, number=number, **options)
         if save:
             question.save()
         return question
