@@ -212,15 +212,17 @@ class Grader(CompetitionGrader):
             for subject in subject_scores[division]:
                 # scores = list(filter(lambda x: x > 0, subject_scores[division][subject].values()))
                 scores = list(subject_scores[division][subject].values())
-                if len(scores) >= 1:
-                    high = max(scores)
-                    max_scores[division][subject] = high
+                high = 0 if not scores else max(scores)
+                max_scores[division][subject] = high
+
+                # Doesn't work for fewer than 3 scores
+                if len(scores) >= 3:
                     powers[division][subject] = self._calculate_individual_exponent(normalize(scores, high))
+
+                # Doesn't work for fewer than 3 scores
                 else:
-                    max_scores[division][subject] = 0
                     powers[division][subject] = 0
         self.individual_powers = powers.dict()
-        print(self.individual_powers)
 
         final_scores = ChillDictionary()
         for division in split_scores:
