@@ -8,11 +8,13 @@
     <input type="hidden" name="recalculate">
     <button type="submit" class="btn btn-primary save">Recalculate</button>
 </form>
+<code>
 {% if error %}
     {% autoescape off %}
         <span class="red">{{ error }}</span>
     {% endautoescape %}
 {% endif %}
+</code>
 <table class="divisions">
     <tr>
         <td valign="top">
