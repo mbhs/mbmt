@@ -262,7 +262,9 @@ def student_scoreboard(request):
         subject_scores = prepare_subject_scores(grader.cache["subject_scores"])
         context = {
             "individual_scores": individual_scores,
-            "subject_scores": subject_scores}
+            "subject_scores": subject_scores,
+            "individual_powers": grader.individual_powers,
+            "individual_bonus": grader.individual_bonus}
     except Exception:
         context = {"error": traceback.format_exc().replace("\n", "<br>")}
     return render(request, "student_scoreboard.html", context)

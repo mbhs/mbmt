@@ -208,6 +208,7 @@ class Grader(CompetitionGrader):
                     powers[division][subject] = self._calculate_individual_exponent(scores)
                 else:
                     powers[division][subject] = 1
+        self.individual_powers = powers.dict()
 
         final_scores = ChillDictionary()
         for division in split_scores:
