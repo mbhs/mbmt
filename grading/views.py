@@ -219,18 +219,32 @@ def live_update(request, round):
         return HttpResponse("{}")
 
 
+def prepare_scores(scores):
+    """Prepare the scores from a question score calculation."""
+
+    divisions = {}
+    for division in scores:
+        divisions[division] = []
+        for thing in scores[division]:
+            divisions[division].append([thing.name, scores[division][thing]])
+        divisions[division].sort(key=lambda x: x[1])
+    return divisions
+
+
+@permission_required("grading.can_grade")
 def scoreboard(request):
     """Do final scoreboard calculations."""
 
     grader = models.Competition.current().grader
-    if request.method == "" and "recalculate" in request.POST:
+    if request.method == "POST" and "recalculate" in request.POST:
+        print("Recalculating")
         grader.calculate_team_scores(use_cache=False)
         grader.calculate_team_individual_scores(use_cache=False)
         grader.calculate_individual_scores(use_cache=False)
         return redirect("scoreboard")
+    print(grader.calculate_individual_scores())
     context = {
-        "team_scores": grader.calculate_team_scores(use_cache=True),
-        "team_individual_scores": grader.calculate_team_individual_scores(use_cache=True),
-        "individual_scores": grader.calculate_individual_scores(use_cache=True)}
-    print(context)
+        "team_scores": prepare_scores(grader.calculate_team_scores(use_cache=True)),
+        "team_individual_scores": prepare_scores(grader.calculate_team_individual_scores(use_cache=True)),
+        "individual_scores": prepare_scores(grader.calculate_individual_scores(use_cache=True))}
     return render(request, "scoreboard.html", context)

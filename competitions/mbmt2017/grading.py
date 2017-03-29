@@ -80,8 +80,7 @@ class Grader(CompetitionGrader):
             for subject in factors[division]:
                 for question in factors[division][subject]:
                     correct, total = factors[division][subject][question]
-                    self.individual_bonus[division][subject] = (
-                        self.LAMBDA * math.log(total / (correct+1)))
+                    self.individual_bonus[division][subject] = (self.LAMBDA * math.log(total / (correct+1)))
 
     def _power_average_partial(self, scores):
         """Return a partial that averages scores raised to a power."""
@@ -98,14 +97,14 @@ class Grader(CompetitionGrader):
     def subject1_question_grader(self, question, answer):
         """Grade an individual question."""
 
-        return (question.weight * (answer.value or 0) *
-                self.individual_bonus[answer.student.team.division][answer.student.subject1])
+        return (question.weight * (answer.value or 0) * (1 +
+                self.individual_bonus[answer.student.team.division][answer.student.subject1]))
 
     def subject2_question_grader(self, question, answer):
         """Grade an individual question."""
 
-        return (question.weight * (answer.value or 0) *
-                self.individual_bonus[answer.student.team.division][answer.student.subject2])
+        return (question.weight * (answer.value or 0) * (1 +
+                self.individual_bonus[answer.student.team.division][answer.student.subject2]))
 
     def guts_question_grader(self, question: g.Question, answer: g.Answer):
         """Grade a guts question."""
@@ -183,7 +182,7 @@ class Grader(CompetitionGrader):
             for student in set(raw_scores2[division].keys()) & set(raw_scores2[division].keys()):
 
                 # Skip students not attending
-                if student.attending:
+                if not student.attending:
                     continue
 
                 score1 = raw_scores1[division][student]
@@ -195,6 +194,8 @@ class Grader(CompetitionGrader):
         powers = ChillDictionary()
         for division in subject_scores:
             for subject in subject_scores[division]:
+                print(subject, division)
+                print(subject_scores[division][subject])
                 powers[division][subject] = self._calculate_individual_exponent(subject_scores[division][subject])
 
         final_scores = ChillDictionary()
@@ -203,7 +204,7 @@ class Grader(CompetitionGrader):
                 score = 0
                 for subject in split_scores[division][student]:
                     score += pow(split_scores[division][student][subject], powers[division][subject])
-                final_scores[division][student] = score
+                final_scores[division][student] = score.real
 
         return final_scores.dict()
 
@@ -212,7 +213,6 @@ class Grader(CompetitionGrader):
         """Custom function that combines team and guts scores."""
 
         raw_scores = self.calculate_individual_scores(use_cache=True)
-        print(raw_scores)
         final_scores = ChillDictionary()
         for team in f.Team.current():
             score = 0
