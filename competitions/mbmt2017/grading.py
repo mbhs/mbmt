@@ -26,6 +26,12 @@ GUTS = "guts"
 TEAM = "team"
 
 
+def normalize(array, n):
+    """Divide array values by n."""
+
+    return list(map(lambda x: x/n, array))
+
+
 class Grader(CompetitionGrader):
     """Grader specific to MBMT 2017."""
 
@@ -38,7 +44,7 @@ class Grader(CompetitionGrader):
 
         super().__init__(competition)
         self.individual_bonus = {}
-        self.individual_exponents = {}
+        self.individual_powers = {}
 
         # Question graders
         self.register_question_grader(
@@ -86,7 +92,7 @@ class Grader(CompetitionGrader):
         """Return a partial that averages scores raised to a power."""
 
         def power_average(d):
-            return 1.0/len(scores) * sum(pow(score, d) for score in scores) - 0.375
+            return 0.375 - 1.0/len(scores) * sum(pow(score, d) for score in scores)
         return power_average
 
     def _calculate_individual_exponent(self, scores):
@@ -201,14 +207,20 @@ class Grader(CompetitionGrader):
         self.cache["subject_scores"] = subject_scores
 
         powers = ChillDictionary()
+        max_scores = ChillDictionary()
         for division in subject_scores:
             for subject in subject_scores[division]:
-                scores = list(filter(lambda x: x > 0, subject_scores[division][subject].values()))
-                if len(scores) >= 2:
-                    powers[division][subject] = self._calculate_individual_exponent(scores)
+                # scores = list(filter(lambda x: x > 0, subject_scores[division][subject].values()))
+                scores = list(subject_scores[division][subject].values())
+                if len(scores) >= 1:
+                    high = max(scores)
+                    max_scores[division][subject] = high
+                    powers[division][subject] = self._calculate_individual_exponent(normalize(scores, high))
                 else:
-                    powers[division][subject] = 1
+                    max_scores[division][subject] = 0
+                    powers[division][subject] = 0
         self.individual_powers = powers.dict()
+        print(self.individual_powers)
 
         final_scores = ChillDictionary()
         for division in split_scores:
@@ -217,7 +229,9 @@ class Grader(CompetitionGrader):
                 score = 0
                 for subject in split_scores[division][student]:
                     if split_scores[division][student][subject] != 0:
-                        score += pow(split_scores[division][student][subject], powers[division][subject])
+                        score += pow(
+                            split_scores[division][student][subject] / max_scores[division][subject],
+                            powers[division][subject])
                 final_scores[division][student] = score
 
         return final_scores.dict()

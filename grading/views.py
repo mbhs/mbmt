@@ -54,7 +54,7 @@ def score_team(request, id, round):
     # Update the answers
     if request.method == "POST":
         update_answers(request, answers)
-        return redirect("grade_teams")
+        return redirect("team_view")
 
     # Render the grading view
     return render(request, "grader.html", {
@@ -83,7 +83,7 @@ def score_individual(request, id, round):
     # Update the answers
     if request.method == "POST":
         update_answers(request, answers)
-        return redirect("grade_students")
+        return redirect("student_view")
 
     # Render the grading view
     return render(request, "grader.html", {
@@ -196,7 +196,7 @@ def live(request, round):
     if round == "guts":
         return render(request, "guts.html")
     else:
-        return redirect("grade_students")
+        return redirect("student_view")
 
 
 @permission_required("grading.can_grade")
@@ -244,6 +244,8 @@ def prepare_subject_scores(scores):
                 students.append((student.name, scores[division][subject][student]))
             students.sort(key=lambda x: x[1], reverse=True)
             subjects.append((frontend.models.SUBJECT_CHOICES_MAP[subject], students))
+        print(subjects)
+        subjects.sort(key=lambda x: x[0])
         divisions.append((division_name, subjects))
     return divisions
 
