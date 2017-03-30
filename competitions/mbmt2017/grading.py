@@ -127,7 +127,8 @@ class Grader(CompetitionGrader):
                 value = 0
             elif question.number == 26:
                 max_below = g.Answer.objects.filter(
-                    value__isnull=False, value__lte=e).exclude(id=answer.id).order_by("value").first()
+                    value__isnull=False, value__lte=e).exclude(id=answer.id).order_by("value").all()
+                max_below = max_below[0]
                 if max_below:
                     value = min(12, e - max_below.value)
                 else:
@@ -147,6 +148,7 @@ class Grader(CompetitionGrader):
 
         scores = ChillDictionary()
         for division in raw_scores:
+            scores[division] = ChillDictionary()
             data = list(map(lambda team: raw_scores[division][team], raw_scores[division]))
             mean = statistics.mean(data)
             dev = statistics.stdev(data, mean)
@@ -281,12 +283,14 @@ class Grader(CompetitionGrader):
         final_scores = ChillDictionary()
         for division in f.DIVISIONS_MAP:
             for team in f.Team.current():
-                if team in individual_scores[division] and team in team_round_scores[division] and team in guts_round_scores[division]:
-                    score = (
-                        0.4*individual_scores[division][team] +
-                        0.3*team_round_scores[division][team] +
-                        0.3*guts_round_scores[division][team])
-                    final_scores[team.division][team] = score
+                score = 0
+                if team in individual_scores[division]:
+                    score += 0.4 * individual_scores[division][team]
+                if team in team_round_scores[division]:
+                    score += 0.3 * team_round_scores[division][team]
+                if team in guts_round_scores[division]:
+                    score += 0.3 * guts_round_scores[division][team]
+                final_scores[division][team] = score
         return final_scores.dict()
 
     def grade_competition(self, competition):

@@ -172,6 +172,9 @@ class CompetitionGrader:
 
         # Iterate through teams or students
         scores = ChillDictionary()
+        for division in frontend.models.DIVISIONS_MAP:
+            scores[division] = ChillDictionary()
+
         for thing in model.current():
 
             if group == "student" and not thing.attending:

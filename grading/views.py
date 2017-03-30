@@ -259,11 +259,11 @@ def prepare_composite_team_scores(guts_scores, guts_z, team_scores, team_z, over
         for team in overall_scores[division]:
             teams.append((
                 team.name,
-                guts_scores[division][team],
-                guts_z[division][team],
-                team_scores[division][team],
-                team_z[division][team],
-                overall_scores[division][team]))
+                guts_scores[division].get(team, 0),
+                guts_z[division].get(team, 0),
+                team_scores[division].get(team, 0),
+                team_z[division].get(team, 0),
+                overall_scores[division].get(team, 0)))
         teams.sort(key=lambda x: x[-1], reverse=True)
         divisions.append((division_name, teams))
     return divisions
