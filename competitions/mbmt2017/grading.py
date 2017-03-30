@@ -127,8 +127,7 @@ class Grader(CompetitionGrader):
                 value = 0
             elif question.number == 26:
                 max_below = g.Answer.objects.filter(
-                    value__isnull=False, value__lte=e).exclude(id=answer.id).order_by("value").all()
-                max_below = max_below[0]
+                    value__isnull=False, value__lte=e).exclude(id=answer.id).order_by("-value").first()
                 if max_below:
                     value = min(12, e - max_below.value)
                 else:
