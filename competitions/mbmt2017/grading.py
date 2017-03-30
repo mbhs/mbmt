@@ -127,7 +127,7 @@ class Grader(CompetitionGrader):
                 value = 0
             elif question.number == 26:
                 max_below = g.Answer.objects.filter(
-                    value__isnull=False, value__lte=e).exclude(answer).order_by("value").first()
+                    value__isnull=False, value__lte=e).exclude(id=answer.id).order_by("value").first()
                 value = min(12, e - max_below)
             elif question.number == 27:
                 value = 12 * 2 ** (-abs(e-a)/60)
