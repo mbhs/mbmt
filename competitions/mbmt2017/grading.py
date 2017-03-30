@@ -88,7 +88,7 @@ class Grader(CompetitionGrader):
                 for question in factors[division][subject]:
                     correct, total = factors[division][subject][question]
                     self.individual_bonus[division][subject][question.id] = (
-                        self.LAMBDA * math.log(total / (correct+1)))
+                        0 if correct == 0 else self.LAMBDA * math.log(total / (correct+1)))
 
     def _power_average_partial(self, scores):
         """Return a partial that averages scores raised to a power."""
