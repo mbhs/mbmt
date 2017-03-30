@@ -249,7 +249,7 @@ def prepare_subject_scores(scores):
     return divisions
 
 
-def prepare_composite_team_scores(guts_scores, guts_z, team_scores, team_z, overall_scores):
+def prepare_composite_team_scores(guts_scores, guts_z, team_scores, team_z, team_individual_scores, overall_scores):
     """Prepare team scores for scoreboard."""
 
     divisions = []
@@ -263,6 +263,7 @@ def prepare_composite_team_scores(guts_scores, guts_z, team_scores, team_z, over
                 guts_z[division].get(team, 0),
                 team_scores[division].get(team, 0),
                 team_z[division].get(team, 0),
+                team_individual_scores[division].get(team, 0),
                 overall_scores[division].get(team, 0)))
         teams.sort(key=lambda x: x[-1], reverse=True)
         divisions.append((division_name, teams))
@@ -306,6 +307,7 @@ def team_scoreboard(request):
             "team_scores": prepare_composite_team_scores(
                 grader.cache_get("raw_guts_scores"), grader.cache_get("guts_scores"),
                 grader.cache_get("raw_team_scores"), grader.cache_get("team_scores"),
+                grader.cache_get("team_individual_scores"),
                 team_scores)}
     except Exception:
         context = {"error": traceback.format_exc().replace("\n", "<br>")}

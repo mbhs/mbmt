@@ -40,14 +40,16 @@
                     <th>Team</th>
                     <th>Guts</th>
                     <th>Team</th>
+                    <th>Individual</th>
                     <th>Overall</th>
                 </tr>
-                {% for name, guts, guts_z, team, team_z, overall in scores %}
+                {% for name, guts, guts_z, team, team_z, individual, overall in scores %}
                     <tr>
                         <td>{{ forloop.counter }}</td>
                         <td class="team">{{ name }}</td>
                         <td>{{ guts|floatformat:3 }}<br>{{ guts_z|floatformat:3 }}</td>
                         <td>{{ team|floatformat:3 }}<br>{{ team_z|floatformat:3 }}</td>
+                        <td>{{ individual|floatformat:3 }}</td>
                         <td>{{ overall|floatformat:3 }}</td>
                     </tr>
                 {% endfor %}
