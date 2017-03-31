@@ -76,7 +76,7 @@ class Grader(CompetitionGrader):
                     subject = answer.student.subject1 if i == 0 else answer.student.subject2
 
                     # Set atomic factor to correct and total values
-                    if question not in factors[division][subject]:
+                    if question.number not in factors[division][subject]:
                         factors[division][subject][question.number] = [0, 0]  # Correct, total
                     factors[division][subject][question.number][0] += answer.value or 0
                     factors[division][subject][question.number][1] += 1
