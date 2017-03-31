@@ -66,7 +66,7 @@ def login(request):
         form = forms.LoginForm(request.POST)
         if form.is_valid():
             auth.login(request, form.user)
-            if request.user.is_staff:
+            if request.user.has_perm("grading.can_grade"):
                 return redirect("student_view")
             return redirect("teams")
 

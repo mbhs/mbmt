@@ -11,10 +11,17 @@ import frontend.models
 from . import models
 
 
+def columnize(objects, columns):
+    """Return a list of rows of a column layout."""
+
+    size = math.ceil(len(objects) / columns)
+    return list(itertools.zip_longest(*[objects[i:i+size] for i in range(0, len(objects), size)]))
+
+
 @permission_required("grading.can_grade")
 def view_students(request):
     return render(request, "student_view.html", {
-        "students": frontend.models.Student.current()})
+        "students": frontend.models.Student.current().order_by("name").all()})
 
 
 @permission_required("grading.can_grade")
@@ -145,10 +152,9 @@ def attendance(request):
         return redirect("attendance")
 
     # Format students into nice columns
-    students = frontend.models.Student.current()
+    students = frontend.models.Student.current().all()
     count = request.GET.get("columns", 4)
-    size = math.ceil(len(students) / count)
-    columns = list(itertools.zip_longest(*[students[i:i+size] for i in range(0, len(students), size)]))
+    columns = columnize(students, count)
     return render(request, "attendance.html", {"students": columns})
 
 

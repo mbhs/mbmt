@@ -264,15 +264,6 @@ table#tags td {
 /* Scoreboard. */
 /***************/
 
-.scoreboard-header {
-    margin: 0 20px;
-    margin-top: 1em;
-}
-
-.subject-header {
-    margin: 0 20px;
-}
-
 .scoreboard h2, h3 {
     margin-top: 0;
 }
@@ -288,8 +279,11 @@ table#tags td {
     border-collapse: separate;
     table-layout: fixed;
     vertical-align: top;
-    border-spacing: 20px;
 }
+
+.scoreboard > tbody > tr > td { padding: 0 10px; }
+.scoreboard > tbody > tr > td:first-of-type { padding-left: 0; }
+.scoreboard > tbody > tr > td:last-of-type { padding-right: 0; }
 
 .scoreboard div {
     display: inline-block;
@@ -315,12 +309,7 @@ table#tags td {
     width: 99%;
 }
 
-table.single {
-    margin: 0 20px;
-}
-
 .individual-debug {
-    margin: 0 20px;
     margin-bottom: 30px;
     display: block;
 }
