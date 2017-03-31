@@ -20,7 +20,13 @@ def view_students(request):
 @permission_required("grading.can_grade")
 def view_teams(request):
     return render(request, "team_view.html", {
-        "teams": frontend.models.Team.objects.all()})
+        "teams": frontend.models.Team.current().order_by("number").all()})
+
+
+@permission_required("grading.can_grade")
+def edit_teams(request):
+    return render(request, "team_edit.html", {
+        "teams": frontend.models.Team.current().order_by("number").all()})
 
 
 @permission_required("grading.can_grade")

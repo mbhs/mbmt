@@ -181,6 +181,12 @@ table#teams ul {
     list-style-type: none;
 }
 
+table#teams .name {
+    max-width: 40%;
+    word-break: break-all;
+    word-wrap: break-word;
+}
+
 table .subject {
     width: 120px;
 }

@@ -27,7 +27,7 @@
 
     {% for team in teams %}
         <tr>
-            <td class="number">{{ forloop.counter }}</td>
+            <td class="number">{{ team.number }}</td>
             <td class="name">{{ team.name }} <br> <span class="italics">{{ team.school.name }}</span></td>
             <td class="division">{{ team.get_division_display|capfirst }}</td>
             <td class="team">

@@ -99,6 +99,7 @@ class Team(models.Model):
     """Represents a team of students competing in the competition."""
 
     name = models.CharField(max_length=256)
+    number = models.IntegerField(default=0)
     school = models.ForeignKey(School, related_name="teams")
     competition = models.ForeignKey(Competition, related_name="teams")
     division = models.IntegerField(choices=DIVISIONS)
