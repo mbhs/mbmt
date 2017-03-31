@@ -87,7 +87,7 @@ class Grader(CompetitionGrader):
                 self.individual_bonus[division][subject] = {}
                 for question in factors[division][subject]:
                     correct, total = factors[division][subject][question]
-                    self.individual_bonus[division][subject][question.id] = (
+                    self.individual_bonus[division][subject][question.number] = (
                         0 if correct == 0 else self.LAMBDA * math.log(total / (correct+1)))
 
     def _power_average_partial(self, scores):
@@ -106,13 +106,13 @@ class Grader(CompetitionGrader):
         """Grade an individual question."""
 
         return (question.weight * (answer.value or 0) * (1 +
-                self.individual_bonus[answer.student.team.division][answer.student.subject1][question.id]))
+                self.individual_bonus[answer.student.team.division][answer.student.subject1][question.number]))
 
     def subject2_question_grader(self, question, answer):
         """Grade an individual question."""
 
         return (question.weight * (answer.value or 0) * (1 +
-                self.individual_bonus[answer.student.team.division][answer.student.subject2][question.id]))
+                self.individual_bonus[answer.student.team.division][answer.student.subject2][question.number]))
 
     def guts_question_grader(self, question: g.Question, answer: g.Answer):
         """Grade a guts question."""
