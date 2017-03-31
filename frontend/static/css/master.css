@@ -326,9 +326,8 @@ table#tags td {
 }
 .red { color: red; }
 
-.freeze {
+#freeze {
     display: inline-block;
-    font-family: 'Roboto', serif;
-    font-size: 20px;
-    margin-top: 7px;
+    color: gray;
+    cursor: pointer;
 }
