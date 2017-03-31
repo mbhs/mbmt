@@ -77,9 +77,9 @@ class Grader(CompetitionGrader):
 
                     # Set atomic factor to correct and total values
                     if question not in factors[division][subject]:
-                        factors[division][subject][question] = [0, 0]  # Correct, total
-                    factors[division][subject][question][0] += answer.value or 0
-                    factors[division][subject][question][1] += 1
+                        factors[division][subject][question.number] = [0, 0]  # Correct, total
+                    factors[division][subject][question.number][0] += answer.value or 0
+                    factors[division][subject][question.number][1] += 1
 
         for division in factors:
             self.individual_bonus[division] = {}
@@ -87,7 +87,7 @@ class Grader(CompetitionGrader):
                 self.individual_bonus[division][subject] = {}
                 for question in factors[division][subject]:
                     correct, total = factors[division][subject][question]
-                    self.individual_bonus[division][subject][question.number] = (
+                    self.individual_bonus[division][subject][question] = (
                         0 if correct == 0 else self.LAMBDA * math.log(total / (correct+1)))
 
     def _power_average_partial(self, scores):
@@ -127,7 +127,8 @@ class Grader(CompetitionGrader):
                 value = 0
             elif question.number == 26:
                 max_below = g.Answer.objects.filter(
-                    value__isnull=False, value__lte=e).exclude(id=answer.id).order_by("-value").first()
+                    value__isnull=False, value__lte=e, question__number=26, question__round__ref=GUTS,
+                ).exclude(id=answer.id).order_by("-value").first()
                 if max_below:
                     value = min(12, e - max_below.value)
                 else:
