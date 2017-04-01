@@ -281,16 +281,17 @@ class Grader(CompetitionGrader):
         guts_round_scores = self.guts_round_grader(guts_round, use_cache=use_cache)
 
         final_scores = ChillDictionary()
-        for division in f.DIVISIONS_MAP:
-            for team in f.Team.current():
-                score = 0
-                if team in individual_scores[division]:
-                    score += 0.4 * individual_scores[division][team]
-                if team in team_round_scores[division]:
-                    score += 0.3 * team_round_scores[division][team]
-                if team in guts_round_scores[division]:
-                    score += 0.3 * guts_round_scores[division][team]
-                final_scores[team.division][team] = score
+        for team in f.Team.current():
+            print(team, team.division)
+            score = 0
+            if team in individual_scores[team.division]:
+                score += 0.4 * individual_scores[team.division][team]
+            if team in team_round_scores[team.division]:
+                score += 0.3 * team_round_scores[team.division][team]
+            if team in guts_round_scores[team.division]:
+                score += 0.3 * guts_round_scores[team.division][team]
+
+            final_scores[team.division][team] = score
         return final_scores.dict()
 
     def grade_competition(self, competition):
