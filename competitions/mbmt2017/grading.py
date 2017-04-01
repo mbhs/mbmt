@@ -94,7 +94,7 @@ class Grader(CompetitionGrader):
         """Return a partial that averages scores raised to a power."""
 
         def power_average(d):
-            return 0.375 - 1.0/len(scores) * sum(pow(score, d) for score in scores)
+            return 0.375 - 1.0/len(scores) * sum(pow(score, d) for score in scores if score != 0)
         return power_average
 
     def _calculate_individual_exponent(self, scores):
