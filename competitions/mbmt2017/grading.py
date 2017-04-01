@@ -290,7 +290,7 @@ class Grader(CompetitionGrader):
                     score += 0.3 * team_round_scores[division][team]
                 if team in guts_round_scores[division]:
                     score += 0.3 * guts_round_scores[division][team]
-                final_scores[division][team] = score
+                final_scores[team.division][team] = score
         return final_scores.dict()
 
     def grade_competition(self, competition):
