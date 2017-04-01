@@ -32,13 +32,19 @@ function update() {
                         return scores[division][b] - scores[division][a];
                     });
 
-                    while (scoreboards[division].firstChild)
-                        scoreboards[division].removeChild(scoreboards[division].firstChild);
+                    console.log(scoreboards);
+                    while (scoreboards[division+"1"].firstChild)
+                        scoreboards[division+"1"].removeChild(scoreboards[division+"1"].firstChild);
+                    while (scoreboards[division+"2"].firstChild)
+                        scoreboards[division+"2"].removeChild(scoreboards[division+"2"].firstChild);
+
+                    var half = Math.ceil(teams.length / 2);
+
                     for (var i = 0; i < teams.length; i++)
-                        scoreboards[division].insertRow().innerHTML += (
-                        "<td>" + (i + 1) + "</td>" +
-                        "<td class=\"team\">" + teams[i] + "</td>" +
-                        "<td>" + Math.round(scores[division][teams[i]] * 1000) / 1000 + "</td>");
+                        scoreboards[division + (i < half ? "1" : "2")].insertRow().innerHTML += (
+                            "<td>" + (i + 1) + "</td>" +
+                            "<td class=\"team\">" + teams[i] + "</td>" +
+                            "<td>" + Math.round(scores[division][teams[i]] * 1000) / 1000 + "</td>");
                 }
             }
             console.log("Updated scoreboard!");
@@ -56,8 +62,10 @@ function freeze() {
 
 window.onload = function() {
     scoreboards = {
-        ramanujan: document.getElementById("ramanujan"),
-        pascal: document.getElementById("pascal")};
+        ramanujan1: document.getElementById("ramanujan1"),
+        ramanujan2: document.getElementById("ramanujan2"),
+        pascal1: document.getElementById("pascal1"),
+        pascal2: document.getElementById("pascal2")};
     update();
     setInterval(update, 25*1000);
 };

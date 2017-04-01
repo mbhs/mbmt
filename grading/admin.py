@@ -15,7 +15,7 @@ if not permission:
 
 
 class QuestionAdmin(admin.ModelAdmin):
-    """Administrative view for the competition model."""
+    """Administrative view for the question model."""
 
     list_display = ["id", "competition_name", "round_name", "number", "label", "weight"]
     ordering = ["round__competition__name", "round__name", "number"]
@@ -42,4 +42,24 @@ class QuestionAdmin(admin.ModelAdmin):
                 pass
 
 
+class AnswerAdmin(admin.ModelAdmin):
+    """Administrative view for answer model."""
+
+    list_display = ["id", "competition_name", "team", "student"]
+    actions = ["reset_answer"]
+
+    def competition_name(self, obj):
+        """Get the competition of an answer."""
+
+        return obj.question.round.competition.name
+
+    def reset_answer(self, request, queryset):
+        """Reset the answers to value none."""
+
+        for answer in queryset.all():
+            answer.value = None
+            answer.save()
+
+
 admin.site.register(models.Question, QuestionAdmin)
+admin.site.register(models.Answer, AnswerAdmin)
