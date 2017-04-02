@@ -5,6 +5,9 @@ from . import views
 
 urlpatterns = [
 
+    # Sponsor scores
+    url(r'^teams/scores/$', views.sponsor_scoreboard, name='sponsor_scoreboard'),
+
     # Grading views
     url(r'^grade/students/$', views.view_students, name='student_view'),
     url(r'^grade/teams/$', views.view_teams, name="team_view"),

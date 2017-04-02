@@ -59,8 +59,18 @@ input {
 #cancel { margin-right: 1em; width: 90px; }
 
 .lower { margin-top: 1em; }
-.lowerer { margin-top: 0.5em; }
+.lowerer { margin-top: 1em; }
 .lowererer { margin-top: 1.5em; }
+
+.sponsor-scoreboard {
+    font-size: 20px;
+}
+
+.fullname {
+    margin-top: -8px;
+    margin-bottom: 20px;
+    font-size: 20px;
+}
 
 footer {
     position: relative;

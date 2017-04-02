@@ -3,6 +3,9 @@
 {% block content %}
 
 <h2 class="lowerer"><strong>{{ request.user.school.name }}</strong>&nbsp;&nbsp;Teams</h2>
+<p class="fullname">{{ request.user.get_full_name }}</p>
+
+<a href="{% url 'sponsor_scoreboard' %}" class="sponsor-scoreboard">Go to scoring &rarr;</a>
 
 <table id="teams" class="table">
     <tr style="background-color: #f9f9f9;">
@@ -14,7 +17,12 @@
     {% for team in request.user.school.teams.all %}
     <tr>
         <td>
-            {{ team.name }}{% if not team.division %} (Please select a division!){% endif %}
+            {{ team.name }}
+            {% if not team.division %}
+                (Please select a division!)
+            {% else %}
+                <br>{{ team.get_division_display|capfirst }}
+            {% endif %}
             {% if allow_add_teams %}
             <br>
             <a href="{% url 'edit_team' team.id %}">Edit</a> |

@@ -282,6 +282,71 @@ def prepare_composite_team_scores(guts_scores, guts_z, team_scores, team_z, team
     return divisions
 
 
+def prepare_school_team_scores(school, guts_scores, team_scores, team_individual_scores, overall_scores):
+    """Prepare scores for sponsor scoreboard."""
+
+    divisions = []
+    for division in sorted(overall_scores.keys()):
+        division_name = frontend.models.DIVISIONS_MAP[division]
+        teams = []
+        for team in overall_scores[division]:
+            if team.school != school:
+                continue
+            teams.append((
+                team.name,
+                guts_scores[division].get(team, 0),
+                team_scores[division].get(team, 0),
+                team_individual_scores[division].get(team, 0),
+                overall_scores[division].get(team, 0)))
+        teams.sort(key=lambda x: x[-1], reverse=True)
+        divisions.append((division_name, teams))
+    return divisions
+
+
+def prepare_school_individual_scores(school, scores):
+    """Prepare individual scores for sponsor scoreboard."""
+
+    divisions = []
+    for division in scores:
+        students = {}
+        for i, subject in enumerate(sorted(frontend.models.SUBJECT_CHOICES_MAP.keys())):
+            for student in scores[division][subject]:
+                if student.team.school != school:
+                    continue
+                if student not in students:
+                    students[student] = [None, None, None, None]
+                students[student][i] = scores[division][subject][student]
+        students = list(map(lambda x: (x[0].name, x[1]), students.items()))
+        students.sort(key=lambda x: x[0])
+        divisions.append((frontend.models.DIVISIONS_MAP[division], students))
+    return divisions
+
+
+@login_required
+def sponsor_scoreboard(request):
+    """Get the sponsor scoreboard."""
+
+    grader = models.Competition.current().grader
+    subject_scores = grader.cache_get("subject_scores")
+    grader.calculate_team_scores(use_cache=True)
+    if subject_scores is None:
+        grader.calculate_individual_scores(use_cache=False)
+
+    school = request.user.school
+    individual_scores = prepare_school_individual_scores(school, grader.cache_get("subject_scores"))
+    team_scores = prepare_school_team_scores(
+        school,
+        grader.cache_get("raw_guts_scores"),
+        grader.cache_get("raw_team_scores"),
+        grader.cache_get("team_individual_scores"),
+        grader.calculate_team_scores(use_cache=True))
+
+    return render(request, "scoring.html", {
+        "individual_scores": individual_scores,
+        "team_scores": team_scores
+    })
+
+
 @permission_required("grading.can_grade")
 def student_scoreboard(request):
     """Do final scoreboard calculations."""

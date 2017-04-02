@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block extrahead %}
+<style>
+    .container {
+        width: 100%;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<h1>Individual Scores</h1>
+
+<table class="scoreboard">
+    <tr>
+        {% for division, students in individual_scores %}
+        <td valign="top">
+            <h2>{{ division|capfirst }}</h2>
+            <table class="table table-striped">
+                <tr>
+                    <th>Name</th>
+                    <th>AL</th>
+                    <th>CP</th>
+                    <th>GE</th>
+                    <th>NT</th>
+                </tr>
+                {% for student, scores in students %}
+                <tr>
+                    <td>{{ student }}</td>
+                    {% for score in scores %}
+                        {% if score %}
+                            <td>{{ score|floatformat:3 }}</td>
+                        {% else %}
+                            <td>-</td>
+                        {% endif %}
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </table>
+        </td>
+        {% endfor %}
+    </tr>
+</table>
+
+<table class="scoreboard">
+    <tr valign="top">
+        {% for division, scores in team_scores %}
+        <td>
+            <h2>{{ division|capfirst }}</h2>
+            <table class="table table-striped">
+                <tr>
+                    <th>#</th>
+                    <th>Team</th>
+                    <th>Guts</th>
+                    <th>Team</th>
+                    <th>Individual</th>
+                    <th>Overall</th>
+                </tr>
+                {% for name, guts, team, individual, overall in scores %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td class="team">{{ name }}</td>
+                        <td>{{ guts|floatformat:3 }}</td>
+                        <td>{{ team|floatformat:3 }}</td>
+                        <td>{{ individual|floatformat:3 }}</td>
+                        <td>{{ overall|floatformat:3 }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </td>
+        {% endfor %}
+    </tr>
+</table>
+
+{% endblock %}

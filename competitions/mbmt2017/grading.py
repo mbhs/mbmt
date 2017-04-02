@@ -282,7 +282,6 @@ class Grader(CompetitionGrader):
 
         final_scores = ChillDictionary()
         for team in f.Team.current():
-            print(team, team.division)
             score = 0
             if team in individual_scores[team.division]:
                 score += 0.4 * individual_scores[team.division][team]
