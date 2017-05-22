@@ -1,5 +1,6 @@
 from django.contrib.auth.decorators import login_required, permission_required
 from django.shortcuts import render, redirect, HttpResponse
+from django.db.models import Q
 
 import json
 import math
@@ -255,7 +256,7 @@ def prepare_subject_scores(scores):
             for student in scores[division][subject]:
                 students.append((student.name, scores[division][subject][student]))
             students.sort(key=lambda x: x[1], reverse=True)
-            subjects.append((frontend.models.SUBJECT_CHOICES_MAP[subject], students))
+            subjects.append((frontend.models.SUBJECTS_MAP[subject], students))
         subjects.sort(key=lambda x: x[0])
         divisions.append((division_name, subjects))
     return divisions
@@ -309,7 +310,7 @@ def prepare_school_individual_scores(school, scores):
     divisions = []
     for division in scores:
         students = {}
-        for i, subject in enumerate(sorted(frontend.models.SUBJECT_CHOICES_MAP.keys())):
+        for i, subject in enumerate(sorted(frontend.models.SUBJECTS_MAP.keys())):
             for student in scores[division][subject]:
                 if student.team.school != school:
                     continue
@@ -343,8 +344,7 @@ def sponsor_scoreboard(request):
 
     return render(request, "scoring.html", {
         "individual_scores": individual_scores,
-        "team_scores": team_scores
-    })
+        "team_scores": team_scores})
 
 
 @permission_required("grading.can_grade")
@@ -389,3 +389,32 @@ def team_scoreboard(request):
     except Exception:
         context = {"error": traceback.format_exc().replace("\n", "<br>")}
     return render(request, "team_scoreboard.html", context)
+
+
+@permission_required("grading._can_grade")
+def view_statistics(request):
+    """View statistics on the last competition."""
+
+    import pprint
+    current = models.Competition.current()
+    division_stats = []
+    for division, division_name in frontend.models.DIVISIONS:
+        subject_stats = []
+        for subject, subject_name in frontend.models.SUBJECTS:
+            question_stats_dict = {}
+            for answer in models.Answer.objects.filter(
+                    Q(question__round__ref="subject1") & Q(student__subject1=subject) |
+                    Q(question__round__ref="subject2") & Q(student__subject2=subject)):
+                if not answer.question.number in question_stats_dict:
+                    question_stats_dict[answer.question.number] = [0, 0, 0]
+                if answer.value is None:
+                    question_stats_dict[answer.question.number][2] += 1
+                if answer.value == 1:
+                    question_stats_dict[answer.question.number][0] += 1
+                elif answer.value == 0:
+                    question_stats_dict[answer.question.number][1] += 1
+
+            subject_stats.append((subject_name, tuple(question_stats_dict.items())))
+        pprint.pprint(subject_stats)
+
+    return render(request, "statistics.html", {"stats": division_stats})

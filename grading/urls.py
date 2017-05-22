@@ -13,6 +13,7 @@ urlpatterns = [
     url(r'^grade/teams/$', views.view_teams, name="team_view"),
     url(r'^grade/teams/edit$', views.edit_teams, name="team_edit"),
     url(r'^grade/(?P<grouping>\w+)/(?P<id>\d+)/(?P<round>\w+)/$', views.score, name='score'),
+    url(r'^grade/statistics/$', views.view_statistics, name="statistics"),
 
     # Logistics
     url(r'^shirts/$', views.shirts, name="shirts"),

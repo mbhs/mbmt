@@ -2,12 +2,12 @@ from django.db import models
 from django.contrib.auth.models import User
 
 
-SUBJECT_CHOICES = (
+SUBJECTS = (
     ("al", "Algebra"),
     ("nt", "Number Theory"),
     ("ge", "Geometry"),
     ("cp", "Counting and Probability"))
-SUBJECT_CHOICES_MAP = dict(SUBJECT_CHOICES)
+SUBJECTS_MAP = dict(SUBJECTS)
 
 
 DIVISIONS = (
@@ -130,8 +130,8 @@ class Student(models.Model):
 
     name = models.CharField(max_length=256, blank=True)
     team = models.ForeignKey(Team, related_name="students")
-    subject1 = models.CharField(max_length=2, blank=True, choices=SUBJECT_CHOICES, verbose_name="Subject 1")
-    subject2 = models.CharField(max_length=2, blank=True, choices=SUBJECT_CHOICES, verbose_name="Subject 2")
+    subject1 = models.CharField(max_length=2, blank=True, choices=SUBJECTS, verbose_name="Subject 1")
+    subject2 = models.CharField(max_length=2, blank=True, choices=SUBJECTS, verbose_name="Subject 2")
 
     size = models.IntegerField(choices=SHIRT_SIZES, default=0)
     attending = models.BooleanField(default=False)

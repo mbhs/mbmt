@@ -106,7 +106,7 @@ class StudentFormSet(NaiveStudentFormSet):
             raise ValidationError("There must be at least one student.")
         subjects = {
             subject: len(list(filter(lambda student: code in (student.subject1, student.subject2), students)))
-            for code, subject in models.SUBJECT_CHOICES}
+            for code, subject in models.SUBJECTS}
         if len(students) == 3:
             for subject, count in subjects.items():
                 if count < 1:

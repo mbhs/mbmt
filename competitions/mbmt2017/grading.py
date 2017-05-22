@@ -198,7 +198,7 @@ class Grader(CompetitionGrader):
 
             # Set up dictionary so no missing keys
             subject_scores[division] = ChillDictionary()
-            for subject in f.SUBJECT_CHOICES_MAP:
+            for subject in f.SUBJECTS_MAP:
                 subject_scores[division][subject] = ChillDictionary()
 
             split_scores[division] = ChillDictionary()
