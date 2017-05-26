@@ -403,8 +403,9 @@ def view_statistics(request):
         for subject, subject_name in frontend.models.SUBJECTS:
             question_stats_dict = {}
             for answer in models.Answer.objects.filter(
-                    Q(question__round__ref="subject1") & Q(student__subject1=subject) |
-                    Q(question__round__ref="subject2") & Q(student__subject2=subject)):
+                    Q(question__round__competition=current) &
+                    (Q(question__round__ref="subject1") & Q(student__subject1=subject) |
+                     Q(question__round__ref="subject2") & Q(student__subject2=subject))):
                 if not answer.question.number in question_stats_dict:
                     question_stats_dict[answer.question.number] = [0, 0, 0]
                 if answer.value is None:
