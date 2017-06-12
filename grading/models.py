@@ -42,6 +42,10 @@ class Round(models.Model):
     competition = models.ForeignKey(Competition, related_name="rounds")
     grouping = models.IntegerField(choices=_ROUND_GROUPINGS)
 
+    # TODO: consider having general polymorphic rounds
+    # Have single or multiple tests that can be taken by choice
+    # Somehow link to student and form for actual test PDF
+
     def __repr__(self):
         """Represent the round as a string."""
 
@@ -76,6 +80,10 @@ class Question(models.Model):
     type = models.IntegerField(choices=_QUESTION_TYPES)
     weight = models.FloatField(default=1.0)
     answer = models.FloatField(blank=True, null=True)
+
+    # TODO: Make sure this is the optimal information for a question
+    # Consider having a statistics utility for the question model that
+    # returns correct, incorrect, and skipped counts.
 
     def __repr__(self):
         """Represent the question as a string."""

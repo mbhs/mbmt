@@ -395,7 +395,6 @@ def team_scoreboard(request):
 def view_statistics(request):
     """View statistics on the last competition."""
 
-    import pprint
     current = models.Competition.current()
     division_stats = []
     for division, division_name in frontend.models.DIVISIONS:
@@ -406,7 +405,7 @@ def view_statistics(request):
                     Q(question__round__competition=current) &
                     (Q(question__round__ref="subject1") & Q(student__subject1=subject) |
                      Q(question__round__ref="subject2") & Q(student__subject2=subject))):
-                if not answer.question.number in question_stats_dict:
+                if answer.question.number not in question_stats_dict:
                     question_stats_dict[answer.question.number] = [0, 0, 0]
                 if answer.value is None:
                     question_stats_dict[answer.question.number][2] += 1
@@ -414,8 +413,7 @@ def view_statistics(request):
                     question_stats_dict[answer.question.number][0] += 1
                 elif answer.value == 0:
                     question_stats_dict[answer.question.number][1] += 1
-
             subject_stats.append((subject_name, tuple(question_stats_dict.items())))
-        pprint.pprint(subject_stats)
+        division_stats.append((division_name, (subject_stats)))
 
     return render(request, "statistics.html", {"stats": division_stats})
