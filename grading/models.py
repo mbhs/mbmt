@@ -99,6 +99,13 @@ class Question(models.Model):
             question.save()
         return question
 
+    # Automated question grading
+    # This feature may eventually be implemented for summer competitions
+    # or other MBMT events. If we generalize our platform to science
+    # bowl, it could be the case that answer would also have to support
+    # multiple choice, in which case storing values rather than true or
+    # false will be more important
+
 
 class Answer(models.Model):
     """An answer to a question."""
@@ -107,3 +114,7 @@ class Answer(models.Model):
     student = models.ForeignKey(frontend.models.Student, related_name="answers", null=True, blank=True)
     team = models.ForeignKey(frontend.models.Team, related_name="answers", null=True, blank=True)
     value = models.FloatField(null=True, blank=True)
+
+    # TODO: answers have to be queried for statistics, so either the
+    # statistics wrapper make such queries or the queries will be
+    # defined under the answer model.
