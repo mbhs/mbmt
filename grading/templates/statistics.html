@@ -1,12 +1,56 @@
 {% extends "base.html" %}
 
 {% block content %}
+<h1>{{ current.name }} Problem Statistics</h1>
 
-<table class="scoreboard">
-    {% for division in divisions %}
-    <tr>
-    </tr>
-
+{% for division_name, division in stats %}
+<h2>{{ division_name|capfirst }}</h2>
+{% with subjects=division.0 %}
+<h3>Subject</h3>
+<table class="scoreboard" style="padding-bottom: 16px;">
+    {% for row in subjects %}
+    {% if forloop.counter0 == 0 %}
+        <tr>{% for value in row %}<td colspan="4">{{ value }}</td>{% endfor %}</tr>
+    {% else %}
+        <tr>
+            {% for value in row %}
+                <td>{{ value.0 }}</td>
+                <td>{{ value.1.0 }}</td>
+                <td>{{ value.1.1 }}</td>
+                <td>{{ value.1.2 }}</td>
+            {% endfor %}
+        </tr>
+    {% endif %}
+    {% endfor %}
+    <tr><td>#</td><td>&#x2713;</td><td>&#x2717;</td><td>?</td></tr>
 </table>
+{% endwith %}
+
+{% for round_name, round in division|slice:"1:" %}
+{% if "estimation" in round_name %}
+<table>
+    {% for question, guesses in round %}
+    <tr>
+        <td width="32px">{{ question }}</td>
+        <td>{{ guesses|join:", " }}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% else %}
+<h3>{{ round_name|capfirst }}</h3>
+<table class="scoreboard" style="padding-bottom: 16px;">
+    {% for row in round %}
+        <tr>
+            <td>{{ row.0 }}</td>
+            <td>{{ row.1.0 }}</td>
+            <td>{{ row.1.1 }}</td>
+            <td>{{ row.1.2 }}</td>
+        </tr>
+    {% endfor %}
+</table>
+{% endif %}
+{% endfor %}
+
+{% endfor %}
 
 {% endblock %}

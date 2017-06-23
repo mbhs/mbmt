@@ -398,10 +398,12 @@ def view_statistics(request):
     current = models.Competition.current()
     division_stats = []
     for division, division_name in frontend.models.DIVISIONS:
+        stats = []
         subject_stats = []
         for subject, subject_name in frontend.models.SUBJECTS:
             question_stats_dict = {}
             for answer in models.Answer.objects.filter(
+                    Q(student__team__division=division) &
                     Q(question__round__competition=current) &
                     (Q(question__round__ref="subject1") & Q(student__subject1=subject) |
                      Q(question__round__ref="subject2") & Q(student__subject2=subject))):
@@ -413,7 +415,30 @@ def view_statistics(request):
                     question_stats_dict[answer.question.number][0] += 1
                 elif answer.value == 0:
                     question_stats_dict[answer.question.number][1] += 1
-            subject_stats.append((subject_name, tuple(question_stats_dict.items())))
-        division_stats.append((division_name, (subject_stats)))
+            subject_stats.append((subject_name,) + tuple(question_stats_dict.items()))
+        stats.append(list(zip(*subject_stats)))
+        for round_ref in ["team", "guts"]:
+            question_stats_dict = {}
+            estimation_guesses = {}
+            for answer in models.Answer.objects.filter(
+                    Q(team__division=division) &
+                    Q(question__round__competition=current) & Q(question__round__ref=round_ref)):
+                if answer.question.type == models.ESTIMATION:
+                    if answer.question.number not in estimation_guesses:
+                        estimation_guesses[answer.question.number] = []
+                    estimation_guesses[answer.question.number].append(answer.value)
+                    continue
+                if answer.question.number not in question_stats_dict:
+                    question_stats_dict[answer.question.number] = [0, 0, 0]
+                if answer.value is None:
+                    question_stats_dict[answer.question.number][2] += 1
+                if answer.value == 1:
+                    question_stats_dict[answer.question.number][0] += 1
+                elif answer.value == 0:
+                    question_stats_dict[answer.question.number][1] += 1
+            stats.append((round_ref, tuple(question_stats_dict.items())))
+            if estimation_guesses:
+                stats.append((round_ref + " estimation", tuple(estimation_guesses.items())))
+        division_stats.append((division_name, stats))
 
-    return render(request, "statistics.html", {"stats": division_stats})
+    return render(request, "statistics.html", {"stats": division_stats, "current": current})
