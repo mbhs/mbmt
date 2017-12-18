@@ -71,7 +71,7 @@ class Grader(CompetitionGrader):
                     if not answer.student.attending:
                         continue
 
-                    # Ignores people whose grading view is not opened
+                    # Ignores people2017 whose grading view is not opened
                     division = answer.student.team.division
                     subject = answer.student.subject1 if i == 0 else answer.student.subject2
 
