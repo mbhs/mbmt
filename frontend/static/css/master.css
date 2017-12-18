@@ -40,13 +40,13 @@ label { display: block; }
 label.name { 
     font-weight: normal;
     font-size: 20px; 
-    margin-bottom: 0px;
+    margin-bottom: 0;
     margin-top: 20px;
 }
 
 label.description {
     font-weight: normal;
-    margin-bottom: 0px;
+    margin-bottom: 0;
 }
 
 input {
@@ -58,9 +58,9 @@ input {
 #submit { width: 90px; }
 #cancel { margin-right: 1em; width: 90px; }
 
-.lower { margin-top: 1em; }
-.lowerer { margin-top: 1em; }
-.lowererer { margin-top: 1.5em; }
+.lower { margin-top: 1rem; }
+.lowerer { margin-top: 3rem; }
+.lowererer { margin-top: 1.5rem; }
 
 .sponsor-scoreboard {
     font-size: 20px;
@@ -174,6 +174,17 @@ table.schedule td:last-of-type {
 div.about-person img {
     border-radius: 50%;
     width: 100%;
+}
+
+.about-person > h3 {
+    text-align: center;
+    margin-top: 8px;
+    margin-bottom: 4px;
+}
+
+.about-person > p {
+    margin-top: 0;
+    text-align: center;
 }
 
 
