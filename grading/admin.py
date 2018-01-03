@@ -1,17 +1,21 @@
 from django.contrib.auth.models import Group, Permission
 from django.contrib.contenttypes.models import ContentType
+from django.dispatch import receiver
+from django.db.models.signals import post_migrate
 from django.contrib import admin
 
 from . import models
 
 
 # Make sure grading permissions are available
-permission = Permission.objects.filter(codename="can_grade").first()
-if not permission:
-    content_type = ContentType.objects.get_for_model(models.Answer)
-    permission = Permission.objects.create(codename="can_grade", name="Can grade", content_type=content_type)
-    grading_group, created = Group.objects.get_or_create(name="grading")
-    grading_group.permissions.add(permission)
+@receiver(post_migrate)
+def setup(sender, **kwargs):
+    permission = Permission.objects.filter(codename="can_grade").first()
+    if not permission:
+        content_type = ContentType.objects.get_for_model(models.Answer)
+        permission = Permission.objects.create(codename="can_grade", name="Can grade", content_type=content_type)
+        grading_group, created = Group.objects.get_or_create(name="grading")
+        grading_group.permissions.add(permission)
 
 
 class QuestionAdmin(admin.ModelAdmin):
