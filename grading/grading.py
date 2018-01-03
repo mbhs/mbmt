@@ -245,3 +245,96 @@ class CompetitionGrader:
         for round in self.competition.rounds.all():
             results[round.ref] = self.grade_round(round)
         return results
+
+
+def prepare_individual_scores(scores):
+    """Prepare the scores from a question score calculation."""
+
+    divisions = []
+    for division in sorted(scores.keys()):
+        division_name = frontend.models.DIVISIONS_MAP[division]
+        things = []
+        for thing in scores[division]:
+            things.append((thing.name, scores[division][thing]))
+        things.sort(key=lambda x: x[1], reverse=True)
+        divisions.append((division_name, things))
+    return divisions
+
+
+def prepare_subject_scores(scores):
+    """Prepare scores recursively."""
+
+    divisions = []
+    for division in sorted(scores.keys()):
+        division_name = frontend.models.DIVISIONS_MAP[division]
+        subjects = []
+        for subject in scores[division]:
+            students = []
+            for student in scores[division][subject]:
+                students.append((student.name, scores[division][subject][student]))
+            students.sort(key=lambda x: x[1], reverse=True)
+            subjects.append((frontend.models.SUBJECTS_MAP[subject], students))
+        subjects.sort(key=lambda x: x[0])
+        divisions.append((division_name, subjects))
+    return divisions
+
+
+def prepare_composite_team_scores(guts_scores, guts_z, team_scores, team_z, team_individual_scores, overall_scores):
+    """Prepare team scores for scoreboard."""
+
+    divisions = []
+    for division in sorted(overall_scores.keys()):
+        division_name = frontend.models.DIVISIONS_MAP[division]
+        teams = []
+        for team in overall_scores[division]:
+            teams.append((
+                team.name,
+                guts_scores[division].get(team, 0),
+                guts_z[division].get(team, 0),
+                team_scores[division].get(team, 0),
+                team_z[division].get(team, 0),
+                team_individual_scores[division].get(team, 0),
+                overall_scores[division].get(team, 0)))
+        teams.sort(key=lambda x: x[-1], reverse=True)
+        divisions.append((division_name, teams))
+    return divisions
+
+
+def prepare_school_team_scores(school, guts_scores, team_scores, team_individual_scores, overall_scores):
+    """Prepare scores for sponsor scoreboard."""
+
+    divisions = []
+    for division in sorted(overall_scores.keys()):
+        division_name = frontend.models.DIVISIONS_MAP[division]
+        teams = []
+        for team in overall_scores[division]:
+            if team.school != school:
+                continue
+            teams.append((
+                team.name,
+                guts_scores[division].get(team, 0),
+                team_scores[division].get(team, 0),
+                team_individual_scores[division].get(team, 0),
+                overall_scores[division].get(team, 0)))
+        teams.sort(key=lambda x: x[-1], reverse=True)
+        divisions.append((division_name, teams))
+    return divisions
+
+
+def prepare_school_individual_scores(school, scores):
+    """Prepare individual scores for sponsor scoreboard."""
+
+    divisions = []
+    for division in scores:
+        students = {}
+        for i, subject in enumerate(sorted(frontend.models.SUBJECTS_MAP.keys())):
+            for student in scores[division][subject]:
+                if student.team.school != school:
+                    continue
+                if student not in students:
+                    students[student] = [None, None, None, None]
+                students[student][i] = scores[division][subject][student]
+        students = list(map(lambda x: (x[0].name, x[1]), students.items()))
+        students.sort(key=lambda x: x[0])
+        divisions.append((frontend.models.DIVISIONS_MAP[division], students))
+    return divisions
