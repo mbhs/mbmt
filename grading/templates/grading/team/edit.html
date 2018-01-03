@@ -1,0 +1,28 @@
+{% extends "home/base.html" %}
+
+{% block content %}
+<table id="teams" class="teams table table-striped table-hover">
+    <tr>
+        <th class="number">#</th>
+        <th class="name">Info</th>
+        <th class="division">Division</th>
+        <th class="students">Students</th>
+    </tr>
+
+    {% for team in teams %}
+        <tr>
+            <td class="number">{{ team.number }}</td>
+            <td class="name">
+                {{ team.name }}<br>
+                <span class="italics">{{ team.school.name }}</span><br>
+                <span class="italics">{{ team.school.user.get_full_name }}</span></td>
+            <td class="division">{{ team.get_division_display|capfirst }}</td>
+            <td>
+                {% for student in team.students.all %}
+                    {{ student.name }}<br>
+                {% endfor %}
+            </td>
+        </tr>
+    {% endfor %}
+</table>
+{% endblock %}
