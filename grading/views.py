@@ -22,19 +22,19 @@ def columnize(objects, columns):
 
 @permission_required("grading.can_grade")
 def view_students(request):
-    return render(request, "student_view.html", {
+    return render(request, "student/view.html", {
         "students": frontend.models.Student.current().order_by("name").all()})
 
 
 @permission_required("grading.can_grade")
 def view_teams(request):
-    return render(request, "team_view.html", {
+    return render(request, "team/view.html", {
         "teams": frontend.models.Team.current().order_by("number").all()})
 
 
 @permission_required("grading.can_grade")
 def edit_teams(request):
-    return render(request, "team_edit.html", {
+    return render(request, "team/edit.html", {
         "teams": frontend.models.Team.current().order_by("number").all()})
 
 
@@ -191,7 +191,7 @@ def attendance_post(request):
 def student_name_tags(request):
     """Display a table from which student name tags can be generated."""
 
-    return render(request, "tags_students.html", {"students": frontend.models.Student.current()})
+    return render(request, "tags/students.html", {"students": frontend.models.Student.current()})
 
 
 @permission_required("grading.can_grade")
@@ -201,7 +201,7 @@ def teacher_name_tags(request):
     users = frontend.models.User.objects.filter(
         is_staff=False, is_superuser=False, school__isnull=False).order_by("school__name")
     users = list(filter(lambda user: user.school and user.school.teams.count(), users))
-    return render(request, "tags_teacher.html", {"teachers": users})
+    return render(request, "tags/teacher.html", {"teachers": users})
 
 
 def live(request, round):
@@ -274,7 +274,7 @@ def student_scoreboard(request):
             "individual_bonus": grader.individual_bonus}
     except Exception:
         context = {"error": traceback.format_exc().replace("\n", "<br>")}
-    return render(request, "student_scoreboard.html", context)
+    return render(request, "student/scoreboard.html", context)
 
 
 @permission_required("grading.can_grade")
@@ -296,7 +296,7 @@ def team_scoreboard(request):
                 team_scores)}
     except Exception:
         context = {"error": traceback.format_exc().replace("\n", "<br>")}
-    return render(request, "team_scoreboard.html", context)
+    return render(request, "team/scoreboard.html", context)
 
 
 @permission_required("grading._can_grade")

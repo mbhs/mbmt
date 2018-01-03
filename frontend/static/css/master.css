@@ -10,47 +10,47 @@
 /*******************/
 
 body {
-    font-family: 'Roboto', serif;
+  font-family: 'Roboto', serif;
 }
 
 h1, h2, h3, h4, h5, h6 {
-    font-family: 'Slabo 27px', sans-serif;
+  font-family: 'Slabo 27px', sans-serif;
 }
 
 #menu {
-    margin-bottom: 0;
-    padding-bottom: 0;
+  margin-bottom: 0;
+  padding-bottom: 0;
 }
 
 #content {
-    /*max-width: 720px;*/
-    /*padding-top: 1em;*/
-    padding-top: 65px;
-    padding-bottom: 70px;
+  /*max-width: 720px;*/
+  /*padding-top: 1em;*/
+  padding-top: 65px;
+  padding-bottom: 75px;
 }
 
 .container {
-    padding-top: -50px;
-    min-height: 100%;
+  padding-top: -50px;
+  min-height: 100%;
 }
 
 form { margin: 1.5em auto; }
 label { display: block; }
 
-label.name { 
-    font-weight: normal;
-    font-size: 20px; 
-    margin-bottom: 0;
-    margin-top: 20px;
+label.name {
+  font-weight: normal;
+  font-size: 20px;
+  margin-bottom: 0;
+  margin-top: 20px;
 }
 
 label.description {
-    font-weight: normal;
-    margin-bottom: 0;
+  font-weight: normal;
+  margin-bottom: 0;
 }
 
 input {
-    margin-top: 8px;
+  margin-top: 8px;
 }
 
 .right { float: right; }
@@ -63,25 +63,25 @@ input {
 .lowererer { margin-top: 1.5rem; }
 
 .sponsor-scoreboard {
-    font-size: 20px;
+  font-size: 20px;
 }
 
 .fullname {
-    margin-top: -8px;
-    margin-bottom: 20px;
-    font-size: 20px;
+  margin-top: -8px;
+  margin-bottom: 20px;
+  font-size: 20px;
 }
 
 footer {
-    position: relative;
-    margin-top: -50px;
-    height: 50px;
-    clear: both;
+  position: relative;
+  margin-top: -50px;
+  height: 50px;
+  clear: both;
 
-    line-height: 50px;
-    background-color: #ccc;
-    text-align: center;
-    width: 100%;
+  line-height: 50px;
+  background-color: #ccc;
+  text-align: center;
+  width: 100%;
 }
 
 
@@ -91,54 +91,54 @@ footer {
 /**************/
 
 h1.title {
-    font-size: 10vw;
-    text-align: center;
-    padding: .2em;
-    user-select: none;
+  font-size: 10vw;
+  text-align: center;
+  padding: .2em;
+  user-select: none;
 }
 
 span.title-left {
-    background-color: #ba2222;
-    color: lightgray;
-    padding: 0 .2em;
-    border-radius: .2em 0 0 .2em;
+  background-color: #ba2222;
+  color: lightgray;
+  padding: 0 .2em;
+  border-radius: .2em 0 0 .2em;
 }
 
 span.title-right {
-    background-color: lightgray;
-    color: #ba2222;
-    padding: 0 .2em;
-    border-radius: 0 .2em .2em 0;
+  background-color: lightgray;
+  color: #ba2222;
+  padding: 0 .2em;
+  border-radius: 0 .2em .2em 0;
 }
 
 p.main-text {
-    text-align: center;
-    font-size: 1.7em;
+  text-align: center;
+  font-size: 1.7em;
 }
 
-.tagline { 
-    text-align: center; 
-    font-size: 24px; 
-    margin-top: 0; 
+.tagline {
+  text-align: center;
+  font-size: 24px;
+  margin-top: 0;
 }
 
 .asteriskField {
-    display: none;
+  display: none;
 }
 
 ol.top > li {
-    margin-top: 0.3em;
+  margin-top: 0.3em;
 }
 
 .btn-register {
-    width: 40%;
-    display: block;
-    height: 2em;
-    vertical-align: middle;
-    font-size: 3em;
-    margin: 0 auto;
-    border-radius: 15px;
-    background-color: #ba2222;
+  width: 40%;
+  display: block;
+  height: 2em;
+  vertical-align: middle;
+  font-size: 3em;
+  margin: 0 auto;
+  border-radius: 15px;
+  background-color: #ba2222;
 }
 
 
@@ -147,23 +147,24 @@ ol.top > li {
 /********************/
 
 table.schedule {
-    font-size: 14px;
+  font-size: 14px;
+  margin-bottom: 1rem;
 }
 
 table.schedule td {
-    padding-top: 1px;
-    padding-bottom: 1px;
+  padding-top: 1px;
+  padding-bottom: 1px;
 }
 
 table.schedule td:first-of-type {
-    padding-left: 10px;
-    padding-right: 10px;
-    border-right: 1px solid black;
-    text-align: right;
+  padding-left: 10px;
+  padding-right: 10px;
+  border-right: 1px solid black;
+  text-align: right;
 }
 
 table.schedule td:last-of-type {
-    padding-left: 10px;
+  padding-left: 10px;
 }
 
 
@@ -172,44 +173,55 @@ table.schedule td:last-of-type {
 /**************/
 
 div.about-person img {
-    border-radius: 50%;
-    width: 100%;
+  border-radius: 50%;
+  width: 100%;
 }
 
 .about-person > h3 {
-    text-align: center;
-    margin-top: 8px;
-    margin-bottom: 4px;
+  text-align: center;
+  margin-top: 8px;
+  margin-bottom: 4px;
 }
 
 .about-person > p {
-    margin-top: 0;
-    text-align: center;
+  margin-top: 0;
+  text-align: center;
 }
 
+ul.contributors {
+  -webkit-column-count: 3;
+  -moz-column-count: 3;
+  column-count: 5;
+  list-style-type: none;
+  padding-left: 0;
+}
+
+ul.contributors > li {
+  text-align: center;
+}
 
 /***********/
 /* Grading */
 /***********/
 
 table#teams {
-    margin-top: 1em;
+  margin-top: 1em;
 }
 
 table#teams ul {
-    margin-bottom: 0;
-    padding-left: 0;
-    list-style-type: none;
+  margin-bottom: 0;
+  padding-left: 0;
+  list-style-type: none;
 }
 
 table#teams .name {
-    max-width: 40%;
-    word-break: break-all;
-    word-wrap: break-word;
+  max-width: 40%;
+  word-break: break-all;
+  word-wrap: break-word;
 }
 
 table .subject {
-    width: 120px;
+  width: 120px;
 }
 
 
@@ -228,53 +240,53 @@ table.attendance .attending { width: 1px; }
 .save { width: 100%; }
 
 .grading .round {
-    padding-top: 0.5em;
-    margin: 0;
+  padding-top: 0.5em;
+  margin: 0;
 }
 
 .grading .team {
-    padding-bottom: 1em;
-    font-size: 20px;
+  padding-bottom: 1em;
+  font-size: 20px;
 }
 
 table#students .team-name {
-    max-width: 400px;
-    text-overflow: ellipsis;
+  max-width: 400px;
+  text-overflow: ellipsis;
 }
 
 table#tags {
-    width: 100%;
-    border-collapse: collapse;
+  width: 100%;
+  border-collapse: collapse;
 }
 
 table#tags th {
-    text-align: left;
+  text-align: left;
 }
 
 table#tags td {
-    border: 1px solid black;
-    padding: 2px;
+  border: 1px solid black;
+  padding: 2px;
 }
 
 .grading .grader { width: 50%; }
 .grading .grader td.qlabel {
-    text-align: right;
-    width: 40px;
-    vertical-align: middle;
+  text-align: right;
+  width: 40px;
+  vertical-align: middle;
 }
 .grading .grader td input[type="radio"] {
-    margin-left: 20px;
-    border: 0;
-    width: 1.2em;
-    height: 1.2em;
+  margin-left: 20px;
+  border: 0;
+  width: 1.2em;
+  height: 1.2em;
 }
 .grading .grader td input[type="number"] {
-    margin: 0;
-    margin-left: 20px;
-    font-size: 12px;
+  margin: 0;
+  margin-left: 20px;
+  font-size: 12px;
 }
 .grading .grader td.help {
-    vertical-align: middle;
+  vertical-align: middle;
 }
 
 .grader-title { margin-bottom: 0; }
@@ -285,21 +297,21 @@ table#tags td {
 /* Scoreboard. */
 /***************/
 
-.scoreboard h2, h3 {
-    margin-top: 0;
+.scoreboard h2, .scoreboard h3 {
+  margin-top: 0;
 }
 
 .recalculate {
-    display: inline-block;
-    margin: 0;
-    margin-top: 6px;
+  display: inline-block;
+  margin: 0;
+  margin-top: 6px;
 }
 
 .scoreboard {
-    width: 100%;
-    border-collapse: separate;
-    table-layout: fixed;
-    vertical-align: top;
+  width: 100%;
+  border-collapse: separate;
+  table-layout: fixed;
+  vertical-align: top;
 }
 
 .scoreboard > tbody > tr > td { padding: 0 10px; }
@@ -307,48 +319,48 @@ table#tags td {
 .scoreboard > tbody > tr > td:last-of-type { padding-right: 0; }
 
 .scoreboard div {
-    display: inline-block;
-    flex-grow: 1;
+  display: inline-block;
+  flex-grow: 1;
 }
 
 .scoreboard div.spacer {
-    width: 20px;
-    flex-grow: 0;
+  width: 20px;
+  flex-grow: 0;
 }
 
 .scoreboard td.team {
-    text-overflow: ellipsis;
-    word-break: break-all;
-    word-wrap: break-word;
-    overflow: hidden;
-    white-space: nowrap;
-    min-width: 280px;
-    max-width: 280px;
+  text-overflow: ellipsis;
+  word-break: break-all;
+  word-wrap: break-word;
+  overflow: hidden;
+  white-space: nowrap;
+  min-width: 280px;
+  max-width: 280px;
 }
 
 .scoreboard td.name {
-    width: 99%;
+  width: 99%;
 }
 
 .individual-debug {
-    margin-bottom: 30px;
-    display: block;
+  margin-bottom: 30px;
+  display: block;
 }
 
 
 .italics { font-style: italic; }
 .gray { color: gray; }
 .ellipsis {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    display: block;
-    margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+  margin: 0;
 }
 .red { color: red; }
 
 #freeze {
-    display: inline-block;
-    color: gray;
-    cursor: pointer;
+  display: inline-block;
+  color: gray;
+  cursor: pointer;
 }

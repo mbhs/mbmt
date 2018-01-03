@@ -60,15 +60,14 @@ class Competition(models.Model):
 
         return Competition.objects.filter(active=True).first()
 
-    @staticmethod
-    def activate(competition):
+    def activate(self):
         """Set a competition as active."""
 
         for active in Competition.objects.filter(active=True):
             active.active = False
             active.save()
-        competition.active = True
-        competition.save()
+        self.active = True
+        self.save()
 
     @property
     def grader(self):
