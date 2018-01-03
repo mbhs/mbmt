@@ -1,10 +1,14 @@
 # MBMT
 
-The Montgomery Blair Math Tournament is a math competition for middle school students in the Maryland area. This is the open source platform registration, logistics, and grading are hosted on. 
+The Montgomery Blair Math Tournament is a math competition for middle school students in the Maryland area. 
+This is the open source platform registration, logistics, and grading are hosted on. 
 
 ## Setup
 
-To set up a development version of the site, clone the git repository and set up a virtual environment. Use Python 3, as Python 2 could not go out of style fast enough...
+To set up a development version of the site, clone the git repository and set up a virtual environment. 
+Use Python 3, as that is the language this project is intended for. 
+Also, make sure you're working on the current version branch through pull requests.
+Master reflects full releases and hot-fixes. 
 
 ```
 $ git clone git@github.com:mbhs/mbmt.git
