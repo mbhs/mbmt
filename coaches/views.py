@@ -43,7 +43,7 @@ def register(request):
 
     # Render the form to the page
     allow_registration = datetime.date.today() <= models.Competition.current().date_registration_end
-    return render(request, "home/register.html", {"form": form, "allow_registration": allow_registration})
+    return render(request, "coaches/register.html", {"form": form, "allow_registration": allow_registration})
 
 
 def login(request):
@@ -59,7 +59,7 @@ def login(request):
                 return redirect("student_view")
             return redirect("teams")
 
-    return render(request, "home/login.html", {"form": form})
+    return render(request, "coaches/login.html", {"form": form})
 
 
 @login_required
@@ -74,7 +74,7 @@ def logout(request):
 def display_teams(request):
     """Display current teams."""
 
-    return render(request, "home/teams.html", {"allow_edit_teams": allow_edit_teams()})
+    return render(request, "coaches/teams.html", {"allow_edit_teams": allow_edit_teams()})
 
 
 @login_required
@@ -118,7 +118,7 @@ def edit_team(request, pk=None):
             return redirect("teams")
 
     # Render the form view
-    return render(request, "home/team.html", {
+    return render(request, "coaches/team.html", {
         "team_form": team_form,
         "student_forms": student_forms,
         "student_helper": forms.PrettyHelper()})
