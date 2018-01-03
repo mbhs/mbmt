@@ -24,15 +24,6 @@ QUESTION_TYPES = {
 CORRECT = 0
 ESTIMATION = 1
 
-# Unnecessary at the moment
-#
-# @receiver(post_save, sender=Competition)
-# def save_rounds(sender: type, instance: Competition, **options):
-#     """Save rounds when a competition is saved"""
-#
-#     for round in instance.rounds.all():
-#         round.save()
-
 
 class Round(models.Model):
     """A single competition round."""

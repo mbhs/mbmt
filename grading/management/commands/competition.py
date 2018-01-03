@@ -95,4 +95,4 @@ class Command(BaseCommand):
         if kwargs["command"] == "activate":
             search = kwargs["id"]
             selected = models.Competition.objects.filter(Q(id=search) | Q(name=search)).first()
-            models.Competition.activate(selected)
+            selected.activate()
