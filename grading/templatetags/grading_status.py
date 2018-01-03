@@ -1,6 +1,6 @@
 from django import template
 
-import frontend.models
+import home.models
 from .. import models
 
 
@@ -20,9 +20,9 @@ def grading_status(team_or_student, round):
         round = models.Round.objects.filter(ref=round).first()
 
     tags = ""
-    if isinstance(team_or_student, frontend.models.Team):
+    if isinstance(team_or_student, home.models.Team):
         search = {"team": team_or_student}
-    elif isinstance(team_or_student, frontend.models.Student):
+    elif isinstance(team_or_student, home.models.Student):
         search = {"student": team_or_student}
     else:
         return tags

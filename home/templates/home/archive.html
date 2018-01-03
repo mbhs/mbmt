@@ -1,0 +1,187 @@
+{% extends "home/base.html" %}
+{% load staticfiles %}
+
+{% block content %}
+
+<h1 class="lowerer">Archive</h1>
+
+Here we're keeping all of past year's problems and solutions, as well as contest results. Some years might be missing
+a round since we haven't done every round every year. In each year, the more difficult division is listed second.
+
+<br/><br/>
+
+<div class="table-responsive">
+    <table class="table table-hover table-striped">
+        <thead>
+            <tr>
+                <th>Year</th>
+                <th>Division</th>
+                <th>Algebra</th>
+                <th>Geometry</th>
+                <th>Counting</th>
+                <th>Number Theory</th>
+                <th>Sprint</th>
+                <th>Team</th>
+                <th>Fun</th>
+                <th>Guts</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr>
+                <th rowspan="2">2017</th>
+                <th>Ramanujan</th>
+                <td>
+                    <a href="{% static 'archive/2017/ramanujan/al.pdf' %}" target="_blank">Problems</a>
+                    <br><a href="{% static 'archive/2017/ramanujan/al_key.pdf' %}" target="_blank">Full key</a>
+                </td>
+                <td>
+                    <a href="{% static 'archive/2017/ramanujan/ge.pdf' %}" target="_blank">Problems</a>
+                    <br><a href="{% static 'archive/2017/ramanujan/ge_key.pdf' %}" target="_blank">Full key</a>
+                </td>
+                <td>
+                    <a href="{% static 'archive/2017/ramanujan/cp.pdf' %}" target="_blank">Problems</a>
+                    <br><a href="{% static 'archive/2017/ramanujan/cp_key.pdf' %}" target="_blank">Full key</a>
+                </td>
+                <td>
+                    <a href="{% static 'archive/2017/ramanujan/nt.pdf' %}" target="_blank">Problems</a>
+                    <br><a href="{% static 'archive/2017/ramanujan/nt_key.pdf' %}" target="_blank">Full key</a>
+                </td>
+                <td>
+                    -
+                </td>
+                <td>
+                    <a href="{% static 'archive/2017/ramanujan/team.pdf' %}" target="_blank">Problems</a>
+                    <br><a href="{% static 'archive/2017/ramanujan/team_key.pdf' %}" target="_blank">Full key</a>
+                </td>
+                <td>N/A</td>
+                <td>
+                    <a href="{% static 'archive/2017/ramanujan/guts.pdf' %}" target="_blank">Problems</a>
+                    <br><a href="{% static 'archive/2017/ramanujan/guts_key.pdf' %}" target="_blank">Full key</a>
+                </td>
+            </tr>
+
+            <tr>
+                <th>Pascal</th>
+                <td>
+                    <a href="{% static 'archive/2017/pascal/al.pdf' %}" target="_blank">Problems</a>
+                    <br><a href="{% static 'archive/2017/pascal/al_key.pdf' %}" target="_blank">Full key</a>
+                </td>
+                <td>
+                    <a href="{% static 'archive/2017/pascal/ge.pdf' %}" target="_blank">Problems</a>
+                    <br><a href="{% static 'archive/2017/pascal/ge_key.pdf' %}" target="_blank">Full key</a>
+                </td>
+                <td>
+                    <a href="{% static 'archive/2017/pascal/cp.pdf' %}" target="_blank">Problems</a>
+                    <br><a href="{% static 'archive/2017/pascal/cp_key.pdf' %}" target="_blank">Full key</a>
+                </td>
+                <td>
+                    <a href="{% static 'archive/2017/pascal/nt.pdf' %}" target="_blank">Problems</a>
+                    <br><a href="{% static 'archive/2017/pascal/nt_key.pdf' %}" target="_blank">Full key</a>
+                </td>
+                <td>
+                    -
+                </td>
+                <td>
+                    <a href="{% static 'archive/2017/pascal/team.pdf' %}" target="_blank">Problems</a>
+                    <br><a href="{% static 'archive/2017/pascal/team_key.pdf' %}" target="_blank">Full key</a>
+                </td>
+                <td>N/A</td>
+                <td>
+                    <a href="{% static 'archive/2017/pascal/guts.pdf' %}" target="_blank">Problems</a>
+                    <br><a href="{% static 'archive/2017/pascal/guts_key.pdf' %}" target="_blank">Full key</a>
+                </td>
+            </tr>
+
+
+            <tr>
+                <th rowspan="2">2016</th>
+                <th>Euclid</th>
+                <td>
+                    <a href="{% static 'archive/2016/euclid/al.pdf' %}" target="_blank">Problems</a>
+                    <br><a href="{% static 'archive/2016/euclid/al_key.pdf' %}" target="_blank">Key</a>
+                </td>
+                <td>
+                    <a href="{% static 'archive/2016/euclid/ge.pdf' %}" target="_blank">Problems</a>
+                    <br><a href="{% static 'archive/2016/euclid/ge_key.pdf' %}" target="_blank">Key</a>
+                </td>
+                <td>
+                    <a href="{% static 'archive/2016/euclid/cp.pdf' %}" target="_blank">Problems</a>
+                    <br><a href="{% static 'archive/2016/euclid/cp_key.pdf' %}" target="_blank">Key</a>
+                </td>
+                <td>
+                    <a href="{% static 'archive/2016/euclid/nt.pdf' %}" target="_blank">Problems</a>
+                    <br><a href="{% static 'archive/2016/euclid/nt_key.pdf' %}" target="_blank">Key</a>
+                </td>
+                <td>
+                    <a href="{% static 'archive/2016/euclid/sprint.pdf' %}" target="_blank">Problems</a>
+                    <br><a href="{% static 'archive/2016/euclid/sprint_key.pdf' %}" target="_blank">Key</a>
+                </td>
+                <td>
+                    <a href="{% static 'archive/2016/euclid/team.pdf' %}" target="_blank">Problems</a>
+                    <br><a href="{% static 'archive/2016/euclid/team_key.pdf' %}" target="_blank">Key</a>
+                </td>
+                <td>N/A</td>
+                <td rowspan="2">
+                    <a href="{% static 'archive/2016/guts.pdf' %}" target="_blank">Problems</a>
+                    <br><a href="{% static 'archive/2016/guts_key.pdf' %}" target="_blank">Key</a>
+                </td>
+            </tr>
+
+            <tr>
+                <th>Lobachevsky</th>
+                <td>
+                    <a href="{% static 'archive/2016/lobachevsky/al.pdf' %}" target="_blank">Problems</a>
+                    <br><a href="{% static 'archive/2016/lobachevsky/al_key.pdf' %}" target="_blank">Key</a>
+                </td>
+                <td>
+                    <a href="{% static 'archive/2016/lobachevsky/ge.pdf' %}" target="_blank">Problems</a>
+                    <br><a href="{% static 'archive/2016/lobachevsky/ge_key.pdf' %}" target="_blank">Key</a>
+                </td>
+                <td>
+                    <a href="{% static 'archive/2016/lobachevsky/cp.pdf' %}" target="_blank">Problems</a>
+                    <br><a href="{% static 'archive/2016/lobachevsky/cp_key.pdf' %}" target="_blank">Key</a>
+                </td>
+                <td>
+                    <a href="{% static 'archive/2016/lobachevsky/nt.pdf' %}" target="_blank">Problems</a>
+                    <br><a href="{% static 'archive/2016/lobachevsky/nt_key.pdf' %}" target="_blank">Key</a>
+                </td>
+                <td>
+                    <a href="{% static 'archive/2016/lobachevsky/sprint.pdf' %}" target="_blank">Problems</a>
+                    <br><a href="{% static 'archive/2016/lobachevsky/sprint_key.pdf' %}" target="_blank">Key</a>
+                </td>
+                <td>
+                    <a href="{% static 'archive/2016/lobachevsky/team.pdf' %}" target="_blank">Problems</a>
+                    <br><a href="{% static 'archive/2016/lobachevsky/team_key.pdf' %}" target="_blank">Key</a>
+                </td>
+                <td>N/A</td>
+            </tr>
+
+            <tr>
+                <th rowspan="2">2015</th>
+                <th>Fermat</th>
+                <td><a href="{% static 'archive/2015/fermat/al.pdf' %}" target="_blank">Problems</a></td>
+                <td><a href="{% static 'archive/2015/fermat/ge.pdf' %}" target="_blank">Problems</a></td>
+                <td><a href="{% static 'archive/2015/fermat/cp.pdf' %}" target="_blank">Problems</a></td>
+                <td><a href="{% static 'archive/2015/fermat/nt.pdf' %}" target="_blank">Problems</a></td>
+                <td><a href="{% static 'archive/2015/fermat/sprint.pdf' %}" target="_blank">Problems</a></td>
+                <td><a href="{% static 'archive/2015/fermat/team.pdf' %}" target="_blank">Problems</a></td>
+                <td>N/A</td>
+                <td rowspan="2"><a href="{% static 'archive/2015/guts.pdf' %}" target="_blank">Problems</a></td>
+            </tr>
+
+            <tr>
+                <th>Euler</th>
+                <td><a href="{% static 'archive/2015/euler/al.pdf' %}" target="_blank">Problems</a></td>
+                <td><a href="{% static 'archive/2015/euler/ge.pdf' %}" target="_blank">Problems</a></td>
+                <td><a href="{% static 'archive/2015/euler/cp.pdf' %}" target="_blank">Problems</a></td>
+                <td><a href="{% static 'archive/2015/euler/nt.pdf' %}" target="_blank">Problems</a></td>
+                <td><a href="{% static 'archive/2015/euler/sprint.pdf' %}" target="_blank">Problems</a></td>
+                <td><a href="{% static 'archive/2015/euler/team.pdf' %}" target="_blank">Problems</a></td>
+                <td>N/A</td>
+            </tr>
+        </tbody>
+</table>
+</div>
+
+{% endblock %}

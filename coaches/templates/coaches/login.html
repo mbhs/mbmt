@@ -1,0 +1,20 @@
+{% extends "home/base.html" %}
+{% load crispy_forms_tags %}
+{% load staticfiles %}
+
+{% block content %}
+
+<h2 class="lowererer">Sponsor Login</h2>
+
+<form name="registration" data-toggle="validator" role="form" method="post">
+    <script src="{% static "js/validator.min.js" %}"></script>
+
+    {% crispy form %}
+
+    <div class="form-group">
+        <input id="submit" type="submit" value="Finish" class="btn btn-primary right"/>
+        <input id="cancel" type="button" value="Cancel" class="btn btn-secondary right" onclick="window.location = {% url 'index' %};"/>
+    </div>
+</form>
+
+{% endblock %}

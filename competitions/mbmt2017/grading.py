@@ -15,7 +15,7 @@ import statistics
 import scipy.optimize
 
 import grading.models as g
-import frontend.models as f
+import home.models as f
 from grading.grading import CompetitionGrader, ChillDictionary, cached, cache_get, cache_set
 from grading.models import CORRECT, ESTIMATION
 

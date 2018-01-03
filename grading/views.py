@@ -8,7 +8,7 @@ import collections
 import itertools
 import traceback
 
-import frontend.models
+import home.models
 from . import models
 from . import grading
 
@@ -22,20 +22,20 @@ def columnize(objects, columns):
 
 @permission_required("grading.can_grade")
 def view_students(request):
-    return render(request, "student/view.html", {
-        "students": frontend.models.Student.current().order_by("name").all()})
+    return render(request, "grading/student/view.html", {
+        "students": home.models.Student.current().order_by("name").all()})
 
 
 @permission_required("grading.can_grade")
 def view_teams(request):
-    return render(request, "team/view.html", {
-        "teams": frontend.models.Team.current().order_by("number").all()})
+    return render(request, "grading/team/view.html", {
+        "teams": home.models.Team.current().order_by("number").all()})
 
 
 @permission_required("grading.can_grade")
 def edit_teams(request):
-    return render(request, "team/edit.html", {
-        "teams": frontend.models.Team.current().order_by("number").all()})
+    return render(request, "grading/team/edit.html", {
+        "teams": home.models.Team.current().order_by("number").all()})
 
 
 @permission_required("grading.can_grade")
@@ -55,7 +55,7 @@ def score_team(request, team_id, round):
     """Scoring view for a team."""
 
     # Iterate questions and get answers
-    team = frontend.models.Team.objects.filter(id=team_id).first()
+    team = home.models.Team.objects.filter(id=team_id).first()
     answers = []
     question_answer = []
     for question in round.questions.order_by("number").all():
@@ -72,7 +72,7 @@ def score_team(request, team_id, round):
         return redirect("team_view")
 
     # Render the grading view
-    return render(request, "grader.html", {
+    return render(request, "grading/grader.html", {
         "name": team.name,
         "division": team.get_division_display,
         "round": round,
@@ -84,7 +84,7 @@ def score_individual(request, student_id, round):
     """Scoring view for an individual."""
 
     # Iterate questions and get answers
-    student = frontend.models.Student.objects.filter(id=student_id).first()
+    student = home.models.Student.objects.filter(id=student_id).first()
     answers = []
     question_answer = []
     for question in round.questions.order_by("number").all():
@@ -101,7 +101,7 @@ def score_individual(request, student_id, round):
         return redirect("student_view")
 
     # Render the grading view
-    return render(request, "grader.html", {
+    return render(request, "grading/grader.html", {
         "name": student.name,
         "division": student.team.get_division_display,
         "round": round,
@@ -126,7 +126,7 @@ def update_answers(request, answers):
 def shirts(request):
     """Shirt sizes view."""
 
-    teams = frontend.models.Team.current()
+    teams = home.models.Team.current()
     teachers = {}
     totals = collections.Counter()
     for team in teams:
@@ -138,7 +138,7 @@ def shirts(request):
             totals[student.get_size_display()] += 1
     for teacher in teachers:
         teachers[teacher][1].sort(key=lambda x: x.name)
-    return render(request, "shirts.html", {
+    return render(request, "grading/shirts.html", {
         "teachers": list(teachers.values()),
         "totals": totals})
 
@@ -154,10 +154,10 @@ def attendance(request):
         return redirect("attendance")
 
     # Format students into nice columns
-    students = frontend.models.Student.current().all()
+    students = home.models.Student.current().all()
     count = request.GET.get("columns", 4)
     columns = columnize(students, count)
-    return render(request, "attendance.html", {"students": columns})
+    return render(request, "grading/attendance.html", {"students": columns})
 
 
 def attendance_post(request):
@@ -173,7 +173,7 @@ def attendance_post(request):
 
     # Iterate post data for numeric entires
     for iid in filter(lambda x: x.isnumeric(), request.POST):
-        student = frontend.models.Student.objects.filter(id=iid).first()
+        student = home.models.Student.objects.filter(id=iid).first()
 
         # Check if student, check present or absent
         if student:
@@ -191,24 +191,24 @@ def attendance_post(request):
 def student_name_tags(request):
     """Display a table from which student name tags can be generated."""
 
-    return render(request, "tags/students.html", {"students": frontend.models.Student.current()})
+    return render(request, "grading/tags/students.html", {"students": home.models.Student.current()})
 
 
 @permission_required("grading.can_grade")
 def teacher_name_tags(request):
     """Display a table from which student name tags can be generated."""
 
-    users = frontend.models.User.objects.filter(
+    users = home.models.User.objects.filter(
         is_staff=False, is_superuser=False, school__isnull=False).order_by("school__name")
     users = list(filter(lambda user: user.school and user.school.teams.count(), users))
-    return render(request, "tags/teacher.html", {"teachers": users})
+    return render(request, "grading/tags/teacher.html", {"teachers": users})
 
 
 def live(request, round):
     """Get the live guts scoreboard."""
 
     if round == "guts":
-        return render(request, "guts.html")
+        return render(request, "grading/guts.html")
     else:
         return redirect("student_view")
 
@@ -222,7 +222,7 @@ def live_update(request, round):
         scores = grader.guts_live_round_scores(use_cache_before=20)
         named_scores = dict()
         for division in scores:
-            division_name = frontend.models.DIVISIONS_MAP[division]
+            division_name = home.models.DIVISIONS_MAP[division]
             named_scores[division_name] = {}
             for team in scores[division]:
                 named_scores[division_name][team.name] = scores[division][team]
@@ -250,7 +250,7 @@ def sponsor_scoreboard(request):
         grader.cache_get("team_individual_scores"),
         grader.calculate_team_scores(use_cache=True))
 
-    return render(request, "scoring.html", {
+    return render(request, "grading/scoring.html", {
         "individual_scores": individual_scores,
         "team_scores": team_scores})
 
@@ -274,7 +274,7 @@ def student_scoreboard(request):
             "individual_bonus": grader.individual_bonus}
     except Exception:
         context = {"error": traceback.format_exc().replace("\n", "<br>")}
-    return render(request, "student/scoreboard.html", context)
+    return render(request, "grading/student/scoreboard.html", context)
 
 
 @permission_required("grading.can_grade")
@@ -296,7 +296,7 @@ def team_scoreboard(request):
                 team_scores)}
     except Exception:
         context = {"error": traceback.format_exc().replace("\n", "<br>")}
-    return render(request, "team/scoreboard.html", context)
+    return render(request, "grading/team/scoreboard.html", context)
 
 
 @permission_required("grading._can_grade")
@@ -305,10 +305,10 @@ def view_statistics(request):
 
     current = models.Competition.current()
     division_stats = []
-    for division, division_name in frontend.models.DIVISIONS:
+    for division, division_name in home.models.DIVISIONS:
         stats = []
         subject_stats = []
-        for subject, subject_name in frontend.models.SUBJECTS:
+        for subject, subject_name in home.models.SUBJECTS:
             question_stats_dict = {}
             for answer in models.Answer.objects.filter(
                     Q(student__team__division=division) &
@@ -349,4 +349,4 @@ def view_statistics(request):
                 stats.append((round_ref + " estimation", tuple(estimation_guesses.items())))
         division_stats.append((division_name, stats))
 
-    return render(request, "statistics.html", {"stats": division_stats, "current": current})
+    return render(request, "grading/statistics.html", {"stats": division_stats, "current": current})

@@ -31,8 +31,9 @@ ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
 # Application definition
 
 INSTALLED_APPS = [
+    'home',
     'grading',
-    'frontend',
+    'coaches',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -129,7 +130,7 @@ STATIC_URL = '/static/'
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'frontend/static')]
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'home/static')]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
 

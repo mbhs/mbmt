@@ -2,9 +2,8 @@ from django.db import models
 # from django.dispatch import receiver
 # from django.db.models.signals import post_save
 
-import frontend.models
-from frontend.models import Competition
-
+from home.models import Competition
+from coaches.models import Team, Student
 
 _ROUND_GROUPINGS = (
     (0, "individual"),
@@ -102,8 +101,8 @@ class Answer(models.Model):
     """An answer to a question."""
 
     question = models.ForeignKey(Question, related_name="answers")
-    student = models.ForeignKey(frontend.models.Student, related_name="answers", null=True, blank=True)
-    team = models.ForeignKey(frontend.models.Team, related_name="answers", null=True, blank=True)
+    student = models.ForeignKey(Student, related_name="answers", null=True, blank=True)
+    team = models.ForeignKey(Team, related_name="answers", null=True, blank=True)
     value = models.FloatField(null=True, blank=True)
 
     # TODO: answers have to be queried for statistics, so either the
