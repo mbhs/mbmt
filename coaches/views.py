@@ -46,30 +46,6 @@ def register(request):
     return render(request, "coaches/register.html", {"form": form, "allow_registration": allow_registration})
 
 
-def login(request):
-    """Process a login request."""
-
-    # Check if the form is valid
-    form = forms.LoginForm()
-    if request.method == "POST":
-        form = forms.LoginForm(request.POST)
-        if form.is_valid():
-            auth.login(request, form.user)
-            if request.user.has_perm("grading.can_grade"):
-                return redirect("student_view")
-            return redirect("teams")
-
-    return render(request, "coaches/login.html", {"form": form})
-
-
-@login_required
-def logout(request):
-    """Logout the currently logged in user."""
-
-    auth.logout(request)
-    return redirect("index")
-
-
 @login_required
 def display_teams(request):
     """Display current teams."""
