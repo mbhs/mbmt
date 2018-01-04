@@ -8,12 +8,6 @@ from . import models, forms
 import datetime
 
 
-def allow_edit_teams():
-    """Check if teams can be editing in this period."""
-
-    return datetime.date.today() <= models.Competition.current().date_team_edit_end
-
-
 def register(request):
     """The registration page for school sponsors."""
 
@@ -36,14 +30,12 @@ def register(request):
             # Login the user and redirect
             user = auth.authenticate(username=user.get_username(), password=form.cleaned_data["password"])
             auth.login(request, user)
-            return redirect("teams")
+            return redirect("coaches:teams")
 
     if request.user.is_authenticated:
-        return redirect("teams")
+        return redirect("coaches:teams")
 
-    # Render the form to the page
-    allow_registration = datetime.date.today() <= models.Competition.current().date_registration_end
-    return render(request, "coaches/register.html", {"form": form, "allow_registration": allow_registration})
+    return render(request, "coaches/register.html", {"form": form, "competition": models.Competition.current()})
 
 
 @login_required

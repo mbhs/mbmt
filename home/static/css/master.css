@@ -49,8 +49,13 @@ label.description {
   margin-bottom: 0;
 }
 
-input {
+input[type="text"] {
   margin-top: 8px;
+}
+
+.bump-down {
+  display: block;
+  padding-top: 8px;
 }
 
 .right { float: right; }

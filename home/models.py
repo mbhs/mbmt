@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils import timezone
 
 
 class Competition(models.Model):
@@ -19,8 +20,8 @@ class Competition(models.Model):
     # Competition dates
     date_registration_start = models.DateField()
     date_registration_end = models.DateField()
-    date_team_edit_end = models.DateField()
-    date_shirt_order_end = models.DateField()
+    date_edit_teams_end = models.DateField()
+    date_edit_shirts_end = models.DateField()
 
     # Semantics
     year = models.CharField(max_length=20)  # First, second, etc.
@@ -61,6 +62,24 @@ class Competition(models.Model):
             grader = importlib.import_module("competitions.{}.grading".format(self.id)).Grader(self)
             self._graders[self.id] = grader
             return grader
+
+    @property
+    def can_register(self):
+        """Check if now is within the registration period."""
+
+        return self.date_registration_start <= timezone.now().date() <= self.date_registration_end
+
+    @property
+    def can_edit_teams(self):
+        """Check if now is within the team editing period."""
+
+        return self.date_registration_start <= timezone.now().date() <= self.date_edit_teams_end
+
+    @property
+    def can_edit_shirts(self):
+        """Check if now is within the shirt editing period."""
+
+        return self.date_registration_start <= timezone.now().date() <= self.date_edit_shirts_end
 
 
 class Organizer(models.Model):

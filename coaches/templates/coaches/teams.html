@@ -1,11 +1,11 @@
-{% extends "home/../../../home/templates/shared/base.html" %}
+{% extends "shared/base.html" %}
 
 {% block content %}
 
 <h2 class="lowerer"><strong>{{ request.user.school.name }}</strong>&nbsp;&nbsp;Teams</h2>
 <p class="fullname">{{ request.user.get_full_name }}</p>
 
-<a href="{% url 'sponsor_scoreboard' %}" class="sponsor-scoreboard">Go to scoring &rarr;</a>
+<a href="{% url "grading:sponsor_scoreboard" %}" class="sponsor-scoreboard">Go to scoring &rarr;</a>
 
 <table id="teams" class="table">
     <tr style="background-color: #f9f9f9;">
@@ -25,8 +25,8 @@
             {% endif %}
             {% if allow_add_teams %}
             <br>
-            <a href="{% url 'edit_team' team.id %}">Edit</a> |
-            <a href="{% url 'remove_team' team.id %}">Remove</a>
+            <a href="{% url "coaches:edit_team" team.id %}">Edit</a> |
+            <a href="{% url "coaches:remove_team" team.id %}">Remove</a>
             {% endif %}
         </td>
         <td>
@@ -61,7 +61,7 @@
     <tr>
         <td>
             {% if allow_edit_teams %}
-                <a href="{% url 'edit_team' %}">+ Add Team</a>
+                <a href="{% url "coaches:edit_team" %}">+ Add Team</a>
             {% endif %}
         </td>
         <td></td>
