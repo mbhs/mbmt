@@ -1,4 +1,4 @@
-{% extends "home/base.html" %}
+{% extends "home/../shared/base.html" %}
 
 {% block content %}
 
@@ -6,37 +6,27 @@
 
 <br/>
 
-<p class="main-text" style="font-family: 'Slabo 27px'; font-size: 36px; margin-bottom: 0;">
-    The Montgomery Blair Math Tournament
-</p>
-<p class="main-text" style="margin: 0 auto; max-width: 820px; padding-bottom: 2em;">
-    <span>
-        A mathematics competition for middle school students in the Maryland area on
-        Saturday, April 7th, 2018
-    </span>
-    <a href="{% url 'register' %}" style="color: #ba2222">Register &#x276f;</a>
+<p class="main-title">The Montgomery Blair Math Tournament</p>
+<p class="main-text">
+    <span>A mathematics competition for middle school students in the Maryland area on Saturday, April 7th, 2018</span>
+    <a href="{% url "coaches:register" %}" style="color: #ba2222">Register &#x276f;</a>
 </p>
 
 <div class="row">
     <div class="col-lg-4">
         <h2>Solve problems.</h2>
-
         <p><strong>MBMT is all about math.</strong> Whether you're just a beginner or a super Mathlete, you'll find
         interesting and challenging math awaiting you at MBMT. We're passionate about math, and we want to
         give you the best competition experience possible.</p>
     </div>
-
     <div class="col-lg-4">
         <h2>Work together.</h2>
-
         <p><strong>Life is better in teams.</strong> The competition is divided into several <em>rounds</em>, during several
         of which you get to work together with up to three other students to collaborate to do math. You can
         help support each other and make each other better competitors, as well as winning glory for your school!</p>
     </div>
-
     <div class="col-lg-4">
         <h2>Learn math.</h2>
-
         <p><strong>Math is everywhere!</strong> Mathematics is useful for describing all sorts of things in our
         world, as well as all sorts of things just in our brains. MBMT will help you master all sorts of math skills,
         both for the real world and for other math competitions.</p>

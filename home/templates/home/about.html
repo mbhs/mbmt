@@ -1,4 +1,4 @@
-{% extends "home/base.html" %}
+{% extends "shared/base.html" %}
 {% load staticfiles %}
 
 {% block content %}
@@ -9,91 +9,42 @@ MBMT is proudly organized and executed entirely by students from the Montgomery 
 
 <h2>Contest Organizers</h2>
 
-<div class="row">
+<div class="row organizers">
+    {% for organizer in organizers %}
     <div class="col-md-3 col-xs-6 about-person">
-        <img src="{% static 'images/people/david.jpg' %}">
-        <h3>David Wu</h3>
-        <p>Logistics</p>
+        <img src="{{ organizer.image }}">
+        <h3>{{ organizer.name }}</h3>
+        <p>{{ organizer.role }}</p>
     </div>
-
-    <div class="col-md-3 col-xs-6 about-person">
-        <img src="{% static 'images/people/annie.jpg' %}">
-        <h3>Annie Zhao</h3>
-        <p>Communications</p>
-    </div>
-
-    <div class="col-md-3 col-xs-6 about-person">
-        <img src="{% static 'images/people/guang.jpg' %}">
-        <h3>Guang Cui</h3> <!-- Guang Cui -->
-        <p>Problem Czar</p>
-    </div>
-
-    <div class="col-md-3 col-xs-6 about-person">
-        <img src="{% static 'images/people/jyo.jpg' %}">
-        <h3>Jyotsna Rao</h3>
-        <p>Competition Day</p>
-    </div>
-
-    <div class="col-md-3 col-xs-6 about-person">
-        <img src="{% static 'images/people/steven.jpg' %}">
-        <h3>Steven Qu</h3>
-        <p>Logistics</p>
-    </div>
-
-    <div class="col-md-3 col-xs-6 about-person">
-        <img src="{% static 'images/people/stav.jpg' %}">
-        <h3>Jacob Stavrianos</h3>
-        <p>Competition Day</p>
-    </div>
-
-    <div class="col-md-3 col-xs-6 about-person">
-        <img src="{% static 'images/people/daniel.jpg' %}">
-        <h3>Daniel Zhu</h3>
-        <p>Problem Czar</p>
-    </div>
-
+    {% endfor %}
 </div>
 
 <h2>Problem Writers</h2>
 
 <p>We're very thankful to our problem writers, without whom we wouldn't have a contest:</p>
 
-<ul class="contributors">
-    <li>Steven Qu</li>
-    <li>Guang Cui</li>
-    <li>Kevin Qian</li>
-    <li>Jyotsna Rao</li>
-    <li>David Wu</li>
-    <li>Daniel Zhu</li>
-    <li>Kevin A. Zhou</li>
-    <li>Haydn Gwyn</li>
-    <li>Jason Hsu</li>
-    <li>Jacob Stavrianos</li>
-    <li>Jesse Silverberg</li>
-    <li>Jason Hsu</li>
-    <li>Dilhan Salgado</li>
-    <li>Daniel Monroe</li>
-    <li>Ambrose Yang</li>
-    <li>Seung-Hyun Kwon</li>
-    <li>Emmy Song</li>
-    <li>Eva Quittman</li>
+<ul class="writers">
+    {% for writer in writers %}
+    <li>{{ writer.name }}</li>
+    {% endfor %}
 </ul>
 
 <h2>Website</h2>
 
-This website, as well as the MBMT internal scoring system, is written by
-    <a href="https://singerng.github.io/" target="_blank">Noah Singer</a> (Github: <a href="https://github.com/singerng" target="_blank">@singerng</a>)
-    and <a href="https://noahbkim.com/" target="_blank">Noah Kim</a> (Github: <a href="https://github.com/noahbkim" target="_blank">@noahbkim</a>).
-    It's written in <a href="https://djangoproject.com">Django</a> and hosted on our school servers. The source is
-    on <a href="https://github.com/mbhs/mbmt">Github</a>.
+This website was developed by <a href="https://singerng.github.io/" target="_blank">Noah Singer</a>
+(Github: <a href="https://github.com/singerng" target="_blank">@singerng</a>) and
+<a href="https://noahbkim.com/" target="_blank">Noah Kim</a>
+(Github: <a href="https://github.com/noahbkim" target="_blank">@noahbkim</a>).
+It's written in <a href="https://djangoproject.com">Django</a> and hosted on our school servers.
+The source is on <a href="https://github.com/mbhs/mbmt">Github</a>.
 
 <h2>Sponsors</h2>
 
 <p>MBMT is sponsored by the Magnet Foundation and Art of Problem Solving.</p>
 
-<img src="{% static "images/magnet.jpg" %}" height="150px">
-<img src="{% static "images/aops.png" %}" style="margin-left: 1rem;" ?>
-
-<div style="height: 2rem;"></div>
+<div class="sponsors">
+    <img src="{% static "images/magnet.jpg" %}" height="150px">
+    <img src="{% static "images/aops.png" %}" style="margin-left: 1rem;">
+</div>
 
 {% endblock %}

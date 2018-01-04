@@ -12,7 +12,6 @@ class Competition(models.Model):
     Question objects.
     """
 
-    id = models.CharField(max_length=12, primary_key=True)
     name = models.CharField(max_length=128)
     date = models.DateField()
     active = models.BooleanField(default=False)
@@ -22,6 +21,9 @@ class Competition(models.Model):
     date_registration_end = models.DateField()
     date_team_edit_end = models.DateField()
     date_shirt_order_end = models.DateField()
+
+    # Semantics
+    year = models.CharField(max_length=20)  # First, second, etc.
 
     # Grader cache
     _graders = {}
@@ -59,3 +61,18 @@ class Competition(models.Model):
             grader = importlib.import_module("competitions.{}.grading".format(self.id)).Grader(self)
             self._graders[self.id] = grader
             return grader
+
+
+class Organizer(models.Model):
+    """Organizers for the about page."""
+
+    image = models.ImageField(blank=True, null=True, upload_to="media/people/%Y/")
+    order = models.IntegerField(default=0)
+    name = models.CharField(max_length=50)
+    role = models.CharField(max_length=20)
+
+
+class Writer(models.Model):
+    """Problem writers."""
+
+    name = models.CharField(max_length=50)
