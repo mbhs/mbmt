@@ -14,16 +14,21 @@ class RegisterForm(PrettyForm, forms.ModelForm):
     """
 
     username = forms.EmailField(max_length=64, label="Email address")
-    school_name = forms.CharField(max_length=256)
-    password = forms.CharField(widget=forms.PasswordInput)
-    password_duplicate = forms.CharField(widget=forms.PasswordInput, label='Enter password again')
+    password = forms.CharField(
+        widget=forms.PasswordInput(attrs={"id": "password"}))
+    password_duplicate = forms.CharField(
+        widget=forms.PasswordInput(attrs={"data-match": "#password"}),
+        label="Enter password again")
+    school_name = forms.CharField(
+        widget=forms.TextInput(attrs={"id": "school", "class": "typeahead"}),
+        max_length=256)
 
     def clean(self):
         """Clean and process the input."""
 
         cleaned_data = super().clean()
-        if cleaned_data.get('password') != cleaned_data.get('password_duplicate'):
-            raise ValidationError('Passwords do not match')
+        if cleaned_data.get("password") != cleaned_data.get("password_duplicate"):
+            raise ValidationError("Passwords do not match")
         if models.User.objects.filter(username=cleaned_data["username"]).exists():
             raise ValidationError("Username is already taken.")
         return cleaned_data

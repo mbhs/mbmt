@@ -1,5 +1,21 @@
 {% extends "shared/base.html" %}
 {% load crispy_forms_tags %}
+{% load static %}
+
+{% block head %}
+<script src="{% static "js/validator.min.js" %}"></script>
+<script src="{% static "js/typeahead.bundle.min.js" %}"></script>
+<script src="{% static "js/mcms.js" %}"></script>
+<script type="text/javascript">
+    var schools = new Bloodhound({
+      datumTokenizer: Bloodhound.tokenizers.whitespace,
+      queryTokenizer: Bloodhound.tokenizers.whitespace,
+      local: SCHOOLS
+    });
+</script>
+<link type="text/css" rel="stylesheet" href="{% static "css/bootstrap-typeahead.css" %}">
+{% endblock %}
+
 
 {% block content %}
 
@@ -11,15 +27,17 @@
 
 {% if competition.can_register %}
 <form name="registration" data-toggle="validator" role="form" method="post">
-    <script src="/static/js/validator.min.js"></script>
     {% crispy form %}
+    <script type="text/javascript">
+        $("#school").typeahead({hint: true, highlight: true, minLength: 1}, {name: "school", source: schools})
+    </script>
     <div class="button-group bump-down">
         <input id="submit" type="submit" value="Finish" class="btn btn-primary right"/>
         <a id="cancel" class="btn btn-link right" href="{% url "home:index" %}">Cancel</a>
     </div>
 </form>
 {% else %}
-<p>Sorry, registration is closed! Please email <script type="text/javascript">email("mbhsmathteam", "gmail.com")</script> for more information.</p>
+<p>At the moment, registration is closed! Please email <script type="text/javascript">email("mbhsmathteam", "gmail.com")</script> for more information.</p>
 {% endif %}
 
 {% endblock %}

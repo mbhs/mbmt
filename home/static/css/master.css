@@ -224,6 +224,14 @@ ul.writers > li {
 }
 
 /***********/
+/* Coaches */
+/***********/
+
+form input.typeahead {
+  margin-top: 2px;
+}
+
+/***********/
 /* Grading */
 /***********/
 
@@ -246,7 +254,6 @@ table#teams .name {
 table .subject {
   width: 120px;
 }
-
 
 table.students .number,
 table.teams .number { width: 50px; }
