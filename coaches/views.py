@@ -21,7 +21,7 @@ def school_required(view):
     """Wrap a view to require the user to have a school."""
 
     def wrapper(request, *args, **kwargs):
-        if not request.user.school.exists():
+        if not models.Coaching.objects.filter(coach=request.user, competition__active=True):
             return redirect("coaches:school")
         return view(request, *args, **kwargs)
 
@@ -88,7 +88,9 @@ def inactive(request):
 def school(request):
     """Allow the coach to select a school for the current competition."""
 
-    return render(request, "coaches/school.html", {"competition": models.Competition.current()})
+    return render(request, "coaches/school.html", {
+        "competition": models.Competition.current(),
+        "schools": models.School.objects.values_list("name", flat=True)})
 
 
 # The actual coach dashboard. Also multiplexes general requests for

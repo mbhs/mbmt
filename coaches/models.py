@@ -27,7 +27,7 @@ SHIRT_SIZES = (
 class School(models.Model):
     """A simple school model that is represented by a teacher."""
 
-    name = models.CharField(max_length=256)
+    name = models.CharField(max_length=60)
     coaches = models.ManyToManyField(User, related_name="school", through="Coaching")
 
     def __str__(self):
