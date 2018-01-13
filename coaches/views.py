@@ -5,7 +5,27 @@ from django.shortcuts import render, redirect, get_object_or_404
 
 from . import models, forms
 
-import datetime
+
+def competition_required(view):
+    """Wrap a view to require there to be a current competition."""
+
+    def wrapper(request, *args, **kwargs):
+        if not models.Competition.has_current():
+            return redirect("coaches:inactive")
+        return view(request, *args, **kwargs)
+
+    return wrapper
+
+
+def school_required(view):
+    """Wrap a view to require the user to have a school."""
+
+    def wrapper(request, *args, **kwargs):
+        if not request.user.school.exists():
+            return redirect("coaches:school")
+        return view(request, *args, **kwargs)
+
+    return wrapper
 
 
 # The first step in the registration process is for potential coaches
@@ -49,12 +69,22 @@ def register(request):
     return render(request, "coaches/register.html", {"form": form, "competition": competition})
 
 
+# Dead view for if there is no active competition.
+
+@login_required
+def inactive(request):
+    """Show there no active competition."""
+
+    return render(request, "coaches/inactive.html")
+
+
 # The second step in registration is for the coach to select the
 # school which they will represent for the currently active
 # competition. If a school has already been claimed by another user,
 # this should lead to the duplicate view.
 
 @login_required
+@competition_required
 def school(request):
     """Allow the coach to select a school for the current competition."""
 
@@ -65,17 +95,10 @@ def school(request):
 # users partway through the registration process.
 
 @login_required
+@competition_required
+@school_required
 def index(request):
     """Coach dashboard."""
-
-    # Check if there is a competition
-    competition = models.Competition.current()
-    if competition is None:
-        return render(request, "coaches/inactive.html")
-
-    # Check if the user has a school
-    if not request.user.school.exists():
-        return redirect("coaches:school")
 
     return render(request, "coaches/teams.html")
 

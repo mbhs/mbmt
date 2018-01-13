@@ -10,6 +10,7 @@ urlpatterns = [
     # Registration
     url(r"^register/$", views.register, name="register"),
     url(r"^school/$", views.school, name="school"),
+    url(r"^inactive/$", views.inactive, name="inactive"),
 
     # Team editing
     url(r"^teams/$", views.display_teams, name="teams"),
