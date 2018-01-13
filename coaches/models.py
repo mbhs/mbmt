@@ -39,8 +39,8 @@ class School(models.Model):
 class Coaching(models.Model):
     """Model to indicate which competition the coach is registered for."""
 
-    coach = models.ForeignKey(User, on_delete=models.CASCADE)
-    school = models.ForeignKey(School, on_delete=models.CASCADE)
+    coach = models.ForeignKey(User, on_delete=models.CASCADE, related_name="+")
+    school = models.ForeignKey(School, on_delete=models.CASCADE, related_name="+")
     competition = models.ForeignKey(Competition, on_delete=models.CASCADE, related_name="competitions")
 
 
