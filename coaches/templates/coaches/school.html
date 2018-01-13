@@ -16,12 +16,42 @@
 </p>
 <form name="school">
     <div class="form-group">
-        <select id="schools" class="form-control selectpicker" data-live-search="true">
+        <select id="schools" name="school" class="form-control selectpicker" data-live-search="true" title="Choose one of the following...">
+            <option value="other">My school isn't listed</option>
             {% for school in schools %}
-            <option>{{ school }}</option>
+            <option value="{{ school }}">{{ school }}</option>
             {% endfor %}
         </select>
     </div>
+    <div id="other-group" class="form-group gone">
+        <input id="other" name="other" type="text" class="form-control" placeholder="Official School Name">
+    </div>
+    <div class="button-group bump-down">
+        <button id="submit" class="btn btn-primary right" disabled>Submit</button>
+    </div>
 </form>
+
+<script type="text/javascript">
+    var schools = $("#schools");
+    var otherGroup = $("#other-group");
+    var other = $("#other");
+    var submit = $("#submit");
+    function checkOther() {
+      if (schools.val() === "other") {
+        if (other.val() !== "") submit.prop("disabled", false);
+        else submit.prop("disabled", true);
+      }
+    }
+    schools.on("change", function() {
+      if (schools.val() === "other") {
+        otherGroup.removeClass("gone");
+        checkOther();
+      } else {
+        otherGroup.addClass("gone");
+        submit.prop("disabled", false);
+      }
+    });
+    other.on("input", checkOther);
+</script>
 
 {% endblock %}

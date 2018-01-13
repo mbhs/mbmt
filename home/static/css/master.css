@@ -231,6 +231,14 @@ form input.typeahead {
   margin-top: 2px;
 }
 
+.bs-searchbox > .form-control {
+  margin-top: 0;
+}
+
+.gone {
+  display: none;
+}
+
 /***********/
 /* Grading */
 /***********/
