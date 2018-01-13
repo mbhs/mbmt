@@ -41,9 +41,11 @@ def login(request):
         form = forms.LoginForm(request.POST)
         if form.is_valid():
             auth.login(request, form.user)
-            if request.user.is_staff:
-                return redirect("grading:index")
-            return redirect("coaches:index")
+
+    if request.user.is_authenticated:
+        if request.user.is_staff:
+            return redirect("grading:index")
+        return redirect("coaches:index")
 
     return render(request, "home/login.html", {"form": form})
 

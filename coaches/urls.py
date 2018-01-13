@@ -5,8 +5,11 @@ from . import views
 
 urlpatterns = [
 
-    # Account actions
+    url(r"^$", views.index, name="index"),
+
+    # Registration
     url(r"^register/$", views.register, name="register"),
+    url(r"^school/$", views.school, name="school"),
 
     # Team editing
     url(r"^teams/$", views.display_teams, name="teams"),

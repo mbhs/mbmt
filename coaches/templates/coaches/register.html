@@ -2,20 +2,6 @@
 {% load crispy_forms_tags %}
 {% load static %}
 
-{% block head %}
-<script src="{% static "js/validator.min.js" %}"></script>
-<script src="{% static "js/typeahead.bundle.min.js" %}"></script>
-<script src="{% static "js/mcms.js" %}"></script>
-<script type="text/javascript">
-    var schools = new Bloodhound({
-      datumTokenizer: Bloodhound.tokenizers.whitespace,
-      queryTokenizer: Bloodhound.tokenizers.whitespace,
-      local: SCHOOLS
-    });
-</script>
-<link type="text/css" rel="stylesheet" href="{% static "css/bootstrap-typeahead.css" %}">
-{% endblock %}
-
 
 {% block content %}
 

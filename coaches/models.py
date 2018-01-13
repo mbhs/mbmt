@@ -11,7 +11,6 @@ SUBJECTS = (
     ("cp", "Counting and Probability"))
 SUBJECTS_MAP = dict(SUBJECTS)
 
-
 DIVISIONS = (
     (1, "pascal"),
     (2, "ramanujan"))
@@ -29,12 +28,20 @@ class School(models.Model):
     """A simple school model that is represented by a teacher."""
 
     name = models.CharField(max_length=256)
-    user = models.OneToOneField(User, related_name="school")
+    coaches = models.ManyToManyField(User, related_name="school", through="Coaching")
 
     def __str__(self):
         """Represent the school as a string."""
 
         return "School[{}]".format(self.name)
+
+
+class Coaching(models.Model):
+    """Model to indicate which competition the coach is registered for."""
+
+    coach = models.ForeignKey(User, on_delete=models.CASCADE)
+    school = models.ForeignKey(School, on_delete=models.CASCADE)
+    competition = models.ForeignKey(Competition, on_delete=models.CASCADE, related_name="competitions")
 
 
 class Team(models.Model):

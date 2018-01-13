@@ -19,9 +19,6 @@ class RegisterForm(PrettyForm, forms.ModelForm):
     password_duplicate = forms.CharField(
         widget=forms.PasswordInput(attrs={"data-match": "#password"}),
         label="Enter password again")
-    school_name = forms.CharField(
-        widget=forms.TextInput(attrs={"id": "school", "class": "typeahead"}),
-        max_length=256)
 
     def clean(self):
         """Clean and process the input."""
@@ -29,8 +26,7 @@ class RegisterForm(PrettyForm, forms.ModelForm):
         cleaned_data = super().clean()
         if cleaned_data.get("password") != cleaned_data.get("password_duplicate"):
             raise ValidationError("Passwords do not match")
-        if models.User.objects.filter(username=cleaned_data["username"]).exists():
-            raise ValidationError("Username is already taken.")
+        cleaned_data["email"] = cleaned_data["username"]
         return cleaned_data
 
     class Meta:
@@ -38,7 +34,7 @@ class RegisterForm(PrettyForm, forms.ModelForm):
 
         model = User
         exclude = ["email"]
-        fields = ["username", "password", "password_duplicate", "first_name", "last_name", "school_name"]
+        fields = ["username", "password", "password_duplicate", "first_name", "last_name"]
 
 
 class TeamForm(PrettyForm, forms.ModelForm):
