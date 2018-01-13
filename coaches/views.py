@@ -60,7 +60,7 @@ def register(request):
 
     # Redirect if the user is authenticated already
     elif request.user.is_authenticated:
-        return redirect("coaches:teams")
+        return redirect("coaches:index")
 
     # Otherwise create a new form
     else:

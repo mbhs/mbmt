@@ -34,14 +34,12 @@
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
                         {% block shortcuts %}
+                        {% if user.is_authenticated %}
+                        <li><a href="{% url "home:logout" %}">Logout</a></li>
+                        {% else %}
                         <li><a href="{% url "coaches:register" %}">Register</a></li>
-                        <li>
-                            {% if user.is_authenticated %}
-                            <a href="{% url "home:logout" %}">Logout</a>
-                            {% else %}
-                            <a href="{% url "home:login" %}">Login</a>
-                            {% endif %}
-                        </li>
+                        <li><a href="{% url "home:login" %}">Login</a></li>
+                        {% endif %}
                         {% endblock %}
                     </ul>
                 </div>
