@@ -105,6 +105,7 @@ def schools(request):
         return redirect("coaches:index")
 
     existing = None
+    school = None
 
     if request.method == "POST":
         form = forms.SchoolForm(request.POST)
@@ -117,16 +118,15 @@ def schools(request):
                 school = models.School.objects.get(name=form.cleaned_data["school"])
 
             # Check if someone is already coaching
-            existing = models.Coaching.objects.filter(
-                school__name=form.cleaned_data["school"],
-                competition__active=True).first()
+            coaching = models.Coaching.objects.filter(school=school, competition__active=True).first()
 
-            if existing is None:
+            if coaching is None:
                 models.Coaching.objects.create(
                     school=school,
                     coach=request.user,
                     competition=models.Competition.current()).save()
                 return redirect("coaches:index")
+            existing = coaching.coach
 
     else:
         form = forms.SchoolForm()
@@ -135,7 +135,8 @@ def schools(request):
         "form": form,
         "competition": models.Competition.current(),
         "schools": models.School.objects.values_list("name", flat=True),
-        "existing": existing})
+        "existing": existing,
+        "school": school})
 
 
 # The actual coach dashboard. Also multiplexes general requests for
