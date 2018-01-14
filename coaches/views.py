@@ -4,15 +4,22 @@ from django.contrib.auth.models import User
 from django.shortcuts import render, redirect, get_object_or_404
 
 from . import models, forms
+from home.forms import PrettyHelper
 
 
 def competition_required(view):
     """Wrap a view to require there to be a current competition."""
 
     def wrapper(request, *args, **kwargs):
-        if not models.Competition.has_current():
+        current = models.Competition.current()
+        if current is None:
             return redirect("coaches:inactive")
-        return view(request, *args, **kwargs)
+
+        # Try to pass to function
+        try:
+            return view(request, *args, competition=current, **kwargs)
+        except TypeError:
+            return view(request, *args, **kwargs)
 
     return wrapper
 
@@ -21,9 +28,15 @@ def school_required(view):
     """Wrap a view to require the user to have a school."""
 
     def wrapper(request, *args, **kwargs):
-        if not models.Coaching.objects.filter(coach=request.user, competition__active=True):
+        coaching = models.Coaching.objects.get(coach=request.user, competition__active=True)
+        if coaching is None:
             return redirect("coaches:school")
-        return view(request, *args, **kwargs)
+
+        # Try to pass to view
+        try:
+            return view(request, *args, school=coaching.school, **kwargs)
+        except TypeError:
+            return view(request, *args, **kwargs)
 
     return wrapper
 
@@ -85,12 +98,44 @@ def inactive(request):
 
 @login_required
 @competition_required
-def school(request):
+def schools(request):
     """Allow the coach to select a school for the current competition."""
 
+    if models.Coaching.objects.filter(coach=request.user, competition__active=True).exists():
+        return redirect("coaches:index")
+
+    existing = None
+
+    if request.method == "POST":
+        form = forms.SchoolForm(request.POST)
+        if form.is_valid():
+
+            if form.use_other:
+                school = models.School.objects.create(name=form.cleaned_data["school"])
+                school.save()
+            else:
+                school = models.School.objects.get(name=form.cleaned_data["school"])
+
+            # Check if someone is already coaching
+            existing = models.Coaching.objects.filter(
+                school__name=form.cleaned_data["school"],
+                competition__active=True).first()
+
+            if existing is None:
+                models.Coaching.objects.create(
+                    school=school,
+                    coach=request.user,
+                    competition=models.Competition.current()).save()
+                return redirect("coaches:index")
+
+    else:
+        form = forms.SchoolForm()
+
     return render(request, "coaches/school.html", {
+        "form": form,
         "competition": models.Competition.current(),
-        "schools": models.School.objects.values_list("name", flat=True)})
+        "schools": models.School.objects.values_list("name", flat=True),
+        "existing": existing})
 
 
 # The actual coach dashboard. Also multiplexes general requests for
@@ -99,10 +144,10 @@ def school(request):
 @login_required
 @competition_required
 @school_required
-def index(request):
+def index(request, school=None, competition=None):
     """Coach dashboard."""
 
-    return render(request, "coaches/teams.html")
+    return render(request, "coaches/teams.html", {"school": school, "competition": competition})
 
 
 @login_required
@@ -157,7 +202,7 @@ def edit_team(request, pk=None):
     return render(request, "coaches/team.html", {
         "team_form": team_form,
         "student_forms": student_forms,
-        "student_helper": forms.PrettyHelper()})
+        "student_helper": PrettyHelper()})
 
 
 @login_required

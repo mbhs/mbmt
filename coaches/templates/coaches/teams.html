@@ -2,7 +2,7 @@
 
 {% block content %}
 
-<h2 class="lowerer"><strong>{{ request.user.school.name }}</strong>&nbsp;&nbsp;Teams</h2>
+<h2 class="lowerer"><strong>{{ school.name }}</strong> Teams</h2>
 <p class="fullname">{{ request.user.get_full_name }}</p>
 
 <a href="{% url "grading:sponsor_scoreboard" %}" class="sponsor-scoreboard">Go to scoring &rarr;</a>

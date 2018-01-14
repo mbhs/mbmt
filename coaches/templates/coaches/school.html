@@ -14,7 +14,9 @@
     Please select the school you will be coaching for {{ competition.name }}.
     Only one coach is permitted per school.
 </p>
-<form name="school">
+<form name="school" method="post" action="{% url "coaches:school" %}">
+    {% csrf_token %}
+    {{ form.errors }}
     <div class="form-group">
         <select id="schools" name="school" class="form-control selectpicker" data-live-search="true" title="Choose one of the following...">
             <option value="other">My school isn't listed</option>
@@ -24,7 +26,7 @@
         </select>
     </div>
     <div id="other-group" class="form-group gone">
-        <input id="other" name="other" type="text" class="form-control" placeholder="Official School Name">
+        <input id="other" name="other" type="text" class="form-control" placeholder="Official School Name" maxlength="60">
     </div>
     <div class="button-group bump-down">
         <button id="submit" class="btn btn-primary right" disabled>Submit</button>

@@ -13,7 +13,7 @@ class RegisterForm(PrettyForm, forms.ModelForm):
     has effectively been replaced by the email field.
     """
 
-    username = forms.EmailField(max_length=64, label="Email address")
+    username = forms.EmailField(max_length=60, label="Email address")
     password = forms.CharField(
         widget=forms.PasswordInput(attrs={"id": "password"}))
     password_duplicate = forms.CharField(
@@ -24,7 +24,7 @@ class RegisterForm(PrettyForm, forms.ModelForm):
         """Clean and process the input."""
 
         cleaned_data = super().clean()
-        if cleaned_data.get("password") != cleaned_data.get("password_duplicate"):
+        if cleaned_data.get("password") != cleaned_data.get("password_duplicate"):  # TODO: move to individual field
             raise ValidationError("Passwords do not match")
         cleaned_data["email"] = cleaned_data["username"]
         return cleaned_data
@@ -35,6 +35,38 @@ class RegisterForm(PrettyForm, forms.ModelForm):
         model = User
         exclude = ["email"]
         fields = ["username", "password", "password_duplicate", "first_name", "last_name"]
+
+
+class SchoolForm(forms.Form):
+    """Form for choosing a school to coach for."""
+
+    school = forms.CharField(max_length=60, min_length=1)
+    other = forms.CharField(max_length=60, required=False)
+
+    def __init__(self, *args, **kwargs):
+        """Override to add an other field."""
+
+        super().__init__(*args, **kwargs)
+        self.use_other = False
+
+    def clean(self):
+        """Clean and validate the form."""
+
+        cleaned_data = super().clean()
+
+        # Check other
+        if cleaned_data.get("school") == "other":
+            self.use_other = True
+            if len(cleaned_data.get("other", "")) == 0:
+                raise ValidationError("You must enter another school name")
+            cleaned_data["school"] = cleaned_data["other"]
+
+        # Check school exists
+        else:
+            if not models.School.objects.filter(name=cleaned_data.get("school")).exists():
+                raise ValidationError("School does not exist")
+
+        return cleaned_data
 
 
 class TeamForm(PrettyForm, forms.ModelForm):
