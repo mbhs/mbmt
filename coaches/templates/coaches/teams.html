@@ -2,10 +2,15 @@
 
 {% block content %}
 
-<h2 class="lowerer"><strong>{{ school.name }}</strong> Teams</h2>
-<p class="fullname">{{ request.user.get_full_name }}</p>
+<h2 class="lowerer">
+    <strong>{{ school.name }}</strong> Teams
+    <span class="right">{{ competition.name }}</span>
+</h2>
+<p class="under">{{ request.user.get_full_name }}</p>
 
+{% if now.date > competition.date %}
 <a href="{% url "grading:sponsor_scoreboard" %}" class="sponsor-scoreboard">Go to scoring &rarr;</a>
+{% endif %}
 
 <table id="teams" class="table">
     <tr style="background-color: #f9f9f9;">
@@ -60,8 +65,8 @@
     {% endfor %}
     <tr>
         <td>
-            {% if allow_edit_teams %}
-                <a href="{% url "coaches:edit_team" %}">+ Add Team</a>
+            {% if competition.can_edit_teams %}
+                <a href="{% url "coaches:teams_edit" %}">+ Add Team</a>
             {% endif %}
         </td>
         <td></td>

@@ -2,6 +2,7 @@ from django.contrib import auth
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect, get_object_or_404
+from django.utils import timezone
 
 from . import models, forms
 from home.forms import PrettyHelper
@@ -131,12 +132,13 @@ def schools(request):
     else:
         form = forms.SchoolForm()
 
-    return render(request, "coaches/school.html", {
+    return render(request, "coaches/schools.html", {
         "form": form,
         "competition": models.Competition.current(),
         "schools": models.School.objects.values_list("name", flat=True),
         "existing": existing,
-        "school": school})
+        "school": school,
+        "now": timezone.now()})
 
 
 # The actual coach dashboard. Also multiplexes general requests for
@@ -148,14 +150,14 @@ def schools(request):
 def index(request, school=None, competition=None):
     """Coach dashboard."""
 
-    return render(request, "coaches/teams.html", {"school": school, "competition": competition})
+    return render(request, "coaches/index.html", {"school": school, "competition": competition})
 
 
 @login_required
 def display_teams(request):
     """Display current teams."""
 
-    return render(request, "coaches/teams.html", {"competition": models.Competition.current()})
+    return render(request, "coaches/index.html", {"competition": models.Competition.current()})
 
 
 @login_required

@@ -35,6 +35,16 @@ class School(models.Model):
 
         return "School[{}]".format(self.name)
 
+    def current_teams(self):
+        """Return the current list of teams for the school."""
+
+        return Team.objects.filter(competition__active=True, school=self)
+
+    def current_chaperones(self):
+        """Get the current list of chaperons."""
+
+        return
+
 
 class Coaching(models.Model):
     """Model to indicate which competition the coach is registered for."""
@@ -100,3 +110,7 @@ class Student(models.Model):
         """Get the students in the current competition."""
 
         return Student.objects.filter(team__competition__active=True)
+
+
+class Chaperone(models.Model):
+    """A chaperone for a team."""
