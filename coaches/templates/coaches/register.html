@@ -2,28 +2,32 @@
 {% load crispy_forms_tags %}
 {% load static %}
 
+{% block head %}
+<script type="text/javascript" src="{% static "js/validator.min.js" %}"></script>
+{% endblock %}
+
 
 {% block content %}
 
 <h2 class="lower">Coach Registration</h2>
+
+{% if competition.can_register %}
 <p>
     Welcome to the {{ competition.year }} annual MBMT, held on {{ competition.date }}!
     We highly encourage schools' math team coaches or math resource department chairs to act as sponsors; however, any adult who is willing to supervise the team is fine.
 </p>
-
-{% if competition.can_register %}
 <form name="registration" data-toggle="validator" role="form" method="post">
     {% crispy form %}
-    <script type="text/javascript">
-        $("#school").typeahead({hint: true, highlight: true, minLength: 1}, {name: "school", source: schools})
-    </script>
     <div class="button-group bump-down">
         <input id="submit" type="submit" value="Finish" class="btn btn-primary right"/>
         <a id="cancel" class="btn btn-link right" href="{% url "home:index" %}">Cancel</a>
     </div>
 </form>
 {% else %}
-<p>At the moment, registration is closed! Please email <script type="text/javascript">email("mbhsmathteam", "gmail.com")</script> for more information.</p>
+<p>
+    At the moment, registration is closed as there is no competition in progress or planned!
+    Please email the contest runners at <script type="text/javascript">email("mbhsmathteam", "gmail.com")</script> for more information.
+</p>
 {% endif %}
 
 {% endblock %}
