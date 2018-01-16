@@ -37,6 +37,12 @@ class Competition(models.Model):
     __str__ = __repr__
 
     @staticmethod
+    def has_current():
+        """Check if there is an active competition."""
+
+        return Competition.objects.filter(active=True).exists()
+
+    @staticmethod
     def current():
         """Get the active competition."""
 

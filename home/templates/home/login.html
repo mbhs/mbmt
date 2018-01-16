@@ -1,4 +1,4 @@
-{% extends "home/../../../home/templates/shared/base.html" %}
+{% extends "shared/base.html" %}
 {% load crispy_forms_tags %}
 {% load staticfiles %}
 
@@ -7,13 +7,12 @@
 <h2 class="lowererer">Sponsor Login</h2>
 
 <form name="registration" data-toggle="validator" role="form" method="post">
+    {% csrf_token %}
     <script src="{% static "js/validator.min.js" %}"></script>
-
     {% crispy form %}
-
     <div class="form-group">
         <input id="submit" type="submit" value="Finish" class="btn btn-primary right"/>
-        <input id="cancel" type="button" value="Cancel" class="btn btn-secondary right" onclick="window.location = {% url 'index' %};"/>
+        <input id="cancel" type="button" value="Cancel" class="btn btn-secondary right" onclick="window.location = {% url "home:index" %};"/>
     </div>
 </form>
 

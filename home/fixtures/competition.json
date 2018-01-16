@@ -8,8 +8,8 @@
       "active": true,
       "date_registration_start": "2018-01-01",
       "date_registration_end": "2018-03-01",
-      "date_team_edit_end": "2018-03-9",
-      "date_shirt_order_end": "2018-03-9",
+      "date_edit_teams_end": "2018-03-9",
+      "date_edit_shirts_end": "2018-03-9",
       "year": "fourth"
     }
   }

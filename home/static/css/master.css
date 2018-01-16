@@ -71,7 +71,7 @@ input[type="text"] {
   font-size: 20px;
 }
 
-.fullname {
+.under {
   margin-top: -8px;
   margin-bottom: 20px;
   font-size: 20px;
@@ -224,6 +224,22 @@ ul.writers > li {
 }
 
 /***********/
+/* Coaches */
+/***********/
+
+form input.typeahead {
+  margin-top: 2px;
+}
+
+.bs-searchbox > .form-control {
+  margin-top: 0;
+}
+
+.gone {
+  display: none;
+}
+
+/***********/
 /* Grading */
 /***********/
 
@@ -246,7 +262,6 @@ table#teams .name {
 table .subject {
   width: 120px;
 }
-
 
 table.students .number,
 table.teams .number { width: 50px; }
