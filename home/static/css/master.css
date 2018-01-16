@@ -23,8 +23,8 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 #content {
-  /*max-width: 720px;*/
   /*padding-top: 1em;*/
+  max-width: 900px;
   padding-top: 65px;
   padding-bottom: 75px;
 }
@@ -49,8 +49,13 @@ label.description {
   margin-bottom: 0;
 }
 
-input {
+input[type="text"] {
   margin-top: 8px;
+}
+
+.bump-down {
+  display: block;
+  padding-top: 8px;
 }
 
 .right { float: right; }
@@ -66,7 +71,7 @@ input {
   font-size: 20px;
 }
 
-.fullname {
+.under {
   margin-top: -8px;
   margin-bottom: 20px;
   font-size: 20px;
@@ -91,7 +96,7 @@ footer {
 /**************/
 
 h1.title {
-  font-size: 10vw;
+  font-size: 9vw;
   text-align: center;
   padding: .2em;
   user-select: none;
@@ -111,9 +116,19 @@ span.title-right {
   border-radius: 0 .2em .2em 0;
 }
 
+p.main-title {
+  font-family: "Slabo 27px", serif;
+  font-size: 36px;
+  text-align: center;
+  margin-bottom: 0;
+}
+
 p.main-text {
   text-align: center;
-  font-size: 1.7em;
+  font-size: 24px;
+  margin: 0 auto;
+  max-width: 820px;
+  padding-bottom: 2em;
 }
 
 .tagline {
@@ -172,6 +187,10 @@ table.schedule td:last-of-type {
 /* About page */
 /**************/
 
+.organizers {
+  margin-top: 8px;
+}
+
 div.about-person img {
   border-radius: 50%;
   width: 100%;
@@ -188,7 +207,7 @@ div.about-person img {
   text-align: center;
 }
 
-ul.contributors {
+ul.writers {
   -webkit-column-count: 3;
   -moz-column-count: 3;
   column-count: 5;
@@ -196,8 +215,28 @@ ul.contributors {
   padding-left: 0;
 }
 
-ul.contributors > li {
+ul.writers > li {
   text-align: center;
+}
+
+.sponsors {
+  margin-bottom: 2rem;
+}
+
+/***********/
+/* Coaches */
+/***********/
+
+form input.typeahead {
+  margin-top: 2px;
+}
+
+.bs-searchbox > .form-control {
+  margin-top: 0;
+}
+
+.gone {
+  display: none;
 }
 
 /***********/
@@ -223,7 +262,6 @@ table#teams .name {
 table .subject {
   width: 120px;
 }
-
 
 table.students .number,
 table.teams .number { width: 50px; }

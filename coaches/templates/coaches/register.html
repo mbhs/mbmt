@@ -1,29 +1,29 @@
-{% extends "home/base.html" %}
+{% extends "shared/base.html" %}
 {% load crispy_forms_tags %}
+{% load static %}
+
 
 {% block content %}
 
-<h2 class="lower">Sponsor Registration for MBMT</h2>
+<h2 class="lower">Coach Registration</h2>
 <p>
-Welcome to the 3rd Annual MBMT, held on April 1st, 2017! We highly encourage schools' math team coaches or math resource department chairs to act as sponsors; however, any adult who is willing to supervise the team is fine.
+    Welcome to the {{ competition.year }} annual MBMT, held on {{ competition.date }}!
+    We highly encourage schools' math team coaches or math resource department chairs to act as sponsors; however, any adult who is willing to supervise the team is fine.
 </p>
 
-{% if allow_registration %}
+{% if competition.can_register %}
 <form name="registration" data-toggle="validator" role="form" method="post">
-    <script src="/static/js/validator.min.js"></script>
-
     {% crispy form %}
-    
-    <div class="form-group">
+    <script type="text/javascript">
+        $("#school").typeahead({hint: true, highlight: true, minLength: 1}, {name: "school", source: schools})
+    </script>
+    <div class="button-group bump-down">
         <input id="submit" type="submit" value="Finish" class="btn btn-primary right"/>
-        <input id="cancel" type="button" value="Cancel" class="btn btn-secondary right" onclick="window.location = '{% url 'index' %}';"/>
+        <a id="cancel" class="btn btn-link right" href="{% url "home:index" %}">Cancel</a>
     </div>
 </form>
 {% else %}
-<p>
-    Sorry, registration is closed! Please email
-    <script type="text/javascript">email("mbhsmathteam", "gmail.com")</script> for more information.
-</p>
+<p>At the moment, registration is closed! Please email <script type="text/javascript">email("mbhsmathteam", "gmail.com")</script> for more information.</p>
 {% endif %}
 
 {% endblock %}

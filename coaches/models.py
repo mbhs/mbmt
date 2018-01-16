@@ -11,7 +11,6 @@ SUBJECTS = (
     ("cp", "Counting and Probability"))
 SUBJECTS_MAP = dict(SUBJECTS)
 
-
 DIVISIONS = (
     (1, "pascal"),
     (2, "ramanujan"))
@@ -28,13 +27,31 @@ SHIRT_SIZES = (
 class School(models.Model):
     """A simple school model that is represented by a teacher."""
 
-    name = models.CharField(max_length=256)
-    user = models.OneToOneField(User, related_name="school")
+    name = models.CharField(max_length=60)
+    coaches = models.ManyToManyField(User, related_name="school", through="Coaching")
 
     def __str__(self):
         """Represent the school as a string."""
 
         return "School[{}]".format(self.name)
+
+    def current_teams(self):
+        """Return the current list of teams for the school."""
+
+        return Team.objects.filter(competition__active=True, school=self)
+
+    def current_chaperones(self):
+        """Get the current list of chaperons."""
+
+        return
+
+
+class Coaching(models.Model):
+    """Model to indicate which competition the coach is registered for."""
+
+    coach = models.ForeignKey(User, on_delete=models.CASCADE, related_name="+")
+    school = models.ForeignKey(School, on_delete=models.CASCADE, related_name="+")
+    competition = models.ForeignKey(Competition, on_delete=models.CASCADE, related_name="competitions")
 
 
 class Team(models.Model):
@@ -93,3 +110,7 @@ class Student(models.Model):
         """Get the students in the current competition."""
 
         return Student.objects.filter(team__competition__active=True)
+
+
+class Chaperone(models.Model):
+    """A chaperone for a team."""

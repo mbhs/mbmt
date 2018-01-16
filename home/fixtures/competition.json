@@ -1,0 +1,16 @@
+[
+  {
+    "model": "home.competition",
+    "pk": 1,
+    "fields": {
+      "name": "MBMT 2018",
+      "date": "2018-04-07",
+      "active": true,
+      "date_registration_start": "2018-01-01",
+      "date_registration_end": "2018-03-01",
+      "date_edit_teams_end": "2018-03-9",
+      "date_edit_shirts_end": "2018-03-9",
+      "year": "fourth"
+    }
+  }
+]

@@ -1,52 +1,18 @@
-{% load staticfiles %}
+{% extends "shared/base.html" %}
 
-<html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-        <title>MBMT</title>
-        <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}">
-        <link rel="stylesheet" type="text/css" href="{% static 'css/master.css' %}">
-        <script type="text/javascript" src="{% static 'js/jquery.min.js' %}"></script>
-        <script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>
-        <script type="text/javascript" src="{% static 'js/email.js' %}"></script>
-        {% block extrahead %}{% endblock %}
-    </head>
-    <body>
-        <nav id="menu" class="navbar navbar-default navbar-fixed-top navbar-xs">
-            <div class="container-fluid">
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#nav-collapse">
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-
-                  <a class="navbar-brand" href="{% url 'index' %}">MBMT</a>
-                </div>
-
-                <div class="collapse navbar-collapse" id="nav-collapse">
-                    <ul class="nav navbar-nav navbar-left">
-                        <li><a href="{% url 'info' %}">Info</a></li>
-                        <li><a href="{% url 'about' %}">About</a></li>
-                        <li><a href="{% url 'topics' %}">Topics</a></li>
-                        <li><a href="{% url 'rules' %}">Rules</a></li>
-                        <li><a href="{% url 'archive' %}">Archive</a></li>
-                    </ul>
-
-                    <ul class="nav navbar-nav navbar-right">
-                    {% if request.user.is_authenticated %}
+{% block menu %}
+{% if request.user.is_authenticated %}
                     {% if perms.grading.can_grade %}
-                        <li><a href="{% url 'attendance' %}">Attendance</a></li>
+                        <li><a href="{% url "attendance" %}">Attendance</a></li>
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                                 Logistics <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu">
-                                <li><a href="{% url 'team_edit' %}">Team editor</a></li>
-                                <li><a href="{% url 'student_name_tags' %}">Student tags</a></li>
-                                <li><a href="{% url 'teacher_name_tags' %}">Teacher tags</a></li>
-                                <li><a href="{% url 'shirts' %}">Shirt sizes</a></li>
+                                <li><a href="{% url "team_edit" %}">Team editor</a></li>
+                                <li><a href="{% url "student_name_tags" %}">Student tags</a></li>
+                                <li><a href="{% url "teacher_name_tags" %}">Teacher tags</a></li>
+                                <li><a href="{% url "shirts" %}">Shirt sizes</a></li>
                             </ul>
                         </li>
                         <li class="dropdown">
@@ -54,9 +20,9 @@
                                 Scoreboards <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu">
-                                <li><a href="{% url 'student_scoreboard' %}">Student scoreboard</a></li>
-                                <li><a href="{% url 'team_scoreboard' %}">Team scoreboard</a></li>
-                                <li><a href="{% url 'live' round_id='guts' %}">Live guts</a></li>
+                                <li><a href="{% url "student_scoreboard" %}">Student scoreboard</a></li>
+                                <li><a href="{% url "team_scoreboard" %}">Team scoreboard</a></li>
+                                <li><a href="{% url "live" round_id="guts" %}">Live guts</a></li>
                             </ul>
                         </li>
                         <li class="dropdown">
@@ -64,36 +30,17 @@
                                 Grading <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu">
-                                <li><a href="{% url 'student_view' %}">Students</a></li>
-                                <li><a href="{% url 'team_view' %}">Teams</a></li>
-                                <li><a href="{% url 'statistics' %}">Statistics</a></li>
+                                <li><a href="{% url "student_view" %}">Students</a></li>
+                                <li><a href="{% url "team_view" %}">Teams</a></li>
+                                <li><a href="{% url "statistics" %}">Statistics</a></li>
                             </ul>
                         </li>
                     {% else %}
-                        <li><a href="{% url 'teams' %}">My Teams</a></li>
+                        <li><a href="{% url "teams" %}">My Teams</a></li>
                     {% endif %}
-                        <li><a href="{% url 'logout' %}">Logout
+                        <li><a href="{% url "logout" %}">Logout
                         </a></li>
                     {% else %}
-                        <li><a href="{% url 'register' %}">Register</a></li>
-                        <li><a href="{% url 'login' %}">Login</a></li>
+
                     {% endif %}
-                    </ul>
-                </div>
-            </div>
-        </nav>
-
-        <div class="container">
-            <div id="content" class="container-fluid">
-                {% block content %}
-                {% endblock %}
-            </div>
-        </div>
-
-        <footer class="footer">
-            <div class="container">
-                <span class="text-muted">Copyright &copy; 2014-17 Montgomery Blair Math Team.</span>
-            </div>
-        </footer>
-    </body>
-</html>
+{% endblock %}

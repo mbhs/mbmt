@@ -1,0 +1,578 @@
+[
+  {
+    "model": "coaches.school",
+    "fields": {
+      "name": "Argyle Middle School"
+    }
+  },
+  {
+    "model": "coaches.school",
+    "fields": {
+      "name": "John T. Baker Middle School"
+    }
+  },
+  {
+    "model": "coaches.school",
+    "fields": {
+      "name": "Benjamin Banneker Middle School"
+    }
+  },
+  {
+    "model": "coaches.school",
+    "fields": {
+      "name": "Briggs Chaney Middle School"
+    }
+  },
+  {
+    "model": "coaches.school",
+    "fields": {
+      "name": "Cabin John Middle School"
+    }
+  },
+  {
+    "model": "coaches.school",
+    "fields": {
+      "name": "Roberto Clemente Middle School"
+    }
+  },
+  {
+    "model": "coaches.school",
+    "fields": {
+      "name": "Eastern Middle School"
+    }
+  },
+  {
+    "model": "coaches.school",
+    "fields": {
+      "name": "Gaithersburg Middle School"
+    }
+  },
+  {
+    "model": "coaches.school",
+    "fields": {
+      "name": "Herbert Hoover Middle School"
+    }
+  },
+  {
+    "model": "coaches.school",
+    "fields": {
+      "name": "Francis Scott Key Middle School"
+    }
+  },
+  {
+    "model": "coaches.school",
+    "fields": {
+      "name": "Dr. Martin Luther King, Jr. Middle School"
+    }
+  },
+  {
+    "model": "coaches.school",
+    "fields": {
+      "name": "Kingsview Middle School"
+    }
+  },
+  {
+    "model": "coaches.school",
+    "fields": {
+      "name": "Lakelands Park Middle School"
+    }
+  },
+  {
+    "model": "coaches.school",
+    "fields": {
+      "name": "Col. E. Brooke Lee Middle School"
+    }
+  },
+  {
+    "model": "coaches.school",
+    "fields": {
+      "name": "A. Mario Loiederman Middle School"
+    }
+  },
+  {
+    "model": "coaches.school",
+    "fields": {
+      "name": "Montgomery Village Middle School"
+    }
+  },
+  {
+    "model": "coaches.school",
+    "fields": {
+      "name": "Neelsville Middle School"
+    }
+  },
+  {
+    "model": "coaches.school",
+    "fields": {
+      "name": "Newport Mill Middle School"
+    }
+  },
+  {
+    "model": "coaches.school",
+    "fields": {
+      "name": "North Bethesda Middle School"
+    }
+  },
+  {
+    "model": "coaches.school",
+    "fields": {
+      "name": "Parkland Middle School"
+    }
+  },
+  {
+    "model": "coaches.school",
+    "fields": {
+      "name": "Rosa M. Parks Middle School"
+    }
+  },
+  {
+    "model": "coaches.school",
+    "fields": {
+      "name": "John Poole Middle School"
+    }
+  },
+  {
+    "model": "coaches.school",
+    "fields": {
+      "name": "Thomas W. Pyle Middle School"
+    }
+  },
+  {
+    "model": "coaches.school",
+    "fields": {
+      "name": "Redland Middle School"
+    }
+  },
+  {
+    "model": "coaches.school",
+    "fields": {
+      "name": "Ridgeview Middle School"
+    }
+  },
+  {
+    "model": "coaches.school",
+    "fields": {
+      "name": "Rocky Hill Middle School"
+    }
+  },
+  {
+    "model": "coaches.school",
+    "fields": {
+      "name": "Shady Grove Middle School"
+    }
+  },
+  {
+    "model": "coaches.school",
+    "fields": {
+      "name": "Silver Creek Middle School"
+    }
+  },
+  {
+    "model": "coaches.school",
+    "fields": {
+      "name": "Silver Spring International Middle School"
+    }
+  },
+  {
+    "model": "coaches.school",
+    "fields": {
+      "name": "Sligo Middle School"
+    }
+  },
+  {
+    "model": "coaches.school",
+    "fields": {
+      "name": "Takoma Park Middle School"
+    }
+  },
+  {
+    "model": "coaches.school",
+    "fields": {
+      "name": "Tilden Middle School"
+    }
+  },
+  {
+    "model": "coaches.school",
+    "fields": {
+      "name": "Hallie Wells Middle School"
+    }
+  },
+  {
+    "model": "coaches.school",
+    "fields": {
+      "name": "Julius West Middle School"
+    }
+  },
+  {
+    "model": "coaches.school",
+    "fields": {
+      "name": "Westland Middle School"
+    }
+  },
+  {
+    "model": "coaches.school",
+    "fields": {
+      "name": "White Oak Middle School"
+    }
+  },
+  {
+    "model": "coaches.school",
+    "fields": {
+      "name": "Earle B. Wood Middle School"
+    }
+  },
+  {
+    "model": "coaches.school",
+    "fields": {
+      "name": "Brightwood Education Campus"
+    }
+  },
+  {
+    "model": "coaches.school",
+    "fields": {
+      "name": "Brookland Middle School"
+    }
+  },
+  {
+    "model": "coaches.school",
+    "fields": {
+      "name": "Browne Education Campus"
+    }
+  },
+  {
+    "model": "coaches.school",
+    "fields": {
+      "name": "Capitol Hill Montessori School "
+    }
+  },
+  {
+    "model": "coaches.school",
+    "fields": {
+      "name": "Cardozo Education Campus"
+    }
+  },
+  {
+    "model": "coaches.school",
+    "fields": {
+      "name": "CHOICE Academy"
+    }
+  },
+  {
+    "model": "coaches.school",
+    "fields": {
+      "name": "Columbia Heights Education Campus"
+    }
+  },
+  {
+    "model": "coaches.school",
+    "fields": {
+      "name": "Deal Middle School"
+    }
+  },
+  {
+    "model": "coaches.school",
+    "fields": {
+      "name": "Eliot-Hine Middle School"
+    }
+  },
+  {
+    "model": "coaches.school",
+    "fields": {
+      "name": "Hardy Middle School"
+    }
+  },
+  {
+    "model": "coaches.school",
+    "fields": {
+      "name": "Hart Middle School"
+    }
+  },
+  {
+    "model": "coaches.school",
+    "fields": {
+      "name": "Jefferson Middle School Academy"
+    }
+  },
+  {
+    "model": "coaches.school",
+    "fields": {
+      "name": "Johnson Middle School"
+    }
+  },
+  {
+    "model": "coaches.school",
+    "fields": {
+      "name": "Kelly Miller Middle School"
+    }
+  },
+  {
+    "model": "coaches.school",
+    "fields": {
+      "name": "Kramer Middle School"
+    }
+  },
+  {
+    "model": "coaches.school",
+    "fields": {
+      "name": "LaSalle-Backus Education Campus"
+    }
+  },
+  {
+    "model": "coaches.school",
+    "fields": {
+      "name": "Leckie Education Campus"
+    }
+  },
+  {
+    "model": "coaches.school",
+    "fields": {
+      "name": "MacFarland Middle School"
+    }
+  },
+  {
+    "model": "coaches.school",
+    "fields": {
+      "name": "McKinley Middle School"
+    }
+  },
+  {
+    "model": "coaches.school",
+    "fields": {
+      "name": "Oyster-Adams Bilingual School"
+    }
+  },
+  {
+    "model": "coaches.school",
+    "fields": {
+      "name": "Raymond Education Campus"
+    }
+  },
+  {
+    "model": "coaches.school",
+    "fields": {
+      "name": "River Terrace Education Campus"
+    }
+  },
+  {
+    "model": "coaches.school",
+    "fields": {
+      "name": "School Without Walls "
+    }
+  },
+  {
+    "model": "coaches.school",
+    "fields": {
+      "name": "Sousa Middle School"
+    }
+  },
+  {
+    "model": "coaches.school",
+    "fields": {
+      "name": "Stuart-Hobson Middle School "
+    }
+  },
+  {
+    "model": "coaches.school",
+    "fields": {
+      "name": "Takoma Education Campus"
+    }
+  },
+  {
+    "model": "coaches.school",
+    "fields": {
+      "name": "Truesdell Education Campus"
+    }
+  },
+  {
+    "model": "coaches.school",
+    "fields": {
+      "name": "Walker-Jones Education Campus"
+    }
+  },
+  {
+    "model": "coaches.school",
+    "fields": {
+      "name": "Washington Metropolitan High School"
+    }
+  },
+  {
+    "model": "coaches.school",
+    "fields": {
+      "name": "West Education Campus"
+    }
+  },
+  {
+    "model": "coaches.school",
+    "fields": {
+      "name": "Wheatley Education Campus"
+    }
+  },
+  {
+    "model": "coaches.school",
+    "fields": {
+      "name": "Whittier Education Campus"
+    }
+  },
+  {
+    "model": "coaches.school",
+    "fields": {
+      "name": "Youth Services Center"
+    }
+  },
+  {
+    "model": "coaches.school",
+    "fields": {
+      "name": "Rachel Carson Middle School"
+    }
+  },
+  {
+    "model": "coaches.school",
+    "fields": {
+      "name": "James Fenimore Cooper Middle School"
+    }
+  },
+  {
+    "model": "coaches.school",
+    "fields": {
+      "name": "Franklin Middle School"
+    }
+  },
+  {
+    "model": "coaches.school",
+    "fields": {
+      "name": "Robert Frost Middle School"
+    }
+  },
+  {
+    "model": "coaches.school",
+    "fields": {
+      "name": "Ellen Glasgow Middle School"
+    }
+  },
+  {
+    "model": "coaches.school",
+    "fields": {
+      "name": "Hayfield Secondary School"
+    }
+  },
+  {
+    "model": "coaches.school",
+    "fields": {
+      "name": "Herndon Middle School"
+    }
+  },
+  {
+    "model": "coaches.school",
+    "fields": {
+      "name": "Oliver Wendell Holmes Middle School"
+    }
+  },
+  {
+    "model": "coaches.school",
+    "fields": {
+      "name": "Langston Hughes Middle School"
+    }
+  },
+  {
+    "model": "coaches.school",
+    "fields": {
+      "name": "Washington Irving Middle School"
+    }
+  },
+  {
+    "model": "coaches.school",
+    "fields": {
+      "name": "Luther Jackson Middle School"
+    }
+  },
+  {
+    "model": "coaches.school",
+    "fields": {
+      "name": "Francis Scott Key Middle School"
+    }
+  },
+  {
+    "model": "coaches.school",
+    "fields": {
+      "name": "Joyce Kilmer Middle School"
+    }
+  },
+  {
+    "model": "coaches.school",
+    "fields": {
+      "name": "Lake Braddock Secondary School"
+    }
+  },
+  {
+    "model": "coaches.school",
+    "fields": {
+      "name": "Sidney Lanier Middle School"
+    }
+  },
+  {
+    "model": "coaches.school",
+    "fields": {
+      "name": "Liberty Middle School"
+    }
+  },
+  {
+    "model": "coaches.school",
+    "fields": {
+      "name": "Henry Wadsworth Longfellow Middle School"
+    }
+  },
+  {
+    "model": "coaches.school",
+    "fields": {
+      "name": "Edgar Allan Poe Middle School"
+    }
+  },
+  {
+    "model": "coaches.school",
+    "fields": {
+      "name": "James W. Robinson, Jr. Secondary School"
+    }
+  },
+  {
+    "model": "coaches.school",
+    "fields": {
+      "name": "Rocky Run Middle School"
+    }
+  },
+  {
+    "model": "coaches.school",
+    "fields": {
+      "name": "Carl Sandburg Middle School"
+    }
+  },
+  {
+    "model": "coaches.school",
+    "fields": {
+      "name": "South County Middle School"
+    }
+  },
+  {
+    "model": "coaches.school",
+    "fields": {
+      "name": "Ormond Stone Middle School"
+    }
+  },
+  {
+    "model": "coaches.school",
+    "fields": {
+      "name": "Henry David Thoreau Middle School"
+    }
+  },
+  {
+    "model": "coaches.school",
+    "fields": {
+      "name": "Mark Twain Middle School"
+    }
+  },
+  {
+    "model": "coaches.school",
+    "fields": {
+      "name": "Walt Whitman Middle School"
+    }
+  }
+]

@@ -1,27 +1,9 @@
 from django import forms
-from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
-from crispy_forms.helper import FormHelper
 
+from home.forms import PrettyForm
 from . import models
-
-
-class PrettyHelper(FormHelper):
-    """Class mixin that handles custom formatting."""
-
-    def __init__(self, *args, **kwargs):
-        """Initialize a new pretty form helper."""
-
-        super(PrettyHelper, self).__init__(*args, **kwargs)
-        self.form_tag = False
-        self.html5_required = True
-
-
-class PrettyForm(forms.Form):
-    """A custom form parent class with the PrettyHelper mixin."""
-
-    helper = PrettyHelper()
 
 
 class RegisterForm(PrettyForm, forms.ModelForm):
@@ -31,19 +13,20 @@ class RegisterForm(PrettyForm, forms.ModelForm):
     has effectively been replaced by the email field.
     """
 
-    username = forms.EmailField(max_length=64, label="Email address")
-    school_name = forms.CharField(max_length=256)
-    password = forms.CharField(widget=forms.PasswordInput)
-    password_duplicate = forms.CharField(widget=forms.PasswordInput, label='Enter password again')
+    username = forms.EmailField(max_length=60, label="Email address")
+    password = forms.CharField(
+        widget=forms.PasswordInput(attrs={"id": "password"}))
+    password_duplicate = forms.CharField(
+        widget=forms.PasswordInput(attrs={"data-match": "#password"}),
+        label="Enter password again")
 
     def clean(self):
         """Clean and process the input."""
 
         cleaned_data = super().clean()
-        if cleaned_data.get('password') != cleaned_data.get('password_duplicate'):
-            raise ValidationError('Passwords do not match')
-        if models.User.objects.filter(username=cleaned_data["username"]).exists():
-            raise ValidationError("Username is already taken.")
+        if cleaned_data.get("password") != cleaned_data.get("password_duplicate"):  # TODO: move to individual field
+            raise ValidationError("Passwords do not match")
+        cleaned_data["email"] = cleaned_data["username"]
         return cleaned_data
 
     class Meta:
@@ -51,7 +34,39 @@ class RegisterForm(PrettyForm, forms.ModelForm):
 
         model = User
         exclude = ["email"]
-        fields = ["username", "password", "password_duplicate", "first_name", "last_name", "school_name"]
+        fields = ["username", "password", "password_duplicate", "first_name", "last_name"]
+
+
+class SchoolForm(forms.Form):
+    """Form for choosing a school to coach for."""
+
+    school = forms.CharField(max_length=60, min_length=1)
+    other = forms.CharField(max_length=60, required=False)
+
+    def __init__(self, *args, **kwargs):
+        """Override to add an other field."""
+
+        super().__init__(*args, **kwargs)
+        self.use_other = False
+
+    def clean(self):
+        """Clean and validate the form."""
+
+        cleaned_data = super().clean()
+
+        # Check other
+        if cleaned_data.get("school") == "other":
+            self.use_other = True
+            if len(cleaned_data.get("other", "")) == 0:
+                raise ValidationError("You must enter another school name")
+            cleaned_data["school"] = cleaned_data["other"]
+
+        # Check school exists
+        else:
+            if not models.School.objects.filter(name=cleaned_data.get("school")).exists():
+                raise ValidationError("School does not exist")
+
+        return cleaned_data
 
 
 class TeamForm(PrettyForm, forms.ModelForm):
@@ -121,29 +136,3 @@ class StudentFormSet(NaiveStudentFormSet):
             for subject, count in subjects.items():
                 if count < 2:
                     raise ValidationError("There must be at least two items in subject {}.".format(subject))
-
-
-class LoginForm(PrettyForm):
-    """Login form for graders and sponsors.
-
-    Note that as a result of the registration process, usernames
-    conform to email field standards. Login still works.
-    """
-
-    username = forms.CharField(label="Email address")
-    password = forms.CharField(widget=forms.PasswordInput)
-
-    def __init__(self, *args, **kwargs):
-        """Initialize a new login form."""
-
-        super().__init__(*args, **kwargs)
-        self.user = None
-
-    def clean(self):
-        """Clean and process the input."""
-
-        self.user = authenticate(
-            username=self.cleaned_data['username'],
-            password=self.cleaned_data['password'])
-        if self.user is None:
-            raise forms.ValidationError("Login was unsuccessful!")

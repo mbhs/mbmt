@@ -1,0 +1,64 @@
+{% extends "shared/base.html" %}
+{% load static %}
+
+{% block head %}
+<script type="text/javascript" src="{% static "js/middle.js" %}"></script>
+<script type="text/javascript" src="{% static "js/bootstrap-select.min.js" %}"></script>
+<link rel="stylesheet" type="text/css" href="{% static "css/bootstrap-select.min.css" %}">
+{% endblock %}
+
+{% block content %}
+
+<h1>School Registration</h1>
+<p>
+    Please select the school you will be coaching for {{ competition.name }}.
+    Only one coach is permitted per school.
+</p>
+{% if existing %}
+<p class="red">
+    A coach <strong>{{ existing.get_full_name }}</strong> has already registered for <strong>{{ school.name }}!</strong> If
+    you think this is a mistake, please contact the competition runners.
+</p>
+{% endif %}
+<form name="school" method="post" action="{% url "coaches:school" %}">
+    {% csrf_token %}
+    <div class="form-group">
+        <select id="schools" name="school" class="form-control selectpicker" data-live-search="true" title="Choose one of the following...">
+            <option value="other">My school isn't listed</option>
+            {% for school in schools %}
+            <option value="{{ school }}">{{ school }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div id="other-group" class="form-group gone">
+        <input id="other" name="other" type="text" class="form-control" placeholder="Official School Name" maxlength="60">
+    </div>
+    <div class="button-group bump-down">
+        <button id="submit" class="btn btn-primary right" disabled>Submit</button>
+    </div>
+</form>
+
+<script type="text/javascript">
+    var schools = $("#schools");
+    var otherGroup = $("#other-group");
+    var other = $("#other");
+    var submit = $("#submit");
+    function checkOther() {
+      if (schools.val() === "other") {
+        if (other.val() !== "") submit.prop("disabled", false);
+        else submit.prop("disabled", true);
+      }
+    }
+    schools.on("change", function() {
+      if (schools.val() === "other") {
+        otherGroup.removeClass("gone");
+        checkOther();
+      } else {
+        otherGroup.addClass("gone");
+        submit.prop("disabled", false);
+      }
+    });
+    other.on("input", checkOther);
+</script>
+
+{% endblock %}
