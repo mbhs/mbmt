@@ -18,7 +18,7 @@
 {% if existing %}
 <p class="red">
     A coach <strong>{{ existing.get_full_name }}</strong> has already registered for <strong>{{ school.name }}!</strong> If
-    you think this is a mistake, please contact the competition runners.
+    you think this is a mistake, please contact the competition runners at <script type="text/javascript">email("mbhsmathteam", "gmail.com")</script>.
 </p>
 {% endif %}
 <form name="school" method="post" action="{% url "coaches:school" %}">
