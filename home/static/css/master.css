@@ -243,18 +243,24 @@ form input.typeahead {
   background-color: #f9f9f9;
 }
 
-.fancy-team {
+.fancy-group {
   display: flex;
   flex-direction: row;
 }
 
-.fancy-team .team-name {
+.fancy-group .team-name { flex-grow: 1; padding-right: 1em;  }
+.fancy-group .team-division { width: 200px; }
+
+.fancy-group.columns-2 > div { flex-grow: 1; }
+.fancy-group.columns-2 > div:first-child { padding-right: 0.5em; }
+.fancy-group.columns-2 > div:last-child { padding-left: 0.5em; }
+
+.fancy-group .student-subject1, .fancy-group .student-subject2 {
   flex-grow: 1;
-  padding-right: 1em;
 }
 
-.fancy-team .team-division {
-  width: 200px;
+.fancy-group .student-shirt-size {
+  flex-grow: 2;
 }
 
 /***********/

@@ -83,27 +83,32 @@ class Team(models.Model):
 class Student(models.Model):
     """A student participating in the competition."""
 
-    # TODO: possibly implement first and last name
-    # first_name = models.CharField(max_length=64)
-    # last_name = models.CharField(max_length=64)
+    first_name = models.CharField(max_length=64)
+    last_name = models.CharField(max_length=64)
 
-    name = models.CharField(max_length=64, blank=True)
+    # name = models.CharField(max_length=64, blank=True)
     team = models.ForeignKey(Team, related_name="students")
     subject1 = models.CharField(max_length=2, blank=True, choices=SUBJECTS, verbose_name="Subject 1")
     subject2 = models.CharField(max_length=2, blank=True, choices=SUBJECTS, verbose_name="Subject 2")
 
-    size = models.IntegerField(choices=SHIRT_SIZES, default=0)
+    shirt_size = models.IntegerField(choices=SHIRT_SIZES, default=0)
     attending = models.BooleanField(default=False)
 
     class Meta:
         """Meta information about the student."""
 
-        ordering = ('name',)
+        ordering = ('last_name',)
 
     def __str__(self):
         """Represent the student as a string."""
 
-        return "Student[{}]".format(self.name)
+        return "Student[{}]".format(self.full_name)
+
+    @property
+    def full_name(self):
+        """Get the user's full name."""
+
+        return self.first_name + " " + self.last_name
 
     @staticmethod
     def current():

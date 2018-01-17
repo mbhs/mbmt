@@ -21,22 +21,22 @@ For a complete explanation regarding what team compositions are allowed, see the
 {% endif %}
 
 <form name="registration" data-toggle="validator" role="form" method="post">
-    <div class="form-group fancy-team">
-        <div class="team-name">
-            <label style="width: 100%">Name</label>
-            <input type="text" class="form-control" name="name" placeholder="Official Team Name" required="required">
-        </div>
-        <div class="team-division">
-            {{ team_form.division|as_crispy_field }}
-        </div>
+    <div class="form-group fancy-group">
+        <div class="team-name">{{ team_form.name|as_crispy_field }}</div>
+        <div class="team-division">{{ team_form.division|as_crispy_field }}</div>
     </div>
-
-    {{ student_forms.management_form|crispy }}
-    {% for form in student_forms %}
-        <h3>Student {{ forloop.counter }}</h3>
-        {% crispy form student_helper %}
+    {% for student_form in student_forms %}
+    <h3>Student {{ forloop.counter }}</h3>
+    <div class="form-group fancy-group columns-2">
+        <div class="student-first-name">{{ student_form.first_name|as_crispy_field }}</div>
+        <div class="student-last-name">{{ student_form.last_name|as_crispy_field }}</div>
+    </div>
+    <div class="form-group fancy-group">
+        <div class="student-subject1">{{ student_form.subject1|as_crispy_field }}</div>
+        <div class="student-subject2">{{ student_form.subject2|as_crispy_field }}</div>
+        <div class="student-shirt-size">{{ student_form.shirt_size|as_crispy_field }}</div>
+    </div>
     {% endfor %}
-
     <div class="form-group">
         <input id="submit" type="submit" value="Finish" class="btn btn-primary right"/>
         <input id="cancel" type="button" value="Cancel" class="btn btn-secondary right" onclick="window.location = {% url "coaches:index" %};"/>

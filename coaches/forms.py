@@ -76,7 +76,8 @@ class TeamForm(PrettyForm, forms.ModelForm):
         """Initialize the team form and modify the empty label."""
 
         super().__init__(*args, **kwargs)
-        self.fields["division"].empty_value = "Blah"
+        self.fields["division"].choices = [("", "Choose...")] + self.fields["division"].choices[1:]
+        self.fields["name"].widget.attrs["placeholder"] = "Official Team Name"
 
     class Meta:
         """Form metadata and formatting."""
@@ -105,7 +106,7 @@ class StudentForm(forms.ModelForm):
         """Form metadata and formatting."""
 
         model = models.Student
-        fields = ["name", "subject1", "subject2", "size"]
+        fields = ["first_name", "last_name", "subject1", "subject2", "shirt_size"]
 
 
 # Form factory for multiple students on a single team
