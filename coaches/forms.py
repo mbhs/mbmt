@@ -72,6 +72,12 @@ class SchoolForm(forms.Form):
 class TeamForm(PrettyForm, forms.ModelForm):
     """Form for creating a new team."""
 
+    def __init__(self, *args, **kwargs):
+        """Initialize the team form and modify the empty label."""
+
+        super().__init__(*args, **kwargs)
+        self.fields["division"].empty_value = "Blah"
+
     class Meta:
         """Form metadata and formatting."""
 
@@ -136,3 +142,4 @@ class StudentFormSet(NaiveStudentFormSet):
             for subject, count in subjects.items():
                 if count < 2:
                     raise ValidationError("There must be at least two items in subject {}.".format(subject))
+        return super().clean()

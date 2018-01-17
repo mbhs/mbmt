@@ -161,12 +161,10 @@ def display_teams(request):
 
 
 @login_required
-def edit_team(request, pk=None):
+@competition_required
+@school_required
+def edit_team(request, pk=None, competition=None, school=None):
     """Add a team to the list."""
-
-    competition = models.Competition.current()
-    if not competition:
-        return redirect("home:logout")
 
     team = None
     students = models.Student.objects.none()
@@ -205,7 +203,9 @@ def edit_team(request, pk=None):
     return render(request, "coaches/team.html", {
         "team_form": team_form,
         "student_forms": student_forms,
-        "student_helper": PrettyHelper()})
+        "student_helper": PrettyHelper(),
+        "competition": competition,
+        "school": school})
 
 
 @login_required

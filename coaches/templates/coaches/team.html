@@ -1,20 +1,35 @@
-{% extends "home/../../../home/templates/shared/base.html" %}
+{% extends "shared/base.html" %}
 {% load crispy_forms_tags %}
-{% load staticfiles %}
+{% load static %}
+
+{% block head %}
+<script type="text/javascript" src="{% static "js/validator.min.js" %}"></script>
+{% endblock %}
 
 {% block content %}
 
-<h2 class="lowerer">Edit Team</h2>
+<h1 class="lowerer">{{ school.name }}</h1>
+<p class="under">{{ competition.name }}</p>
 
-For a complete explanation regarding what team compositions are allowed, see the <a href="{% url 'rules' %}#registration">Rules</a>.
+<h2>Team Editor</h2>
+
+For a complete explanation regarding what team compositions are allowed, see the <a href="{% url "home:rules" %}" target="_blank">Rules</a>.
 
 {% if student_forms.non_form_errors %}
-    <br/><br/>
-    <div class="alert alert-danger">{{ student_forms.non_form_errors }}</div>
+<br/><br/>
+<div class="alert alert-danger">{{ student_forms.non_form_errors }}</div>
 {% endif %}
 
 <form name="registration" data-toggle="validator" role="form" method="post">
-    {% crispy team_form %}
+    <div class="form-group fancy-team">
+        <div class="team-name">
+            <label style="width: 100%">Name</label>
+            <input type="text" class="form-control" name="name" placeholder="Official Team Name" required="required">
+        </div>
+        <div class="team-division">
+            {{ team_form.division|as_crispy_field }}
+        </div>
+    </div>
 
     {{ student_forms.management_form|crispy }}
     {% for form in student_forms %}
@@ -24,7 +39,7 @@ For a complete explanation regarding what team compositions are allowed, see the
 
     <div class="form-group">
         <input id="submit" type="submit" value="Finish" class="btn btn-primary right"/>
-        <input id="cancel" type="button" value="Cancel" class="btn btn-secondary right" onclick="window.location = {% url 'teams' %};"/>
+        <input id="cancel" type="button" value="Cancel" class="btn btn-secondary right" onclick="window.location = {% url "coaches:index" %};"/>
     </div>
 </form>
 

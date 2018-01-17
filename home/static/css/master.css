@@ -24,7 +24,7 @@ h1, h2, h3, h4, h5, h6 {
 
 #content {
   /*padding-top: 1em;*/
-  max-width: 900px;
+  max-width: 980px;
   padding-top: 65px;
   padding-bottom: 75px;
 }
@@ -49,7 +49,7 @@ label.description {
   margin-bottom: 0;
 }
 
-input[type="text"] {
+input[type="text"], select {
   margin-top: 8px;
 }
 
@@ -237,6 +237,24 @@ form input.typeahead {
 
 .gone {
   display: none;
+}
+
+.table tr:first-of-type {
+  background-color: #f9f9f9;
+}
+
+.fancy-team {
+  display: flex;
+  flex-direction: row;
+}
+
+.fancy-team .team-name {
+  flex-grow: 1;
+  padding-right: 1em;
+}
+
+.fancy-team .team-division {
+  width: 200px;
 }
 
 /***********/

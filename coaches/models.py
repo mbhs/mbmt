@@ -12,8 +12,8 @@ SUBJECTS = (
 SUBJECTS_MAP = dict(SUBJECTS)
 
 DIVISIONS = (
-    (1, "pascal"),
-    (2, "ramanujan"))
+    (1, "Gauss"),  # Harder
+    (2, "Cantor"))
 DIVISIONS_MAP = dict(DIVISIONS)
 
 SHIRT_SIZES = (
@@ -87,7 +87,7 @@ class Student(models.Model):
     # first_name = models.CharField(max_length=64)
     # last_name = models.CharField(max_length=64)
 
-    name = models.CharField(max_length=256, blank=True)
+    name = models.CharField(max_length=64, blank=True)
     team = models.ForeignKey(Team, related_name="students")
     subject1 = models.CharField(max_length=2, blank=True, choices=SUBJECTS, verbose_name="Subject 1")
     subject2 = models.CharField(max_length=2, blank=True, choices=SUBJECTS, verbose_name="Subject 2")
