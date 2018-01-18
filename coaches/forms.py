@@ -89,6 +89,16 @@ class TeamForm(PrettyForm, forms.ModelForm):
 class StudentForm(forms.ModelForm):
     """Inline form for a single student."""
 
+    def __init__(self, *args, **kwargs):
+        """Initialize and modify fields."""
+
+        super().__init__(*args, **kwargs)
+        self.fields["first_name"].widget.attrs["placeholder"] = "First"
+        self.fields["last_name"].widget.attrs["placeholder"] = "Last"
+        self.fields["subject1"].choices = [("", "Choose...")] + self.fields["subject1"].choices[1:]
+        self.fields["subject2"].choices = [("", "Choose...")] + self.fields["subject2"].choices[1:]
+        self.fields["shirt_size"].choices = [("", "Choose...")] + self.fields["shirt_size"].choices[1:]
+
     def clean(self):
         """Clean and validate student data."""
 

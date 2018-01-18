@@ -246,21 +246,39 @@ form input.typeahead {
 .fancy-group {
   display: flex;
   flex-direction: row;
+  margin-bottom: 0;
 }
 
-.fancy-group .team-name { flex-grow: 1; padding-right: 1em;  }
+.fancy-group .team-name { flex: 1; padding-right: 1em;  }
 .fancy-group .team-division { width: 200px; }
 
-.fancy-group.columns-2 > div { flex-grow: 1; }
+.fancy-group.columns-2 > div { flex: 1; }
 .fancy-group.columns-2 > div:first-child { padding-right: 0.5em; }
 .fancy-group.columns-2 > div:last-child { padding-left: 0.5em; }
 
 .fancy-group .student-subject1, .fancy-group .student-subject2 {
-  flex-grow: 1;
+  flex: 1;
 }
 
 .fancy-group .student-shirt-size {
-  flex-grow: 2;
+  flex: 2;
+}
+
+.student-form {
+  margin-bottom: 1.5em;
+}
+
+.team-form {
+  margin-bottom: 1.5em;
+}
+
+.student-form h3 {
+  margin-top: 0;
+  margin-bottom: 1em;
+}
+
+form {
+  margin-bottom: 6em;
 }
 
 /***********/

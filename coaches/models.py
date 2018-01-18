@@ -17,7 +17,6 @@ DIVISIONS = (
 DIVISIONS_MAP = dict(DIVISIONS)
 
 SHIRT_SIZES = (
-    (0, "Default"),
     (1, "Adult Small"),
     (2, "Adult Medium"),
     (3, "Adult Large"),
@@ -57,7 +56,7 @@ class Coaching(models.Model):
 class Team(models.Model):
     """Represents a team of students competing in the competition."""
 
-    name = models.CharField(max_length=256)
+    name = models.CharField(max_length=64)
     number = models.IntegerField(default=0)
     school = models.ForeignKey(School, related_name="teams")
     competition = models.ForeignKey(Competition, related_name="teams")
@@ -91,7 +90,7 @@ class Student(models.Model):
     subject1 = models.CharField(max_length=2, blank=True, choices=SUBJECTS, verbose_name="Subject 1")
     subject2 = models.CharField(max_length=2, blank=True, choices=SUBJECTS, verbose_name="Subject 2")
 
-    shirt_size = models.IntegerField(choices=SHIRT_SIZES, default=0)
+    shirt_size = models.IntegerField(choices=SHIRT_SIZES)
     attending = models.BooleanField(default=False)
 
     class Meta:

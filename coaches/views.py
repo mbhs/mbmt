@@ -166,15 +166,12 @@ def display_teams(request):
 def edit_team(request, pk=None, competition=None, school=None):
     """Add a team to the list."""
 
+    # Get existing data
     team = None
     students = models.Student.objects.none()
-
     if pk:
         team = get_object_or_404(models.Team, id=pk)
         students = team.students.all()
-
-    team_form = forms.TeamForm(instance=team)
-    student_forms = forms.StudentFormSet(queryset=students)
 
     # Register a team from posted data
     if request.method == "POST":
@@ -198,6 +195,12 @@ def edit_team(request, pk=None, competition=None, school=None):
                 student.save()
 
             return redirect("teams")
+
+    else:
+
+        # Create the forms
+        team_form = forms.TeamForm(instance=team)
+        student_forms = forms.StudentFormSet(queryset=students)
 
     # Render the form view
     return render(request, "coaches/team.html", {

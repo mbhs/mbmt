@@ -20,7 +20,7 @@
     {% crispy form %}
     <div class="button-group bump-down">
         <input id="submit" type="submit" value="Finish" class="btn btn-primary right"/>
-        <a id="cancel" class="btn btn-link right" href="{% url "home:index" %}">Cancel</a>
+        <input id="cancel" type="button" value="Cancel" class="btn btn-secondary right" onclick="window.location = '{% url "home:index" %}';"/>
     </div>
 </form>
 {% else %}
