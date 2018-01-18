@@ -30,16 +30,12 @@
     {% for team in school.current_teams %}
     <tr>
         <td>
-            {{ team.name }}
-            {% if not team.division %}
-                (Please select a division!)
-            {% else %}
-                <br>{{ team.get_division_display|capfirst }}
-            {% endif %}
-            {% if allow_add_teams %}
+            {{ team.name }}<br>
+            {{ team.get_division_display|capfirst }}
+            {% if competition.can_edit_teams %}
             <br>
-            <a href="{% url "coaches:edit_team" team.id %}">Edit</a> |
-            <a href="{% url "coaches:remove_team" team.id %}">Remove</a>
+            <a href="{% url "coaches:teams_edit" team.id %}">Edit</a> |
+            <a href="{% url "coaches:teams_remove" team.id %}">Remove</a>
             {% endif %}
         </td>
         <td>

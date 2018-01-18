@@ -16,6 +16,12 @@ DIVISIONS = (
     (2, "Cantor"))
 DIVISIONS_MAP = dict(DIVISIONS)
 
+GRADES = (
+    (0, "Other"),
+    (6, "6"),
+    (7, "7"),
+    (8, "8"))
+
 SHIRT_SIZES = (
     (1, "Adult Small"),
     (2, "Adult Medium"),
@@ -85,10 +91,11 @@ class Student(models.Model):
     first_name = models.CharField(max_length=64)
     last_name = models.CharField(max_length=64)
 
-    # name = models.CharField(max_length=64, blank=True)
     team = models.ForeignKey(Team, related_name="students")
     subject1 = models.CharField(max_length=2, blank=True, choices=SUBJECTS, verbose_name="Subject 1")
     subject2 = models.CharField(max_length=2, blank=True, choices=SUBJECTS, verbose_name="Subject 2")
+
+    grade = models.IntegerField(choices=GRADES)
 
     shirt_size = models.IntegerField(choices=SHIRT_SIZES)
     attending = models.BooleanField(default=False)
