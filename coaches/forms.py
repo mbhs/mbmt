@@ -104,13 +104,12 @@ class StudentForm(forms.ModelForm):
 
         cleaned_data = super().clean()
         if any(cleaned_data.values()):
-            if not cleaned_data["name"]:
-                raise ValidationError("A name is required.")
+            if not cleaned_data["first_name"] or not cleaned_data["last_name"]:
+                raise ValidationError("A first and last name is required.")
             if not cleaned_data["subject1"] or not cleaned_data["subject2"]:
                 raise ValidationError("Two subjects are required.")
             if cleaned_data["subject1"] == cleaned_data["subject2"]:
                 raise ValidationError("The two subjects must be different.")
-        return cleaned_data
 
     class Meta:
         """Form metadata and formatting."""
@@ -123,8 +122,7 @@ class StudentForm(forms.ModelForm):
 NaiveStudentFormSet = forms.modelformset_factory(
     models.Student,
     form=StudentForm,
-    min_num=5,
-    max_num=5)
+    extra=5)
 
 
 class StudentFormSet(NaiveStudentFormSet):
@@ -133,7 +131,8 @@ class StudentFormSet(NaiveStudentFormSet):
     def clean(self):
         """Clean and validate student data."""
 
-        students = [form.instance for form in self if form.instance.name]
+        super().clean()
+        students = [form.instance for form in self if form.instance.first_name]
         if len(students) == 0:
             raise ValidationError("There must be at least one student.")
         subjects = {
@@ -153,4 +152,3 @@ class StudentFormSet(NaiveStudentFormSet):
             for subject, count in subjects.items():
                 if count < 2:
                     raise ValidationError("There must be at least two items in subject {}.".format(subject))
-        return super().clean()

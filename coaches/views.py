@@ -186,7 +186,8 @@ def edit_team(request, pk=None, competition=None, school=None):
                 team.save()
             else:
                 team = team_form.save(commit=False)
-                team.school = request.user.school
+                team.competition = competition
+                team.school = school
                 team.save()
 
             form_students = student_forms.save(commit=False)
@@ -194,7 +195,7 @@ def edit_team(request, pk=None, competition=None, school=None):
                 student.team = team
                 student.save()
 
-            return redirect("teams")
+            return redirect("coaches:index")
 
     else:
 
