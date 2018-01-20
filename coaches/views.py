@@ -154,13 +154,6 @@ def index(request, school=None, competition=None):
 
 
 @login_required
-def display_teams(request):
-    """Display current teams."""
-
-    return render(request, "coaches/index.html", {"competition": models.Competition.current()})
-
-
-@login_required
 @competition_required
 @school_required
 def edit_team(request, pk=None, competition=None, school=None):

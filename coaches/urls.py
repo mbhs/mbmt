@@ -13,7 +13,6 @@ urlpatterns = [
     url(r"^inactive/$", views.inactive, name="inactive"),
 
     # Team editing
-    url(r"^teams/$", views.display_teams, name="teams"),
     url(r"^teams/edit/(\d+)?$", views.edit_team, name="teams_edit"),
     url(r"^teams/remove/(\d+)$", views.remove_team, name="teams_remove"),
 
