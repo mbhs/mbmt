@@ -249,8 +249,8 @@ form input.typeahead {
   margin-bottom: 0;
 }
 
-.fancy-group .team-name { flex: 1; padding-right: 1em;  }
-.fancy-group .team-division { width: 200px; }
+.fancy-group .team-name { flex: 3; padding-right: 0.75em;  }
+.fancy-group .team-division { flex: 1; padding-left: 0.25em; }
 
 .fancy-group.columns-2 > div { flex: 1; }
 .fancy-group.columns-2 > div:first-child { padding-right: 0.5em; }
@@ -285,7 +285,7 @@ form {
 /* Grading */
 /***********/
 
-table#teams {
+table#teams, table#chaperones {
   margin-top: 1em;
 }
 

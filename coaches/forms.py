@@ -98,6 +98,7 @@ class StudentForm(forms.ModelForm):
         self.fields["subject1"].choices = [("", "Choose...")] + self.fields["subject1"].choices[1:]
         self.fields["subject2"].choices = [("", "Choose...")] + self.fields["subject2"].choices[1:]
         self.fields["shirt_size"].choices = [("", "Choose...")] + self.fields["shirt_size"].choices[1:]
+        self.fields["grade"].choices = [("", "Choose...")] + self.fields["grade"].choices[1:]
 
     def clean(self):
         """Clean and validate student data."""
@@ -115,14 +116,17 @@ class StudentForm(forms.ModelForm):
         """Form metadata and formatting."""
 
         model = models.Student
-        fields = ["first_name", "last_name", "subject1", "subject2", "shirt_size"]
+        fields = ["first_name", "last_name", "subject1", "subject2", "grade", "shirt_size"]
 
 
 # Form factory for multiple students on a single team
 NaiveStudentFormSet = forms.modelformset_factory(
     models.Student,
     form=StudentForm,
-    extra=5)
+    min_num=1,
+    max_num=5,
+    extra=5,
+    validate_min=False)
 
 
 class StudentFormSet(NaiveStudentFormSet):
@@ -152,3 +156,11 @@ class StudentFormSet(NaiveStudentFormSet):
             for subject, count in subjects.items():
                 if count < 2:
                     raise ValidationError("There must be at least two items in subject {}.".format(subject))
+
+
+class ChaperoneForm(PrettyForm, forms.ModelForm):
+    """Simple chaperone entry."""
+
+    class Meta:
+        model = models.Chaperone
+        fields = ["first_name", "last_name", "email", "phone", "shirt_size"]

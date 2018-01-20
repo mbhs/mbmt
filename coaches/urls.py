@@ -16,4 +16,6 @@ urlpatterns = [
     url(r"^teams/edit/(\d+)?$", views.edit_team, name="teams_edit"),
     url(r"^teams/remove/(\d+)$", views.remove_team, name="teams_remove"),
 
+    url(r"^chaperones/edit/(d+)?$", views.edit_chaperone, name="chaperones_edit")
+
 ]

@@ -13,12 +13,13 @@
 <table id="chaperones" class="table">
     <tr><th>Name</th><th>Email</th><th>Phone Number</th><th>Shirt Size</th></tr>
     {% for chaperone in school.current_chaperones %}
-
+    
     {% endfor %}
+
     <tr>
         <td colspan="5">
             {% if competition.can_edit_teams %}
-            <a href="{% url "coaches:teams_edit" %}">+ Add Chaperone</a>
+            <a href="{% url "coaches:chaperones_edit" %}">+ Add Chaperone</a>
             {% endif %}
         </td>
     </tr>
@@ -30,12 +31,8 @@
     {% for team in school.current_teams %}
     <tr>
         <td>
-            {{ team.name }}
-            {% if not team.division %}
-                (Please select a division!)
-            {% else %}
-                <br>{{ team.get_division_display|capfirst }}
-            {% endif %}
+            {{ team.name }}<br>
+            {{ team.get_division_display|capfirst }}
             {% if competition.can_edit_teams %}
             <br>
             <a href="{% url "coaches:teams_edit" team.id %}">Edit</a> |
@@ -45,7 +42,7 @@
         <td>
             <ul>
                 {% for student in team.students.all %}
-                <li>{{ student.full_name }}</li>
+                <li>{{ student.full_name }}, {{ student.get_grade_display }}</li>
                 {% endfor %}
             </ul>
         </td>

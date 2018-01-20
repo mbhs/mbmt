@@ -1,0 +1,32 @@
+{% extends "shared/base.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block head %}
+<script type="text/javascript" src="{% static "js/validator.min.js" %}"></script>
+{% endblock %}
+
+{% block content %}
+
+<h1 class="lowerer">{{ school.name }}</h1>
+<p class="under">{{ competition.name }}</p>
+
+<h2>Team Editor</h2>
+
+<p>Schools may have no more than three chaperones.</p>
+
+{% if student_forms.non_form_errors %}
+<br/><br/>
+<div class="alert alert-danger">{{ student_forms.non_form_errors }}</div>
+{% endif %}
+
+<form method="post">
+    {% csrf_token %}
+    {% crispy form form.helper %}
+    <div class="form-group">
+        <input id="submit" type="submit" value="Save" class="btn btn-primary right"/>
+        <input id="cancel" type="button" value="Cancel" class="btn btn-secondary right" onclick="window.location = '{% url "coaches:index" %}';"/>
+    </div>
+</form>
+
+{% endblock %}

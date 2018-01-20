@@ -13,7 +13,7 @@
 
 <h2>Team Editor</h2>
 
-For a complete explanation regarding what team compositions are allowed, see the <a href="{% url "home:rules" %}" target="_blank">rules</a>.
+<p>For a complete explanation regarding what team compositions are allowed, see the <a href="{% url "home:rules" %}" target="_blank">rules</a>.</p>
 
 {% if student_forms.non_form_errors %}
 <br/><br/>
@@ -30,6 +30,7 @@ For a complete explanation regarding what team compositions are allowed, see the
     {% for student_form in student_forms %}
     <div class="student-form">
         <h3>Student {{ forloop.counter }}</h3>
+        {{ student_form.id }}
         <div class="form-group fancy-group columns-2">
             <div class="student-first-name">{{ student_form.first_name|as_crispy_field }}</div>
             <div class="student-last-name">{{ student_form.last_name|as_crispy_field }}</div>
@@ -39,7 +40,10 @@ For a complete explanation regarding what team compositions are allowed, see the
                 <div class="student-subject1">{{ student_form.subject1|as_crispy_field }}</div>
                 <div class="student-subject2">{{ student_form.subject2|as_crispy_field }}</div>
             </div>
-            <div class="student-shirt-size">{{ student_form.shirt_size|as_crispy_field }}</div>
+            <div class="student-info fancy-group columns-2">
+                <div class="student-grade">{{ student_form.grade|as_crispy_field }}</div>
+                <div class="student-shirt-size">{{ student_form.shirt_size|as_crispy_field }}</div>
+            </div>
         </div>
     </div>
     {% endfor %}
