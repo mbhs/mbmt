@@ -12,12 +12,17 @@ SUBJECTS = (
 SUBJECTS_MAP = dict(SUBJECTS)
 
 DIVISIONS = (
-    (1, "pascal"),
-    (2, "ramanujan"))
+    (1, "Gauss"),  # Harder
+    (2, "Cantor"))
 DIVISIONS_MAP = dict(DIVISIONS)
 
+GRADES = (
+    (0, "Other"),
+    (6, "6th"),
+    (7, "7th"),
+    (8, "8th"))
+
 SHIRT_SIZES = (
-    (0, "Default"),
     (1, "Adult Small"),
     (2, "Adult Medium"),
     (3, "Adult Large"),
@@ -27,7 +32,7 @@ SHIRT_SIZES = (
 class School(models.Model):
     """A simple school model that is represented by a teacher."""
 
-    name = models.CharField(max_length=60)
+    name = models.CharField(max_length=60, unique=True)
     coaches = models.ManyToManyField(User, related_name="school", through="Coaching")
 
     def __str__(self):
@@ -38,12 +43,12 @@ class School(models.Model):
     def current_teams(self):
         """Return the current list of teams for the school."""
 
-        return Team.objects.filter(competition__active=True, school=self)
+        return Team.objects.filter(competition__active=True, school=self).all()
 
     def current_chaperones(self):
         """Get the current list of chaperons."""
 
-        return
+        return Chaperone.objects.filter(competition__active=True, school=self).all()
 
 
 class Coaching(models.Model):
@@ -57,7 +62,7 @@ class Coaching(models.Model):
 class Team(models.Model):
     """Represents a team of students competing in the competition."""
 
-    name = models.CharField(max_length=256)
+    name = models.CharField(max_length=64)
     number = models.IntegerField(default=0)
     school = models.ForeignKey(School, related_name="teams")
     competition = models.ForeignKey(Competition, related_name="teams")
@@ -83,27 +88,33 @@ class Team(models.Model):
 class Student(models.Model):
     """A student participating in the competition."""
 
-    # TODO: possibly implement first and last name
-    # first_name = models.CharField(max_length=64)
-    # last_name = models.CharField(max_length=64)
+    first_name = models.CharField(max_length=64)
+    last_name = models.CharField(max_length=64)
 
-    name = models.CharField(max_length=256, blank=True)
     team = models.ForeignKey(Team, related_name="students")
     subject1 = models.CharField(max_length=2, blank=True, choices=SUBJECTS, verbose_name="Subject 1")
     subject2 = models.CharField(max_length=2, blank=True, choices=SUBJECTS, verbose_name="Subject 2")
 
-    size = models.IntegerField(choices=SHIRT_SIZES, default=0)
+    grade = models.IntegerField(choices=GRADES)
+
+    shirt_size = models.IntegerField(choices=SHIRT_SIZES)
     attending = models.BooleanField(default=False)
 
     class Meta:
         """Meta information about the student."""
 
-        ordering = ('name',)
+        ordering = ('last_name',)
 
     def __str__(self):
         """Represent the student as a string."""
 
-        return "Student[{}]".format(self.name)
+        return "Student[{}]".format(self.full_name)
+
+    @property
+    def full_name(self):
+        """Get the user's full name."""
+
+        return self.first_name + " " + self.last_name
 
     @staticmethod
     def current():
@@ -114,3 +125,16 @@ class Student(models.Model):
 
 class Chaperone(models.Model):
     """A chaperone for a team."""
+
+    competition = models.ForeignKey(Competition)
+    school = models.ForeignKey(School)
+
+    first_name = models.CharField(max_length=60)
+    last_name = models.CharField(max_length=60)
+
+    email = models.EmailField()
+    phone = models.CharField(max_length=20)
+    shirt_size = models.IntegerField(choices=SHIRT_SIZES)
+
+    def get_full_name(self):
+        return self.first_name + " " + self.last_name

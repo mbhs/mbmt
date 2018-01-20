@@ -9,18 +9,77 @@
 <a href="{% url "grading:sponsor_scoreboard" %}" class="sponsor-scoreboard">Go to scoring &rarr;</a>
 {% endif %}
 
-<h2>Teams</h2>
-{% for team in school.current_teams %}
-
-{% empty %}
-No teams have been added yet!
-{% endfor %}
-
 <h2>Chaperones</h2>
-{% for chaperone in school.current_chaperones %}
+<table id="chaperones" class="table">
+    <tr><th>Name</th><th>Email</th><th>Phone Number</th><th>Shirt Size</th><th>Edit</th></tr>
+    {% for chaperone in chaperones %}
+    <tr>
+        <td>{{ chaperone.get_full_name }}</td>
+        <td>{{ chaperone.email }}</td>
+        <td>{{ chaperone.phone }}</td>
+        <td>{{ chaperone.get_shirt_size_display }}</td>
+        <td>
+            <a href="{% url "coaches:chaperones_edit" chaperone.pk %}">Edit</a> |
+            <a href="{% url "coaches:chaperones_remove" chaperone.pk %}">Delete</a>
+        </td>
+    </tr>
+    {% endfor %}
+    {% if chaperones|length < 3 %}
+    <tr>
+        <td colspan="5">
+            {% if competition.can_edit_teams %}
+            <a href="{% url "coaches:chaperones_edit" %}">+ Add Chaperone</a>
+            {% endif %}
+        </td>
+    </tr>
+    {% endif %}
+</table>
 
-{% empty %}
-No chaperones have been added yet!
-{% endfor %}
+<h2>Teams</h2>
+<table id="teams" class="table">
+    <tr><th>Name</th><th>Students</th><th>Subject Tests</th><th>Shirt Sizes</th></tr>
+    {% for team in teams %}
+    <tr>
+        <td>
+            {{ team.name }}<br>
+            {{ team.get_division_display|capfirst }}
+            {% if competition.can_edit_teams %}
+            <br>
+            <a href="{% url "coaches:teams_edit" team.id %}">Edit</a> |
+            <a href="{% url "coaches:teams_remove" team.id %}">Remove</a>
+            {% endif %}
+        </td>
+        <td>
+            <ul>
+                {% for student in team.students.all %}
+                <li>{{ student.full_name }}, {{ student.get_grade_display }}</li>
+                {% endfor %}
+            </ul>
+        </td>
+        <td>
+            <ul>
+                {% for student in team.students.all %}
+                <li>{{ student.get_subject1_display }}, {{ student.get_subject2_display }}</li>
+                {% endfor %}
+            </ul>
+        </td>
+        <td>
+            <ul>
+                {% for student in team.students.all %}
+                <li>{{ student.get_shirt_size_display }}</li>
+                {% endfor %}
+            </ul>
+        </td>
+    </tr>
+    {% endfor %}
+    <tr>
+        <td colspan="5">
+            {% if competition.can_edit_teams %}
+            <a href="{% url "coaches:teams_edit" %}">+ Add Team</a>
+            {% endif %}
+        </td>
+    </tr>
+</table>
+
 
 {% endblock %}

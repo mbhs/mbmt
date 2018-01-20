@@ -29,7 +29,7 @@ def school_required(view):
     """Wrap a view to require the user to have a school."""
 
     def wrapper(request, *args, **kwargs):
-        coaching = models.Coaching.objects.get(coach=request.user, competition__active=True)
+        coaching = models.Coaching.objects.filter(coach=request.user, competition__active=True).first()
         if coaching is None:
             return redirect("coaches:school")
 
@@ -116,6 +116,8 @@ def schools(request):
                 school = models.School.objects.create(name=form.cleaned_data["school"])
                 school.save()
             else:
+                print(form.cleaned_data["school"])
+
                 school = models.School.objects.get(name=form.cleaned_data["school"])
 
             # Check if someone is already coaching
@@ -150,33 +152,27 @@ def schools(request):
 def index(request, school=None, competition=None):
     """Coach dashboard."""
 
-    return render(request, "coaches/index.html", {"school": school, "competition": competition})
+    return render(request, "coaches/index.html", {
+        "school": school,
+        "chaperones": school.current_chaperones(),
+        "teams": school.current_teams(),
+        "competition": competition})
 
 
 @login_required
-def display_teams(request):
-    """Display current teams."""
-
-    return render(request, "coaches/index.html", {"competition": models.Competition.current()})
-
-
-@login_required
-def edit_team(request, pk=None):
+@competition_required
+@school_required
+def edit_team(request, pk=None, competition=None, school=None):
     """Add a team to the list."""
 
-    competition = models.Competition.current()
-    if not competition:
-        return redirect("home:logout")
-
+    # Get existing data
     team = None
     students = models.Student.objects.none()
-
     if pk:
         team = get_object_or_404(models.Team, id=pk)
+        if team.school != school:  # Prevent editing other teams
+            return redirect("coaches:index")
         students = team.students.all()
-
-    team_form = forms.TeamForm(instance=team)
-    student_forms = forms.StudentFormSet(queryset=students)
 
     # Register a team from posted data
     if request.method == "POST":
@@ -191,7 +187,8 @@ def edit_team(request, pk=None):
                 team.save()
             else:
                 team = team_form.save(commit=False)
-                team.school = request.user.school
+                team.competition = competition
+                team.school = school
                 team.save()
 
             form_students = student_forms.save(commit=False)
@@ -199,19 +196,71 @@ def edit_team(request, pk=None):
                 student.team = team
                 student.save()
 
-            return redirect("teams")
+            return redirect("coaches:index")
+
+    else:
+
+        # Create the forms
+        team_form = forms.TeamForm(instance=team)
+        student_forms = forms.StudentFormSet(queryset=students)
 
     # Render the form view
     return render(request, "coaches/team.html", {
         "team_form": team_form,
         "student_forms": student_forms,
-        "student_helper": PrettyHelper()})
+        "student_helper": PrettyHelper(),
+        "competition": competition,
+        "school": school})
 
 
 @login_required
-def remove_team(request, pk=None):
+@competition_required
+@school_required
+def remove_team(request, pk=None, competition=None, school=None):
     """Remove the team."""
 
     if pk:
-        models.Team.objects.filter(id=pk).delete()
-    return redirect("teams")
+        team = models.Team.objects.get(pk=pk)
+        if team.school == school:
+            team.delete()
+    return redirect("coaches:index")
+
+
+@login_required
+@competition_required
+@school_required
+def edit_chaperone(request, pk=None, competition=None, school=None):
+    """Edit a chaperone."""
+
+    if models.Chaperone.objects.filter(school=school, competition=competition).count() >= 3:
+        return redirect("coaches:index")
+
+    instance = models.Chaperone.objects.filter(pk=pk).first()
+    if instance and instance.school != school:  # Prevent from accessing other chaperones
+        return redirect("coaches:index")
+
+    if request.method == "POST":
+        form = forms.ChaperoneForm(request.POST)
+        if form.is_valid():
+            chaperone = form.save(commit=False)
+            chaperone.competition = competition
+            chaperone.school = school
+            chaperone.save()
+            return redirect("coaches:index")
+    else:
+        form = forms.ChaperoneForm(instance=instance)
+
+    return render(request, "coaches/chaperone.html", {"form": form})
+
+
+@login_required
+@competition_required
+@school_required
+def remove_chaperone(request, pk=None, competition=None, school=None):
+    """Remove the team."""
+
+    if pk:
+        chaperone = models.Chaperone.objects.get(pk=pk)
+        if chaperone.school == school:
+            chaperone.delete()
+    return redirect("coaches:index")
