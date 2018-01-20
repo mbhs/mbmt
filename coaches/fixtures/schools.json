@@ -56,12 +56,6 @@
   {
     "model": "coaches.school",
     "fields": {
-      "name": "Francis Scott Key Middle School"
-    }
-  },
-  {
-    "model": "coaches.school",
-    "fields": {
       "name": "Dr. Martin Luther King, Jr. Middle School"
     }
   },

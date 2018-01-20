@@ -32,7 +32,7 @@ SHIRT_SIZES = (
 class School(models.Model):
     """A simple school model that is represented by a teacher."""
 
-    name = models.CharField(max_length=60)
+    name = models.CharField(max_length=60, unique=True)
     coaches = models.ManyToManyField(User, related_name="school", through="Coaching")
 
     def __str__(self):
@@ -43,12 +43,12 @@ class School(models.Model):
     def current_teams(self):
         """Return the current list of teams for the school."""
 
-        return Team.objects.filter(competition__active=True, school=self)
+        return Team.objects.filter(competition__active=True, school=self).all()
 
     def current_chaperones(self):
         """Get the current list of chaperons."""
 
-        return
+        return Chaperone.objects.filter(competition__active=True, school=self).all()
 
 
 class Coaching(models.Model):
@@ -135,3 +135,6 @@ class Chaperone(models.Model):
     email = models.EmailField()
     phone = models.CharField(max_length=20)
     shirt_size = models.IntegerField(choices=SHIRT_SIZES)
+
+    def get_full_name(self):
+        return self.first_name + " " + self.last_name

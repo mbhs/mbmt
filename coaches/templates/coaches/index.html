@@ -11,11 +11,20 @@
 
 <h2>Chaperones</h2>
 <table id="chaperones" class="table">
-    <tr><th>Name</th><th>Email</th><th>Phone Number</th><th>Shirt Size</th></tr>
-    {% for chaperone in school.current_chaperones %}
-    
+    <tr><th>Name</th><th>Email</th><th>Phone Number</th><th>Shirt Size</th><th>Edit</th></tr>
+    {% for chaperone in chaperones %}
+    <tr>
+        <td>{{ chaperone.get_full_name }}</td>
+        <td>{{ chaperone.email }}</td>
+        <td>{{ chaperone.phone }}</td>
+        <td>{{ chaperone.get_shirt_size_display }}</td>
+        <td>
+            <a href="{% url "coaches:chaperones_edit" chaperone.pk %}">Edit</a> |
+            <a href="{% url "coaches:chaperones_remove" chaperone.pk %}">Delete</a>
+        </td>
+    </tr>
     {% endfor %}
-
+    {% if chaperones|length < 3 %}
     <tr>
         <td colspan="5">
             {% if competition.can_edit_teams %}
@@ -23,12 +32,13 @@
             {% endif %}
         </td>
     </tr>
+    {% endif %}
 </table>
 
 <h2>Teams</h2>
 <table id="teams" class="table">
     <tr><th>Name</th><th>Students</th><th>Subject Tests</th><th>Shirt Sizes</th></tr>
-    {% for team in school.current_teams %}
+    {% for team in teams %}
     <tr>
         <td>
             {{ team.name }}<br>

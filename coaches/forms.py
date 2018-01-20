@@ -161,6 +161,12 @@ class StudentFormSet(NaiveStudentFormSet):
 class ChaperoneForm(PrettyForm, forms.ModelForm):
     """Simple chaperone entry."""
 
+    def __init__(self, *args, **kwargs):
+        """Initialize and modify fields."""
+
+        super().__init__(*args, **kwargs)
+        self.fields["shirt_size"].choices = [("", "Choose...")] + self.fields["shirt_size"].choices[1:]
+
     class Meta:
         model = models.Chaperone
         fields = ["first_name", "last_name", "email", "phone", "shirt_size"]

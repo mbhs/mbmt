@@ -289,6 +289,11 @@ table#teams, table#chaperones {
   margin-top: 1em;
 }
 
+table#chaperones td:last-child {
+  width: 1%;
+  white-space: nowrap;
+}
+
 table#teams ul {
   margin-bottom: 0;
   padding-left: 0;
