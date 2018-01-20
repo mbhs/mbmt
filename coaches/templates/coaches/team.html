@@ -13,10 +13,12 @@
 
 <h2>Team Editor</h2>
 
-<p>For a complete explanation regarding what team compositions are allowed, see the <a href="{% url "home:rules" %}" target="_blank">rules</a>.</p>
+<p>
+    For a complete explanation regarding what team compositions are allowed, see the <a href="{% url "home:rules" %}" target="_blank">rules</a>.
+    Note that this year, the {{ harder }} division is harder.
+</p>
 
 {% if student_forms.non_form_errors %}
-<br/><br/>
 <div class="alert alert-danger">{{ student_forms.non_form_errors }}</div>
 {% endif %}
 

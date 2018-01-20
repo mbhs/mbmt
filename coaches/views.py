@@ -210,7 +210,8 @@ def edit_team(request, pk=None, competition=None, school=None):
         "student_forms": student_forms,
         "student_helper": PrettyHelper(),
         "competition": competition,
-        "school": school})
+        "school": school,
+        "harder": models.DIVISIONS[0][1]})
 
 
 @login_required

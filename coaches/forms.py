@@ -76,7 +76,9 @@ class TeamForm(PrettyForm, forms.ModelForm):
         """Initialize the team form and modify the empty label."""
 
         super().__init__(*args, **kwargs)
-        self.fields["division"].choices = [("", "Choose...")] + self.fields["division"].choices[1:]
+        divisions = [("", "Choose...")] + self.fields["division"].choices[1:]
+        divisions[1] = divisions[1][0], divisions[1][1] + " (harder)"
+        self.fields["division"].choices = divisions
         self.fields["name"].widget.attrs["placeholder"] = "Official Team Name"
 
     class Meta:
@@ -108,9 +110,12 @@ class StudentForm(forms.ModelForm):
             if not cleaned_data["first_name"] or not cleaned_data["last_name"]:
                 raise ValidationError("A first and last name is required.")
             if not cleaned_data["subject1"] or not cleaned_data["subject2"]:
-                raise ValidationError("Two subjects are required.")
+                raise ValidationError("Two subjects are required for {} {}.".format(
+                    cleaned_data["first_name"], cleaned_data["last_name"]))
             if cleaned_data["subject1"] == cleaned_data["subject2"]:
-                raise ValidationError("The two subjects must be different.")
+                raise ValidationError("The subject tests for {} {} must be different.".format(
+                    cleaned_data["first_name"], cleaned_data["last_name"]))
+        return cleaned_data
 
     class Meta:
         """Form metadata and formatting."""
@@ -135,7 +140,10 @@ class StudentFormSet(NaiveStudentFormSet):
     def clean(self):
         """Clean and validate student data."""
 
-        super().clean()
+        data = super().clean()
+        for form in self:
+            form.clean()
+
         students = [form.instance for form in self if form.instance.first_name]
         if len(students) == 0:
             raise ValidationError("There must be at least one student.")
@@ -156,6 +164,7 @@ class StudentFormSet(NaiveStudentFormSet):
             for subject, count in subjects.items():
                 if count < 2:
                     raise ValidationError("There must be at least two items in subject {}.".format(subject))
+        return data
 
 
 class ChaperoneForm(PrettyForm, forms.ModelForm):
