@@ -51,16 +51,6 @@ class Round(models.Model):
         return round
 
 
-# Unnecessary at the moment
-#
-# @receiver(post_save, sender=Round)
-# def save_rounds(sender: type, instance: Round, **options):
-#     """Save rounds when a competition is saved"""
-#
-#     for question in instance.questions.all():
-#         question.save()
-
-
 class Question(models.Model):
     """A question container model."""
 
