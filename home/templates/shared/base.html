@@ -37,7 +37,19 @@
                         {% block shortcuts %}
                         {% if user.is_authenticated %}
                         {% if user.is_staff %}
-
+                        <li><a href="{% url "" %}">Overview</a></li>
+                        <li><a href="{% url "" %}">Attendance</a></li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                Logistics <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a href="{% url "" %}">Team editor</a></li>
+                                <li><a href="{% url "" %}">Student tags</a></li>
+                                <li><a href="{% url "" %}">Teacher tags</a></li>
+                                <li><a href="{% url "" %}">Shirt sizes</a></li>
+                            </ul>
+                        </li>
                         {% else %}
                         <li><a href="{% url "coaches:index" %}">Coaching</a></li>
                         {% endif %}

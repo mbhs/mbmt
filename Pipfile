@@ -1,0 +1,19 @@
+[[source]]
+
+url = "https://pypi.python.org/simple"
+verify_ssl = true
+name = "pypi"
+
+
+[packages]
+
+django-crispy-forms = "*"
+django-picklefield = "==0.3.2"
+pyyaml = "==3.12"
+scipy = "*"
+pillow = "*"
+django = "==1.11"
+
+
+[dev-packages]
+
