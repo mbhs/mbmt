@@ -19,8 +19,8 @@
         <td>{{ chaperone.phone }}</td>
         <td>{{ chaperone.get_shirt_size_display }}</td>
         <td>
-            <a href="{% url "coaches:chaperones_edit" chaperone.pk %}">Edit</a> |
-            <a href="{% url "coaches:chaperones_remove" chaperone.pk %}">Delete</a>
+            <a href="{% url "coaches:chaperone_edit" chaperone.pk %}">Edit</a> |
+            <a href="{% url "coaches:chaperone_remove" chaperone.pk %}">Delete</a>
         </td>
     </tr>
     {% endfor %}
@@ -28,7 +28,7 @@
     <tr>
         <td colspan="5">
             {% if competition.can_edit_teams %}
-            <a href="{% url "coaches:chaperones_edit" %}">+ Add Chaperone</a>
+            <a href="{% url "coaches:chaperone_edit" %}">+ Add Chaperone</a>
             {% endif %}
         </td>
     </tr>
@@ -45,8 +45,8 @@
             {{ team.get_division_display|capfirst }}
             {% if competition.can_edit_teams %}
             <br>
-            <a href="{% url "coaches:teams_edit" team.id %}">Edit</a> |
-            <a href="{% url "coaches:teams_remove" team.id %}">Remove</a>
+            <a href="{% url "coaches:team_edit" team.id %}">Edit</a> |
+            <a href="{% url "coaches:team_remove" team.id %}">Remove</a>
             {% endif %}
         </td>
         <td>
@@ -75,7 +75,7 @@
     <tr>
         <td colspan="5">
             {% if competition.can_edit_teams %}
-            <a href="{% url "coaches:teams_edit" %}">+ Add Team</a>
+            <a href="{% url "coaches:team_edit" %}">+ Add Team</a>
             {% endif %}
         </td>
     </tr>

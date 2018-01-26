@@ -28,20 +28,19 @@ def columnize(objects, columns):
 # spreadsheet generator at some point.
 
 @staff_member_required
-def view_students(request):
+def index(request):
+    return render(request, "grading/index.html")
+
+
+@staff_member_required
+def students(request):
     return render(request, "grading/student/view.html", {
         "students": Student.current().order_by("name").all()})
 
 
 @staff_member_required
-def view_teams(request):
+def teams(request):
     return render(request, "grading/team/view.html", {
-        "teams": Team.current().order_by("number").all()})
-
-
-@staff_member_required
-def edit_teams(request):
-    return render(request, "grading/team/edit.html", {
         "teams": Team.current().order_by("number").all()})
 
 
@@ -307,7 +306,7 @@ def team_scoreboard(request):
 
 
 @staff_member_required
-def view_statistics(request):
+def statistics(request):
     """View statistics on the last competition."""
 
     current = Competition.current()
