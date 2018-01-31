@@ -154,15 +154,15 @@ def index(request, school=None, competition=None):
 
     return render(request, "coaches/index.html", {
         "school": school,
-        "chaperones": school.current_chaperones(),
-        "teams": school.current_teams(),
+        "chaperones": models.Chaperone.current(school=school),
+        "teams": models.Team.current(school=school),
         "competition": competition})
 
 
 @login_required
 @competition_required
 @school_required
-def edit_team(request, pk=None, competition=None, school=None):
+def team_edit(request, pk=None, competition=None, school=None):
     """Add a team to the list."""
 
     # Get existing data
@@ -217,7 +217,7 @@ def edit_team(request, pk=None, competition=None, school=None):
 @login_required
 @competition_required
 @school_required
-def remove_team(request, pk=None, competition=None, school=None):
+def team_remove(request, pk=None, competition=None, school=None):
     """Remove the team."""
 
     if pk:
@@ -230,7 +230,7 @@ def remove_team(request, pk=None, competition=None, school=None):
 @login_required
 @competition_required
 @school_required
-def edit_chaperone(request, pk=None, competition=None, school=None):
+def chaperone_edit(request, pk=None, competition=None, school=None):
     """Edit a chaperone."""
 
     if models.Chaperone.objects.filter(school=school, competition=competition).count() >= 3:
@@ -257,7 +257,7 @@ def edit_chaperone(request, pk=None, competition=None, school=None):
 @login_required
 @competition_required
 @school_required
-def remove_chaperone(request, pk=None, competition=None, school=None):
+def chaperone_remove(request, pk=None, competition=None, school=None):
     """Remove the team."""
 
     if pk:

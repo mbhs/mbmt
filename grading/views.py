@@ -1,4 +1,5 @@
 from django.contrib.auth.decorators import login_required, permission_required
+from django.contrib.admin.views.decorators import staff_member_required
 from django.shortcuts import render, redirect, HttpResponse
 from django.db.models import Q
 
@@ -8,41 +9,48 @@ import collections
 import itertools
 import traceback
 
-import home.models
-from . import models
+from home.models import User, Competition
+from coaches.models import Coaching, Student, Team, DIVISIONS_MAP, DIVISIONS, SUBJECTS
+from .models import Round, Question, Answer, ESTIMATION
 from . import grading
 
+
+# Some quick utility functions
 
 def columnize(objects, columns):
     """Return a list of rows of a column layout."""
 
-    size = math.ceil(len(objects) / columns)
+    size = int(math.ceil(len(objects) / columns))
     return list(itertools.zip_longest(*[objects[i:i+size] for i in range(0, len(objects), size)]))
 
 
-@permission_required("grading.can_grade")
-def view_students(request):
+# Dashboard utilities and logistics views. We should probably write a
+# spreadsheet generator at some point.
+
+@staff_member_required
+def index(request):
+    return render(request, "grading/index.html", {
+        "competition": Competition.current(),
+        "coaching": Coaching.current().all()})
+
+
+@staff_member_required
+def students(request):
     return render(request, "grading/student/view.html", {
-        "students": home.models.Student.current().order_by("name").all()})
+        "students": Student.current().order_by("name").all()})
 
 
-@permission_required("grading.can_grade")
-def view_teams(request):
+@staff_member_required
+def teams(request):
     return render(request, "grading/team/view.html", {
-        "teams": home.models.Team.current().order_by("number").all()})
+        "teams": Team.current().order_by("number").all()})
 
 
-@permission_required("grading.can_grade")
-def edit_teams(request):
-    return render(request, "grading/team/edit.html", {
-        "teams": home.models.Team.current().order_by("number").all()})
-
-
-@permission_required("grading.can_grade")
+@staff_member_required
 def score(request, grouping, any_id, round_id):
     """Scoring view."""
 
-    competition = models.Competition.current()
+    competition = Competition.current()
     round = competition.rounds.filter(ref=round_id).first()
 
     if grouping == "team":
@@ -55,13 +63,13 @@ def score_team(request, team_id, round):
     """Scoring view for a team."""
 
     # Iterate questions and get answers
-    team = home.models.Team.objects.filter(id=team_id).first()
+    team = Team.objects.filter(id=team_id).first()
     answers = []
     question_answer = []
     for question in round.questions.order_by("number").all():
-        answer = models.Answer.objects.filter(team=team, question=question).first()
+        answer = Answer.objects.filter(team=team, question=question).first()
         if not answer:
-            answer = models.Answer(team=team, question=question)
+            answer = Answer(team=team, question=question)
             answer.save()
         answers.append(answer)
         question_answer.append((question, answer))
@@ -84,13 +92,13 @@ def score_individual(request, student_id, round):
     """Scoring view for an individual."""
 
     # Iterate questions and get answers
-    student = home.models.Student.objects.filter(id=student_id).first()
+    student = Student.objects.filter(id=student_id).first()
     answers = []
     question_answer = []
     for question in round.questions.order_by("number").all():
-        answer = models.Answer.objects.filter(student=student, question=question).first()
+        answer = Answer.objects.filter(student=student, question=question).first()
         if not answer:
-            answer = models.Answer(student=student, question=question)
+            answer = Answer(student=student, question=question)
             answer.save()
         answers.append(answer)
         question_answer.append((question, answer))
@@ -122,11 +130,11 @@ def update_answers(request, answers):
 
 
 @login_required
-@permission_required("grading.can_grade")
+@staff_member_required
 def shirts(request):
     """Shirt sizes view."""
 
-    teams = home.models.Team.current()
+    teams = Team.current()
     teachers = {}
     totals = collections.Counter()
     for team in teams:
@@ -144,7 +152,7 @@ def shirts(request):
 
 
 @login_required
-@permission_required("grading.can_grade")
+@staff_member_required
 def attendance(request):
     """Display the attendance page."""
 
@@ -154,7 +162,7 @@ def attendance(request):
         return redirect("attendance")
 
     # Format students into nice columns
-    students = home.models.Student.current().all()
+    students = Student.current().all()
     count = request.GET.get("columns", 4)
     columns = columnize(students, count)
     return render(request, "grading/attendance.html", {"students": columns})
@@ -173,7 +181,7 @@ def attendance_post(request):
 
     # Iterate post data for numeric entires
     for iid in filter(lambda x: x.isnumeric(), request.POST):
-        student = home.models.Student.objects.filter(id=iid).first()
+        student = Student.objects.filter(id=iid).first()
 
         # Check if student, check present or absent
         if student:
@@ -187,18 +195,18 @@ def attendance_post(request):
                     student.save()
 
 
-@permission_required("grading.can_grade")
+@staff_member_required
 def student_name_tags(request):
     """Display a table from which student name tags can be generated."""
 
-    return render(request, "grading/tags/students.html", {"students": home.models.Student.current()})
+    return render(request, "grading/tags/students.html", {"students": Student.current()})
 
 
-@permission_required("grading.can_grade")
+@staff_member_required
 def teacher_name_tags(request):
     """Display a table from which student name tags can be generated."""
 
-    users = home.models.User.objects.filter(
+    users = User.objects.filter(
         is_staff=False, is_superuser=False, school__isnull=False).order_by("school__name")
     users = list(filter(lambda user: user.school and user.school.teams.count(), users))
     return render(request, "grading/tags/teacher.html", {"teachers": users})
@@ -213,16 +221,16 @@ def live(request, round):
         return redirect("student_view")
 
 
-@permission_required("grading.can_grade")
+@staff_member_required
 def live_update(request, round):
     """Get the live scoreboard update."""
 
     if round == "guts":
-        grader = models.Competition.current().grader
+        grader = Competition.current().grader
         scores = grader.guts_live_round_scores(use_cache_before=20)
         named_scores = dict()
         for division in scores:
-            division_name = home.models.DIVISIONS_MAP[division]
+            division_name = DIVISIONS_MAP[division]
             named_scores[division_name] = {}
             for team in scores[division]:
                 named_scores[division_name][team.name] = scores[division][team]
@@ -235,7 +243,7 @@ def live_update(request, round):
 def sponsor_scoreboard(request):
     """Get the sponsor scoreboard."""
 
-    grader = models.Competition.current().grader
+    grader = Competition.current().grader
     subject_scores = grader.cache_get("subject_scores")
     grader.calculate_team_scores(use_cache=True)
     if subject_scores is None:
@@ -255,11 +263,11 @@ def sponsor_scoreboard(request):
         "team_scores": team_scores})
 
 
-@permission_required("grading.can_grade")
+@staff_member_required
 def student_scoreboard(request):
     """Do final scoreboard calculations."""
 
-    grader = models.Competition.current().grader
+    grader = Competition.current().grader
     if request.method == "POST" and "recalculate" in request.POST:
         grader.calculate_individual_scores(use_cache=False)
         return redirect("student_scoreboard")
@@ -277,11 +285,11 @@ def student_scoreboard(request):
     return render(request, "grading/student/scoreboard.html", context)
 
 
-@permission_required("grading.can_grade")
+@staff_member_required
 def team_scoreboard(request):
     """Show the team scoreboard view."""
 
-    grader = models.Competition.current().grader
+    grader = Competition.current().grader
     if request.method == "POST" and "recalculate" in request.POST:
         grader.calculate_team_scores(use_cache=False)
         return redirect("team_scoreboard")
@@ -299,18 +307,18 @@ def team_scoreboard(request):
     return render(request, "grading/team/scoreboard.html", context)
 
 
-@permission_required("grading._can_grade")
-def view_statistics(request):
+@staff_member_required
+def statistics(request):
     """View statistics on the last competition."""
 
-    current = models.Competition.current()
+    current = Competition.current()
     division_stats = []
-    for division, division_name in home.models.DIVISIONS:
+    for division, division_name in DIVISIONS:
         stats = []
         subject_stats = []
-        for subject, subject_name in home.models.SUBJECTS:
+        for subject, subject_name in SUBJECTS:
             question_stats_dict = {}
-            for answer in models.Answer.objects.filter(
+            for answer in Answer.objects.filter(
                     Q(student__team__division=division) &
                     Q(question__round__competition=current) &
                     (Q(question__round__ref="subject1") & Q(student__subject1=subject) |
@@ -328,10 +336,10 @@ def view_statistics(request):
         for round_ref in ["team", "guts"]:
             question_stats_dict = {}
             estimation_guesses = {}
-            for answer in models.Answer.objects.filter(
+            for answer in Answer.objects.filter(
                     Q(team__division=division) &
                     Q(question__round__competition=current) & Q(question__round__ref=round_ref)):
-                if answer.question.type == models.ESTIMATION:
+                if answer.question.type == ESTIMATION:
                     if answer.question.number not in estimation_guesses:
                         estimation_guesses[answer.question.number] = []
                     estimation_guesses[answer.question.number].append(answer.value)

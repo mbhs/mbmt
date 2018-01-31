@@ -13,3 +13,6 @@ migrations/
 
 # Logging
 mbmt.log*
+
+# Deploy data
+deployed/

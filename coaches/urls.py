@@ -13,10 +13,10 @@ urlpatterns = [
     url(r"^inactive/$", views.inactive, name="inactive"),
 
     # Team editing
-    url(r"^teams/edit/(\d+)?$", views.edit_team, name="teams_edit"),
-    url(r"^teams/remove/(\d+)$", views.remove_team, name="teams_remove"),
+    url(r"^teams/edit/(\d+)?$", views.team_edit, name="team_edit"),
+    url(r"^teams/remove/(\d+)$", views.team_remove, name="team_remove"),
 
-    url(r"^chaperones/edit/(\d+)?", views.edit_chaperone, name="chaperones_edit"),
-    url(r"^chaperones/remove/(\d+)?", views.remove_chaperone, name="chaperones_remove")
+    url(r"^chaperones/edit/(\d+)?", views.chaperone_edit, name="chaperone_edit"),
+    url(r"^chaperones/remove/(\d+)?", views.chaperone_remove, name="chaperone_remove")
 
 ]
