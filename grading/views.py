@@ -10,7 +10,7 @@ import itertools
 import traceback
 
 from home.models import User, Competition
-from coaches.models import Student, Team, DIVISIONS_MAP, DIVISIONS, SUBJECTS
+from coaches.models import Coaching, Student, Team, DIVISIONS_MAP, DIVISIONS, SUBJECTS
 from .models import Round, Question, Answer, ESTIMATION
 from . import grading
 
@@ -29,7 +29,9 @@ def columnize(objects, columns):
 
 @staff_member_required
 def index(request):
-    return render(request, "grading/index.html")
+    return render(request, "grading/index.html", {
+        "competition": Competition.current(),
+        "coaching": Coaching.current().all()})
 
 
 @staff_member_required

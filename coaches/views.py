@@ -154,8 +154,8 @@ def index(request, school=None, competition=None):
 
     return render(request, "coaches/index.html", {
         "school": school,
-        "chaperones": school.current_chaperones(),
-        "teams": school.current_teams(),
+        "chaperones": models.Chaperone.current(school=school),
+        "teams": models.Team.current(school=school),
         "competition": competition})
 
 

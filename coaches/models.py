@@ -40,23 +40,29 @@ class School(models.Model):
 
         return "School[{}]".format(self.name)
 
-    def current_teams(self):
-        """Return the current list of teams for the school."""
-
-        return Team.objects.filter(competition__active=True, school=self).all()
-
-    def current_chaperones(self):
-        """Get the current list of chaperons."""
-
-        return Chaperone.objects.filter(competition__active=True, school=self).all()
-
 
 class Coaching(models.Model):
     """Model to indicate which competition the coach is registered for."""
 
-    coach = models.ForeignKey(User, on_delete=models.CASCADE, related_name="+")
-    school = models.ForeignKey(School, on_delete=models.CASCADE, related_name="+")
+    coach = models.ForeignKey(User, on_delete=models.CASCADE, related_name="coaching")
+    school = models.ForeignKey(School, on_delete=models.CASCADE, related_name="coaching")
     competition = models.ForeignKey(Competition, on_delete=models.CASCADE, related_name="competitions")
+
+    def teams(self):
+        """Return a list of teams."""
+
+        return Team.objects.filter(competition=self.competition, school=self.school)
+
+    def chaperones(self):
+        """Return a list of chaperones."""
+
+        return Chaperone.objects.filter(competition=self.competition, school=self.school)
+
+    @staticmethod
+    def current(**kwargs):
+        """Get the current list of coaches."""
+
+        return Coaching.objects.filter(competition__active=True)
 
 
 class Team(models.Model):
@@ -74,10 +80,10 @@ class Team(models.Model):
         return "Team[{}]".format(self.name)
 
     @staticmethod
-    def current():
+    def current(**kwargs):
         """Get the teams for the current competition."""
 
-        return Team.objects.filter(competition__active=True)
+        return Team.objects.filter(competition__active=True, **kwargs)
 
     def get_students_display(self):
         """Get the comma separated list of students."""
@@ -110,17 +116,16 @@ class Student(models.Model):
 
         return "Student[{}]".format(self.full_name)
 
-    @property
-    def full_name(self):
+    def get_full_name(self):
         """Get the user's full name."""
 
         return self.first_name + " " + self.last_name
 
     @staticmethod
-    def current():
+    def current(**kwargs):
         """Get the students in the current competition."""
 
-        return Student.objects.filter(team__competition__active=True)
+        return Student.objects.filter(team__competition__active=True, **kwargs)
 
 
 class Chaperone(models.Model):
@@ -137,4 +142,12 @@ class Chaperone(models.Model):
     shirt_size = models.IntegerField(choices=SHIRT_SIZES)
 
     def get_full_name(self):
+        """Get the user's full name."""
+
         return self.first_name + " " + self.last_name
+
+    @staticmethod
+    def current(**kwargs):
+        """Get the students in the current competition."""
+
+        return Chaperone.objects.filter(team__competition__active=True, **kwargs)
