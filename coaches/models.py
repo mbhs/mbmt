@@ -150,4 +150,4 @@ class Chaperone(models.Model):
     def current(**kwargs):
         """Get the students in the current competition."""
 
-        return Chaperone.objects.filter(team__competition__active=True, **kwargs)
+        return Chaperone.objects.filter(competition__active=True, **kwargs)
