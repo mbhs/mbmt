@@ -322,6 +322,10 @@ table.teams .division { width: 130px; }
 table.attendance { margin-top: 1.5em; }
 table.attendance .attending { width: 1px; }
 
+span.newline {
+  display: block;
+}
+
 .save { width: 100%; }
 
 .grading .round {

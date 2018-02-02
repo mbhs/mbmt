@@ -6,24 +6,33 @@
 
 <h2>Schools</h2>
 <table id="chaperones" class="table">
-    <tr><th>School</th><th>Chaperone</th><th>Teams</th><th>Chaperones</th></tr>
+    <tr><th>School</th><th>Coach</th><th>Teams</th><th>Chaperones</th></tr>
     {% for map in coaching %}
+    {% with map.teams as teams %}
+    {% with map.chaperones as chaperones %}
     <tr>
-        <td>{{ map.school.name|default_if_none:"None selected" }}</td>
-        <td>{{ map.coach.get_full_name }}</td>
         <td>
-        {% with map.teams as teams %}
-        {{ teams|length }} total
+            {{ map.school.name|default_if_none:"None selected" }}<br>
+            {{ teams|length }} teams <br>
+            {{ chaperones|length }} chaperones
+        </td>
+        <td>
+            {{ map.coach.get_full_name }}<br>
+            <a href="mailto:{{ map.coach.email }}">{{ map.coach.email }}</a>
+        </td>
+        <td>
         {% for team in teams %}
-            <br>{{ team.name }}
+            <span class="newline">{{ team.name }}</span>
+        {% empty %}
+            No teams!
         {% endfor %}
         {% endwith %}
         </td>
         <td>
-        {% with map.chaperones as chaperones %}
-        {{ chaperones|length }} total
         {% for chaperone in chaperones %}
-            <br>{{ chaperone.name }}
+            <span class="newline">{{ chaperone.name }}</span>
+        {% empty %}
+            No chaperones!
         {% endfor %}
         {% endwith %}
         </td>
