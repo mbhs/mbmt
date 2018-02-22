@@ -62,7 +62,7 @@ class Coaching(models.Model):
     def current(**kwargs):
         """Get the current list of coaches."""
 
-        return Coaching.objects.filter(competition__active=True)
+        return Coaching.objects.filter(competition__active=True, **kwargs)
 
 
 class Team(models.Model):
@@ -150,4 +150,4 @@ class Chaperone(models.Model):
     def current(**kwargs):
         """Get the students in the current competition."""
 
-        return Chaperone.objects.filter(team__competition__active=True, **kwargs)
+        return Chaperone.objects.filter(competition__active=True, **kwargs)

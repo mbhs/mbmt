@@ -12,12 +12,17 @@ class SchoolAdmin(admin.ModelAdmin):
     def team_count(self, obj):
         """Get the team names of the school."""
 
-        return models.Team.objects.filter(school=obj).count()
+        return models.Team.current(school=obj).count()
 
     def sponsor_name(self, obj):
         """Get the sponsor of the school."""
 
-        return "{} {}".format(obj.user.first_name, obj.user.last_name)
+        try:
+            coaching = models.Coaching.current(school=obj).get()
+            coach = coaching.coach
+            return "{} {}".format(coach.first_name, coach.last_name)
+        except models.Coaching.DoesNotExist:
+            return ""
 
 
 class TeamAdmin(admin.ModelAdmin):

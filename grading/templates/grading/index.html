@@ -14,17 +14,11 @@
         <td>
         {% with map.teams as teams %}
         {{ teams|length }} total
-        {% for team in teams %}
-            <br>{{ team.name }}
-        {% endfor %}
         {% endwith %}
         </td>
         <td>
         {% with map.chaperones as chaperones %}
         {{ chaperones|length }} total
-        {% for chaperone in chaperones %}
-            <br>{{ chaperone.name }}
-        {% endfor %}
         {% endwith %}
         </td>
     </tr>
