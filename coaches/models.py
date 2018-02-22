@@ -114,7 +114,7 @@ class Student(models.Model):
     def __str__(self):
         """Represent the student as a string."""
 
-        return "Student[{}]".format(self.full_name)
+        return "Student[{}]".format(self.get_full_name())
 
     def get_full_name(self):
         """Get the user's full name."""

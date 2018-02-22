@@ -39,7 +39,12 @@ class TeamAdmin(admin.ModelAdmin):
     def sponsor_name(self, obj):
         """Get the sponsor name of the school."""
 
-        return "{} {}".format(obj.school.user.first_name, obj.school.user.last_name)
+        try:
+            coaching = models.Coaching.current(school=obj.school).get()
+            coach = coaching.coach
+            return "{} {}".format(coach.first_name, coach.last_name)
+        except models.Coaching.DoesNotExist:
+            return ""
 
 
 admin.site.register(models.School, SchoolAdmin)
