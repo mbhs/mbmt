@@ -27,6 +27,7 @@ SHIRT_SIZES = (
     (2, "Adult Medium"),
     (3, "Adult Large"),
     (4, "Adult Extra Large"))
+SHIRT_SIZES_MAP = dict(SHIRT_SIZES)
 
 
 class School(models.Model):
@@ -47,6 +48,8 @@ class Coaching(models.Model):
     coach = models.ForeignKey(User, on_delete=models.CASCADE, related_name="coaching")
     school = models.ForeignKey(School, on_delete=models.CASCADE, related_name="coaching")
     competition = models.ForeignKey(Competition, on_delete=models.CASCADE, related_name="competitions")
+
+    shirt_size = models.IntegerField(choices=SHIRT_SIZES)
 
     def teams(self):
         """Return a list of teams."""

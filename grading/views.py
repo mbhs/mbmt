@@ -10,7 +10,7 @@ import itertools
 import traceback
 
 from home.models import User, Competition
-from coaches.models import Coaching, Student, Team, DIVISIONS_MAP, DIVISIONS, SUBJECTS
+from coaches.models import Coaching, Student, Team, Chaperone, DIVISIONS_MAP, DIVISIONS, SUBJECTS, SHIRT_SIZES_MAP
 from .models import Round, Question, Answer, ESTIMATION
 from . import grading
 
@@ -131,24 +131,17 @@ def update_answers(request, answers):
 
 @login_required
 @staff_member_required
-def shirts(request):
+def shirt_sizes(request):
     """Shirt sizes view."""
 
-    teams = Team.current()
-    teachers = {}
     totals = collections.Counter()
-    for team in teams:
-        if team.school.user not in teachers:
-            teachers[team.school.user] = [team.school.user, [], collections.Counter()]
-        teachers[team.school.user][1].extend(list(team.students.all()))
-        for student in team.students.all():
-            teachers[team.school.user][2][student.get_size_display()] += 1
-            totals[student.get_size_display()] += 1
-    for teacher in teachers:
-        teachers[teacher][1].sort(key=lambda x: x.name)
-    return render(request, "grading/shirts.html", {
-        "teachers": list(teachers.values()),
-        "totals": totals})
+    for size in Student.current().values_list("shirt_size", flat=True):
+        totals[SHIRT_SIZES_MAP[size]] += 1
+    for size in Coaching.current().values_list("shirt_size", flat=True):
+        totals[SHIRT_SIZES_MAP[size]] += 1
+    for size in Chaperone.current().values_list("shirt_size", flat=True):
+        totals[SHIRT_SIZES_MAP[size]] += 1
+    return render(request, "grading/shirts.html", {"totals": totals})
 
 
 @login_required

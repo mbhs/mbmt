@@ -5,7 +5,7 @@ from . import views
 
 urlpatterns = [
 
-    url(r"^", views.index, name="index"),
+    url(r"^$", views.index, name="index"),
 
     # Grading views
     url(r"^grade/students/$", views.students, name="students"),
@@ -15,7 +15,7 @@ urlpatterns = [
 
     # Logistics
     url(r"^attendance/$", views.attendance, name="attendance"),
-    url(r"^shirts/$", views.shirts, name="shirt_sizes"),
+    url(r"^shirts/$", views.shirt_sizes, name="shirt_sizes"),
     url(r"^tags/students/$", views.student_name_tags, name="tags_students"),
     url(r"^tags/teachers/$", views.teacher_name_tags, name="tags_teachers"),
 
