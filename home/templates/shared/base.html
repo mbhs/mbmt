@@ -69,6 +69,9 @@
                                 <li><a href="{% url "grading:shirt_sizes" %}">Shirt sizes</a></li>
                             </ul>
                         </li>
+                        {% if user.is_superuser %}
+                        <li><a href="{% url "admin:index" %}">Admin</a></li>
+                        {% endif %}
                         {% else %}
                         <li><a href="{% url "coaches:index" %}">Coaching</a></li>
                         {% endif %}

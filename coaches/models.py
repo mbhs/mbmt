@@ -23,6 +23,7 @@ GRADES = (
     (8, "8th"))
 
 SHIRT_SIZES = (
+    (0, "Default"),
     (1, "Adult Small"),
     (2, "Adult Medium"),
     (3, "Adult Large"),
@@ -49,7 +50,15 @@ class Coaching(models.Model):
     school = models.ForeignKey(School, on_delete=models.CASCADE, related_name="coaching")
     competition = models.ForeignKey(Competition, on_delete=models.CASCADE, related_name="competitions")
 
-    shirt_size = models.IntegerField(choices=SHIRT_SIZES)
+    shirt_size = models.IntegerField(choices=SHIRT_SIZES, default=0)
+
+    def __str__(self):
+        return "{} coaching for {}".format(self.coach.get_full_name(), self.school.name)
+
+    def students(self):
+        """Return a list of students."""
+
+        return Student.objects.filter(team__competition=self.competition, team__school=self.school)
 
     def teams(self):
         """Return a list of teams."""

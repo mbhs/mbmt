@@ -31,6 +31,9 @@ def columnize(objects, columns):
 def index(request):
     return render(request, "grading/index.html", {
         "competition": Competition.current(),
+        "students": Student.current().count(),
+        "teams": Team.current().count(),
+        "chaperones": Chaperone.current().count(),
         "coaching": Coaching.current().all()})
 
 
