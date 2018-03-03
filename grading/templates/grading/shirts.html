@@ -1,10 +1,40 @@
-{% load fancy_dict %}
+{% extends "shared/base.html" %}
+{% load shirt_size %}
 
-<html>
-    <head>
-        <title>Name tags</title>
-    </head>
-    <body>
-        {{ totals | fancy_dict }}
-    </body>
-</html>
+{% block content %}
+
+<h1>Shirt Sizes</h1>
+
+<h2>Totals</h2>
+<table id="shirts" class="table table-striped">
+    <tr>
+        {% for size in totals.keys %}
+        <th>{{ size|shirt_size }}</th>
+        {% endfor %}
+    </tr>
+    <tr>
+        {% for count in totals.values %}
+        <td>{{ count }}</td>
+        {% endfor %}
+    </tr>
+</table>
+
+<h2>Lookup</h2>
+<table id="people" class="table table-striped">
+    <tr>
+        <th>Name</th>
+        <th>Role</th>
+        <th>Size</th>
+    </tr>
+    {% for name, group in groups %}
+    {% for first_name, last_name, size in group %}
+    <tr>
+        <td>{{ first_name }} {{ last_name }}</td>
+        <td>{{ name }}</td>
+        <td>{{ size|shirt_size }}</td>
+    </tr>
+    {% endfor %}
+    {% endfor %}
+</table>
+
+{% endblock %}

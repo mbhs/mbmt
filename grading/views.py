@@ -139,12 +139,17 @@ def shirt_sizes(request):
 
     totals = collections.Counter()
     for size in Student.current().values_list("shirt_size", flat=True):
-        totals[SHIRT_SIZES_MAP[size]] += 1
+        totals[size] += 1
     for size in Coaching.current().values_list("shirt_size", flat=True):
-        totals[SHIRT_SIZES_MAP[size]] += 1
+        totals[size] += 1
     for size in Chaperone.current().values_list("shirt_size", flat=True):
-        totals[SHIRT_SIZES_MAP[size]] += 1
-    return render(request, "grading/shirts.html", {"totals": totals})
+        totals[size] += 1
+    return render(request, "grading/shirts.html", {
+        "totals": dict(totals),
+        "groups": [
+            ("Coach", Coaching.current().values_list("coach__first_name", "coach__last_name", "shirt_size")),
+            ("Chaperone", Chaperone.current().values_list("first_name", "last_name", "shirt_size")),
+            ("Student", Student.current().values_list("first_name", "last_name", "shirt_size"))]})
 
 
 @login_required
