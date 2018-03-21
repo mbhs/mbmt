@@ -49,4 +49,5 @@ class TeamAdmin(admin.ModelAdmin):
 
 admin.site.register(models.School, SchoolAdmin)
 admin.site.register(models.Team, TeamAdmin)
+admin.site.register(models.Chaperone)
 admin.site.register(models.Student)
