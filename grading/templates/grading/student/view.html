@@ -37,14 +37,14 @@
                 {% autoescape off %}
                 {{ student|grading_status:"subject1" }}
                 {% endautoescape %}
-                ({{ student.subject1|upper }})
+                ({{ student.subject1|upper }}) <br>
                 <a href="{% url 'grading:score' grouping="individual" any_id=student.id round_id='subject1' %}">edit</a>
             </td>
             <td class="subject">
                 {% autoescape off %}
                 {{ student|grading_status:"subject2" }}
                 {% endautoescape %}
-                ({{ student.subject2|upper }})
+                ({{ student.subject2|upper }}) <br>
                 <a href="{% url 'grading:score' grouping="individual" any_id=student.id round_id='subject2' %}">edit</a>
             </td>
         </tr>
