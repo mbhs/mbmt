@@ -1,4 +1,4 @@
-{% extends "home/../../../../home/templates/shared/base.html" %}
+{% extends "shared/base.html" %}
 {% load staticfiles %}
 {% load grading_status %}
 {% load attending %}
@@ -10,7 +10,7 @@
 {% block content %}
 
 <h1 class="grader-title">Students ({{ students.count }})</h1>
-<p class="grader-switcher">Go to <a href="{% url 'team_view' %}">teams</a> &rarr;</p>
+<p class="grader-switcher">Go to <a href="{% url 'grading:teams' %}">teams</a> &rarr;</p>
 
 <div class="form-group">
     <input class="form-control" id="search" name="search" placeholder="search" oninput="update();">
@@ -20,7 +20,6 @@
     <tr>
         <th class="number">#</th>
         <th class="name">Name</th>
-        <th class="information">Info</th>
         <th class="division">Division</th>
         <th class="subject">Subject 1</th>
         <th class="subject">Subject 2</th>
@@ -29,10 +28,9 @@
     {% for student in students %}
         <tr>
             <td class="number">{{ forloop.counter }}</td>
-            <td class="name">{{ student.name }} {% autoescape off %}{{ student|attending }}{% endautoescape %}</td>
-            <td class="information">
-                <span class="team-name ellipsis">{{ student.team.name }}</span>
-                <span class="italics">{{ student.team.school.name }}</span>
+            <td class="name">
+                {{ student.get_full_name }} {% autoescape off %}{{ student|attending }}{% endautoescape %}<br>
+                {{ student.team.school.name }}
             </td>
             <td class="division">{{ student.team.get_division_display|capfirst }}</td>
             <td class="subject">
@@ -40,14 +38,14 @@
                 {{ student|grading_status:"subject1" }}
                 {% endautoescape %}
                 ({{ student.subject1|upper }}) <br>
-                <a href="{% url 'score' grouping="individual" id=student.id round='subject1' %}">edit</a>
+                <a href="{% url 'grading:score' grouping="individual" any_id=student.id round_id='subject1' %}">edit</a>
             </td>
             <td class="subject">
                 {% autoescape off %}
                 {{ student|grading_status:"subject2" }}
                 {% endautoescape %}
                 ({{ student.subject2|upper }}) <br>
-                <a href="{% url 'score' grouping="individual" id=student.id round='subject2' %}">edit</a>
+                <a href="{% url 'grading:score' grouping="individual" any_id=student.id round_id='subject2' %}">edit</a>
             </td>
         </tr>
     {% endfor %}

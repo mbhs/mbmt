@@ -50,5 +50,6 @@ class AnswerAdmin(admin.ModelAdmin):
             answer.save()
 
 
+admin.site.register(models.Round)
 admin.site.register(models.Question, QuestionAdmin)
 admin.site.register(models.Answer, AnswerAdmin)

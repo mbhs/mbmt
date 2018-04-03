@@ -1,5 +1,8 @@
-from django.contrib.auth.decorators import login_required, permission_required
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.admin.views.decorators import staff_member_required
+from django.views import View
+from django.views.generic import ListView
 from django.shortcuts import render, redirect, HttpResponse
 from django.db.models import Q
 
@@ -24,6 +27,19 @@ def columnize(objects, columns):
     return list(itertools.zip_longest(*[objects[i:i+size] for i in range(0, len(objects), size)]))
 
 
+# Staff check
+
+class StaffMemberRequired(View):
+    """Mixin that verifies a requesting user is a staff member."""
+
+    def dispatch(self, request, *args, **kwargs):
+        """Dispatch a request."""
+
+        if not request.user.is_staff:
+            return redirect("coaches:index")
+        return super().dispatch(request, *args, **kwargs)
+
+
 # Dashboard utilities and logistics views. We should probably write a
 # spreadsheet generator at some point.
 
@@ -37,10 +53,12 @@ def index(request):
         "coaching": Coaching.current().all()})
 
 
-@staff_member_required
-def students(request):
-    return render(request, "grading/student/view.html", {
-        "students": Student.current().order_by("name").all()})
+class StudentsView(ListView, StaffMemberRequired):
+    """Get the list of all students for grading."""
+
+    template_name = "grading/student/view.html"
+    queryset = Student.current().order_by("last_name").all()
+    context_object_name = "students"
 
 
 @staff_member_required
@@ -207,10 +225,10 @@ def student_name_tags(request):
 def teacher_name_tags(request):
     """Display a table from which student name tags can be generated."""
 
-    users = User.objects.filter(
-        is_staff=False, is_superuser=False, school__isnull=False).order_by("school__name")
-    users = list(filter(lambda user: user.school and user.school.teams.count(), users))
-    return render(request, "grading/tags/teacher.html", {"teachers": users})
+    # users = User.objects.filter(
+    #     is_staff=False, is_superuser=False, school__isnull=False).order_by("school__name")
+    # users = list(filter(lambda user: user.school and user.school.teams.count(), users))
+    return render(request, "grading/tags/teacher.html", {"coachings": Coaching.current()})
 
 
 def live(request, round):
