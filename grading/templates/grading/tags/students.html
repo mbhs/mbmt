@@ -14,7 +14,7 @@
             </tr>
             {% for student in students %}
             <tr>
-                <td>{{ student.name }}</td>
+                <td>{{ student.get_full_name }}</td>
                 <td>{{ student.team.name }}</td>
                 <td>{{ student.team.school.name }}</td>
                 <td>{{ student.team.get_division_display }}</td>

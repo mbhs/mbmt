@@ -9,14 +9,12 @@
                 <th>Name</th>
                 <th>Email</th>
                 <th>School</th>
-                <th>Teams</th>
             </tr>
-            {% for teacher in teachers %}
+            {% for coaching in coachings %}
             <tr>
-                <td>{{ teacher.first_name }} {{ teacher.last_name }}</td>
-                <td>{{ teacher.email }}</td>
-                <td>{{ teacher.school.name }}</td>
-                <td>{{ teacher.school.teams.count }}</td>
+                <td>{{ coaching.coach.get_full_name }}</td>
+                <td>{{ coaching.coach.email }}</td>
+                <td>{{ coaching.school.name }}</td>
             </tr>
             {% endfor %}
         </table>

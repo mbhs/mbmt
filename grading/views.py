@@ -225,10 +225,10 @@ def student_name_tags(request):
 def teacher_name_tags(request):
     """Display a table from which student name tags can be generated."""
 
-    users = User.objects.filter(
-        is_staff=False, is_superuser=False, school__isnull=False).order_by("school__name")
-    users = list(filter(lambda user: user.school and user.school.teams.count(), users))
-    return render(request, "grading/tags/teacher.html", {"teachers": users})
+    # users = User.objects.filter(
+    #     is_staff=False, is_superuser=False, school__isnull=False).order_by("school__name")
+    # users = list(filter(lambda user: user.school and user.school.teams.count(), users))
+    return render(request, "grading/tags/teacher.html", {"coachings": Coaching.current()})
 
 
 def live(request, round):
