@@ -1,0 +1,24 @@
+<html>
+    <head>
+        <title>Name tags</title>
+        <link rel="stylesheet" type="text/css" href="/static/css/master.css">
+    </head>
+    <body>
+        <table id="tags">
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>School</th>
+                <th>Phone</th>
+            </tr>
+            {% for chaperone in chaperones %}
+            <tr>
+                <td>{{ chaperone.get_full_name }}</td>
+                <td>{{ chaperone.email }}</td>
+                <td>{{ chaperone.school.name }}</td>
+                <td>{{ chaperone.phone }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </body>
+</html>

@@ -18,6 +18,7 @@ urlpatterns = [
     url(r"^shirts/$", views.shirt_sizes, name="shirt_sizes"),
     url(r"^tags/students/$", views.student_name_tags, name="tags_students"),
     url(r"^tags/teachers/$", views.teacher_name_tags, name="tags_teachers"),
+    url(r"^tags/chaperones/$", views.chaperone_name_tags, name="tags_chaperones"),
 
     # Scoring
     url(r"^scoreboard/students/$", views.student_scoreboard, name="scoreboard_students"),
