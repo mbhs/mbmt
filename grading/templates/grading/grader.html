@@ -1,13 +1,13 @@
-{% extends "home/../../../home/templates/shared/base.html" %}
+{% extends "shared/base.html" %}
 {% load staticfiles %}
 
 {% block content %}
 <script>
     function back() {
         {% if mode == "student" %}
-        window.location.href = "{% url 'student_view' %}";
+        window.location.href = "{% url 'grading:students' %}";
         {% elif mode == "team" %}
-        window.location.href = "{% url 'team_view' %}";
+        window.location.href = "{% url 'grading:teams' %}";
         {% endif %}
     }
 </script>

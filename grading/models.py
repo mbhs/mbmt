@@ -3,6 +3,7 @@ from django.db import models
 from home.models import Competition
 from coaches.models import Team, Student
 
+
 _ROUND_GROUPINGS = (
     (0, "individual"),
     (1, "team"))

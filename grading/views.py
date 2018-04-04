@@ -63,8 +63,7 @@ class StudentsView(ListView, StaffMemberRequired):
 
 @staff_member_required
 def teams(request):
-    return render(request, "grading/team/view.html", {
-        "teams": Team.current().order_by("number").all()})
+    return render(request, "grading/team/view.html", {"teams": Team.current().order_by("number").all()})
 
 
 @staff_member_required
@@ -131,7 +130,7 @@ def score_individual(request, student_id, round):
 
     # Render the grading view
     return render(request, "grading/grader.html", {
-        "name": student.name,
+        "name": student.get_full_name(),
         "division": student.team.get_division_display,
         "round": round,
         "question_answer": question_answer,
@@ -187,6 +186,8 @@ def attendance(request):
     return render(request, "grading/attendance.html", {"students": columns})
 
 
+@login_required
+@staff_member_required
 def attendance_post(request):
     """Handle post data from the attendance.
 

@@ -9,7 +9,7 @@
 {% block content %}
 
 <h1 class="grader-title">Teams ({{ teams.count }})</h1>
-<p class="grader-switcher">Go to <a href="{% url 'student_view' %}">students</a> &rarr;</p>
+<p class="grader-switcher">Go to <a href="{% url 'grading:students' %}">students</a> &rarr;</p>
 
 <div class="form-group">
     <input class="form-control" id="search" name="search" placeholder="search" oninput="update();">
@@ -34,13 +34,13 @@
                 {% autoescape off %}
                 {{ team|grading_status:"team" }}
                 {% endautoescape %}<br>
-                <a href="{% url "score" grouping="team" id=team.id round="team" %}">edit</a>
+                <a href="{% url "grading:score" grouping="team" any_id=team.id round_id="team" %}">edit</a>
             </td>
             <td class="guts">
                 {% autoescape off %}
                 {{ team|grading_status:"guts" }}
                 {% endautoescape %}<br>
-                <a href="{% url "score" grouping="team" id=team.id round="guts" %}">edit</a>
+                <a href="{% url "grading:score" grouping="team" any_id=team.id round_id="guts" %}">edit</a>
             </td>
         </tr>
     {% endfor %}

@@ -1,4 +1,4 @@
-{% extends "home/../../../../home/templates/shared/base.html" %}
+{% extends "shared/base.html" %}
 {% load staticfiles %}
 
 {% block extrahead %}
@@ -13,7 +13,7 @@
 
 <h1 class="scoreboard-header">
     Team Scores
-    <form action="{% url 'team_scoreboard' %}" method="POST" class="recalculate right">
+    <form action="{% url 'grading:teams' %}" method="POST" class="recalculate right">
         {% csrf_token %}
         <input type="hidden" name="recalculate">
         <button type="submit" class="btn btn-primary save padded">Recalculate</button>
