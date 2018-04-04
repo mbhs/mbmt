@@ -279,7 +279,8 @@ def prepare_subject_scores(scores):
     return divisions
 
 
-def prepare_composite_team_scores(guts_scores, guts_z, team_scores, team_z, team_individual_scores, overall_scores):
+def prepare_composite_team_scores(guts_scores, guts_z, team_scores, team_z,
+                                  team_individual_scores, overall_scores):
     """Prepare team scores for scoreboard."""
 
     divisions = []

@@ -27,9 +27,10 @@
         <th>Size</th>
     </tr>
     {% for name, group in groups %}
-    {% for first_name, last_name, size in group %}
+    {% for first_name, last_name, school, size in group %}
     <tr>
         <td>{{ first_name }} {{ last_name }}</td>
+        <td>{{ school }}</td>
         <td>{{ name }}</td>
         <td>{{ size|shirt_size }}</td>
     </tr>

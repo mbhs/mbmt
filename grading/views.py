@@ -164,9 +164,9 @@ def shirt_sizes(request):
     return render(request, "grading/shirts.html", {
         "totals": dict(totals),
         "groups": [
-            ("Coach", Coaching.current().values_list("coach__first_name", "coach__last_name", "shirt_size")),
-            ("Chaperone", Chaperone.current().values_list("first_name", "last_name", "shirt_size")),
-            ("Student", Student.current().values_list("first_name", "last_name", "shirt_size"))]})
+            ("Coach", Coaching.current().values_list("coach__first_name", "coach__last_name", "school__name", "shirt_size")),
+            ("Chaperone", Chaperone.current().values_list("first_name", "last_name", "school__name", "shirt_size")),
+            ("Student", Student.current().values_list("first_name", "last_name", "team__school__name", "shirt_size"))]})
 
 
 @login_required
