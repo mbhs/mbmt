@@ -98,7 +98,7 @@ def score_team(request, team_id, round):
     # Update the answers
     if request.method == "POST":
         update_answers(request, answers)
-        return redirect("team_view")
+        return redirect("grading:teams")
 
     # Render the grading view
     return render(request, "grading/grader.html", {
@@ -128,7 +128,7 @@ def score_individual(request, student_id, round):
     # Update the answers
     if request.method == "POST":
         update_answers(request, answers)
-        return redirect("student_view")
+        return redirect("grading:students")
 
     # Render the grading view
     return render(request, "grading/grader.html", {
