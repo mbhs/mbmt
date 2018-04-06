@@ -133,6 +133,12 @@ class Student(models.Model):
 
         return self.first_name + " " + self.last_name
 
+    @property
+    def name(self):
+        """Match the team name for generic access."""
+
+        return self.get_full_name()
+
     @staticmethod
     def current(**kwargs):
         """Get the students in the current competition."""
