@@ -320,7 +320,16 @@ table.teams .guts,
 table.teams .division { width: 130px; }
 
 table.attendance { margin-top: 1.5em; }
-table.attendance .attending { width: 1px; }
+table.attendance .attending { white-space: nowrap; width: 65px; }
+table.attendance input[type="radio"] { display: none; }
+table.attendance input[type="radio"]+label {
+  font-weight: normal;
+  display: inline-block;
+  width: 70px;
+  margin: 0;
+  user-select: none;
+}
+table.attendance input[type="radio"]:checked+label { font-weight: bold; }
 
 span.newline {
   display: block;

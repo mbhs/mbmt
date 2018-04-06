@@ -79,6 +79,7 @@ def score(request, grouping, any_id, round_id):
         return score_individual(request, any_id, round)
 
 
+@staff_member_required
 def score_team(request, team_id, round):
     """Scoring view for a team."""
 
@@ -108,6 +109,7 @@ def score_team(request, team_id, round):
         "mode": "team"})
 
 
+@staff_member_required
 def score_individual(request, student_id, round):
     """Scoring view for an individual."""
 
@@ -137,6 +139,7 @@ def score_individual(request, student_id, round):
         "mode": "student"})
 
 
+@staff_member_required
 def update_answers(request, answers):
     """Update the answers to a round by an individual or group."""
 
@@ -180,10 +183,8 @@ def attendance(request):
         return redirect("attendance")
 
     # Format students into nice columns
-    students = Student.current().all()
-    count = request.GET.get("columns", 4)
-    columns = columnize(students, count)
-    return render(request, "grading/attendance.html", {"students": columns})
+    students = Student.current().order_by("last_name").values_list("id", "first_name", "last_name", "attending")
+    return render(request, "grading/attendance.html", {"students": students})
 
 
 @login_required

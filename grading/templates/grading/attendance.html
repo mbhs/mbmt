@@ -1,30 +1,28 @@
 {% extends "shared/base.html" %}
 
 {% block content %}
-<form action="{% url "attendance" %}" method="post">
+<form action="{% url "grading:attendance" %}" method="post">
     {% csrf_token %}
     <button type="submit" class="save btn btn-primary">Save</button>
     <table id="attendance" class="attendance table table-striped">
         <tr>
-            <th class="attending">&nbsp;?</th>
+            <th class="attending">Attending</th>
             <th class="name" colspan="100%">Name</th>
         </tr>
-        {% for row in students %}
-            <tr>
-            {% for student in row %}
-                <td class="attending">
-                {% if student %}
-                    <input name="{{ student.id }}" type="checkbox" value="present" {% if student.attending %}checked{% endif %}>
-                    <input name="{{ student.id }}" type="hidden" value="absent">
-                {% endif %}
-                </td>
-                <td class="name">
-                {% if student %}
-                    {{ student.name }}
-                {% endif %}
-                </td>
-            {% endfor %}
-            </tr>
+        {% for id, first_name, last_name, attending in students %}
+        <tr>
+            <td class="attending">
+                <input id="present#{{ id }}" type="radio" name="present#{{ id }}" value="True" {% if attending %}checked{% endif %}>
+                <label for="present#{{ id }}">present</label>
+                <input id="absent#{{ id }}" type="radio" name="present#{{ id }}" value="False" {% if attending is False %}checked{% endif %}>
+                <label for="absent#{{ id }}">absent</label>
+                <!--input name="{{ id }}" type="checkbox" value="present" {% if attending %}checked{% endif %}>
+                <input name="{{ id }}" type="hidden" value="absent"-->
+            </td>
+            <td class="name">
+                {{ first_name }} {{ last_name }}
+            </td>
+        </tr>
         {% endfor %}
     </table>
     <button type="submit" class="save btn btn-primary">Save</button>

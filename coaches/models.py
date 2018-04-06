@@ -116,7 +116,7 @@ class Student(models.Model):
     grade = models.IntegerField(choices=GRADES)
 
     shirt_size = models.IntegerField(choices=SHIRT_SIZES)
-    attending = models.BooleanField(default=False)
+    attending = models.NullBooleanField(default=False)
 
     class Meta:
         """Meta information about the student."""
