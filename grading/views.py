@@ -57,9 +57,15 @@ class StudentsView(ListView, StaffMemberRequired):
     """Get the list of all students for grading."""
 
     template_name = "grading/student/view.html"
-    queryset = Student.current().order_by("last_name").all()
     context_object_name = "students"
-    paginate_by = 5
+    paginate_by = 50
+
+    def get_queryset(self):
+        students = Student.current().order_by("last_name").all()
+        if self.request.GET["search"]:
+            search = self.request.GET["search"].lower()
+            return list(filter(lambda student: search in student.get_full_name().lower(), students))
+        return students
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

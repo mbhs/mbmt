@@ -277,7 +277,7 @@ form input.typeahead {
   margin-bottom: 1em;
 }
 
-form {
+form.student-form, form.team-form {
   margin-bottom: 6em;
 }
 

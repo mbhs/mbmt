@@ -12,9 +12,11 @@
 <h1 class="grader-title">Students ({{ total }})</h1>
 <p class="grader-switcher">Go to <a href="{% url 'grading:teams' %}">teams</a> &rarr;</p>
 
-<div class="form-group">
-    <input class="form-control" id="search" name="search" placeholder="search" oninput="update();">
-</div>
+<form name="search" method="get">
+    <div class="form-group">
+        <input class="form-control" id="search" name="search" placeholder="Search students">
+    </div>
+</form>
 
 <table id="students" class="students table table-striped table-hover">
     <tr>
@@ -38,14 +40,18 @@
                 {{ student|grading_status:"subject1" }}
                 {% endautoescape %}
                 ({{ student.subject1|upper }}) <br>
-                <a href="{% url 'grading:score' grouping="individual" any_id=student.id round_id='subject1' %}">edit</a>
+                <a href="{% url 'grading:score' grouping="individual" any_id=student.id round_id='subject1' %}">
+                    edit
+                </a>
             </td>
             <td class="subject">
                 {% autoescape off %}
                 {{ student|grading_status:"subject2" }}
                 {% endautoescape %}
                 ({{ student.subject2|upper }}) <br>
-                <a href="{% url 'grading:score' grouping="individual" any_id=student.id round_id='subject2' %}">edit</a>
+                <a href="{% url 'grading:score' grouping="individual" any_id=student.id round_id='subject2' %}">
+                    edit
+                </a>
             </td>
         </tr>
     {% endfor %}
@@ -72,4 +78,5 @@
 </nav>
 
 <script type="text/javascript" src="{% static "js/grade.js" %}"></script>
+
 {% endblock %}
