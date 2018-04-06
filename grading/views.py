@@ -13,18 +13,9 @@ import itertools
 import traceback
 
 from home.models import User, Competition
-from coaches.models import Coaching, Student, Team, Chaperone, DIVISIONS_MAP, DIVISIONS, SUBJECTS, SHIRT_SIZES_MAP
+from coaches.models import Coaching, Student, Team, Chaperone, DIVISIONS_MAP, DIVISIONS, SUBJECTS
 from .models import Round, Question, Answer, ESTIMATION
 from . import grading
-
-
-# Some quick utility functions
-
-def columnize(objects, columns):
-    """Return a list of rows of a column layout."""
-
-    size = int(math.ceil(len(objects) / columns))
-    return list(itertools.zip_longest(*[objects[i:i+size] for i in range(0, len(objects), size)]))
 
 
 # Staff check
@@ -194,9 +185,21 @@ def shirt_sizes(request):
     return render(request, "grading/shirts.html", {
         "totals": dict(totals),
         "groups": [
-            ("Coach", Coaching.current().values_list("coach__first_name", "coach__last_name", "school__name", "shirt_size")),
-            ("Chaperone", Chaperone.current().values_list("first_name", "last_name", "school__name", "shirt_size")),
-            ("Student", Student.current().values_list("first_name", "last_name", "team__school__name", "shirt_size"))]})
+            ("Coach", Coaching.current().values_list(
+                "coach__first_name",
+                "coach__last_name",
+                "school__name",
+                "shirt_size")),
+            ("Chaperone", Chaperone.current().values_list(
+                "first_name",
+                "last_name",
+                "school__name",
+                "shirt_size")),
+            ("Student", Student.current().values_list(
+                "first_name",
+                "last_name",
+                "team__school__name",
+                "shirt_size"))]})
 
 
 @staff_member_required
@@ -312,12 +315,14 @@ def student_scoreboard(request):
     """Do final scoreboard calculations."""
 
     grader = Competition.current().grader
+
     if request.method == "POST" and "recalculate" in request.POST:
         grader.calculate_individual_scores(use_cache=False)
         return redirect("student_scoreboard")
 
     try:
-        individual_scores = grading.prepare_individual_scores(grader.calculate_individual_scores(use_cache=True))
+        individual_scores = grading.prepare_individual_scores(
+            grader.calculate_individual_scores(use_cache=True))
         subject_scores = grading.prepare_subject_scores(grader.cache_get("subject_scores"))
         context = {
             "individual_scores": individual_scores,

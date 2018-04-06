@@ -18,8 +18,8 @@ import statistics
 import scipy.optimize
 
 import grading.models as g
-import home.models as f
-from grading.grading import CompetitionGrader, ChillDictionary, cached, cache_get, cache_set
+import coaches.models as c
+from grading.grading import CompetitionGrader, ChillDictionary, cached
 from grading.models import CORRECT, ESTIMATION
 
 
@@ -65,7 +65,7 @@ class Grader(CompetitionGrader):
 
         self.individual_bonus = {}
 
-        factors = ChillDictionary({division: ChillDictionary() for division in f.DIVISIONS_MAP})
+        factors = ChillDictionary({division: ChillDictionary() for division in c.DIVISIONS_MAP})
         for i, round in enumerate((round1, round2)):
             for question in round.questions.all():
                 for answer in g.Answer.objects.filter(question=question).all():
@@ -197,11 +197,11 @@ class Grader(CompetitionGrader):
         subject_scores = ChillDictionary()
 
         # This ignores students who received answers for one test but not another
-        for division in f.DIVISIONS_MAP:
+        for division in c.DIVISIONS_MAP:
 
             # Set up dictionary so no missing keys
             subject_scores[division] = ChillDictionary()
-            for subject in f.SUBJECTS_MAP:
+            for subject in c.SUBJECTS_MAP:
                 subject_scores[division][subject] = ChillDictionary()
 
             split_scores[division] = ChillDictionary()
@@ -263,7 +263,7 @@ class Grader(CompetitionGrader):
 
         raw_scores = self.calculate_individual_scores(use_cache=True)
         final_scores = ChillDictionary()
-        for team in f.Team.current():
+        for team in c.Team.current():
             score = 0
             count = 0
             for student in team.students.all():
@@ -284,7 +284,7 @@ class Grader(CompetitionGrader):
         guts_round_scores = self.guts_round_grader(guts_round, use_cache=use_cache)
 
         final_scores = ChillDictionary()
-        for team in f.Team.current():
+        for team in c.Team.current():
             score = 0
             if team in individual_scores[team.division]:
                 score += 0.4 * individual_scores[team.division][team]
@@ -296,7 +296,7 @@ class Grader(CompetitionGrader):
             final_scores[team.division][team] = score
         return final_scores.dict()
 
-    def grade_competition(self, competition):
+    def grade_competition(self):
         """Grade the entire competition."""
 
         pass

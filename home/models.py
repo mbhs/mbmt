@@ -28,7 +28,6 @@ class Competition(models.Model):
 
     # Grader path and cache
     _grader = models.CharField(max_length=40, null=True, blank=True)
-    _grader_instance = None
 
     def __repr__(self):
         """Represent the competition as a string."""
@@ -64,7 +63,7 @@ class Competition(models.Model):
 
         try:
             return self._grader_instance
-        except KeyError:
+        except AttributeError:
             import importlib
             grader = importlib.import_module(self._grader).Grader(self)
             self._grader_instance = grader
