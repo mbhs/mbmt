@@ -128,22 +128,17 @@ class Grader(CompetitionGrader):
             a = question.answer
             if e is None:
                 value = 0
+            #change this every year to modify the estimation formulas
             elif question.number == 26:
-                max_below = g.Answer.objects.filter(
-                    value__isnull=False, value__lte=e, question__number=26, question__round__ref=GUTS,
-                ).exclude(id=answer.id).order_by("-value").first()
-                if max_below:
-                    value = min(12, e - max_below.value)
-                else:
-                    value = min(12, e)
+                value = 0 if e <= 0 else 12*min(e/a, a/e)**3
             elif question.number == 27:
-                value = 12 * 2 ** (-abs(e-a)/60)
+                value = max(0, 12-6*abs(a-e))
             elif question.number == 28:
-                value = 0 if e <= 0 else 12 * (16 * math.log10(max(e/a, a/e)) + 1) ** (-0.5)
+                value = max(0, 12-120*abs(a-e)/a)
             elif question.number == 29:
-                value = 0 if e <= 0 else 12 * min(e/a, a/e)
+                value = 0 if e <= 0 else 12*min(e/a, a/e)
             elif question.number == 30:
-                value = 0 if e <= 0 else max(0, 12 - 4 * math.log10(max(e/a, a/e)))
+                value = max(0, 12-500*(abs(a-e)/a)**2)
         return value * question.weight
 
     def z_score(self, raw_scores):
