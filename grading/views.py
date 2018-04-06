@@ -1,5 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
+from django.views.decorators.csrf import csrf_exempt
 from django.views import View
 from django.views.generic import ListView
 from django.shortcuts import render, redirect, HttpResponse
@@ -184,6 +185,7 @@ def attendance(request):
     return render(request, "grading/attendance.html")
 
 
+@csrf_exempt
 @staff_member_required
 def attendance_get(request):
     """Get the attendance list."""
@@ -191,7 +193,7 @@ def attendance_get(request):
     # If data is posted
     if request.method == "POST":
         attendance_post(request)
-        return redirect("attendance")
+        return HttpResponse("")
 
     # Format students into nice columns
     students = []
@@ -202,30 +204,14 @@ def attendance_get(request):
 
 @staff_member_required
 def attendance_post(request):
-    """Handle post data from the attendance.
+    """Handle post data from the attendance app."""
 
-    There's some degree of weirdness here, as check boxes don't post
-    anything unless they're checked. To prevent this, hidden inputs
-    are included for every check box with the absent value. The final
-    result is accessed by getting the list of posted values and
-    checking if present is in it. To minimize saves, only students
-    whose attendance has changed are modified.
-    """
+    student = Student.current(id=request.POST["id"]).first()
+    if not student:
+        return
 
-    # Iterate post data for numeric entires
-    for iid in filter(lambda x: x.isnumeric(), request.POST):
-        student = Student.objects.filter(id=iid).first()
-
-        # Check if student, check present or absent
-        if student:
-            values = request.POST.getlist(iid)
-            if "absent" in values:
-
-                # Modify in database
-                attending = "present" in request.POST.getlist(iid)
-                if student.attending != attending:
-                    student.attending = attending
-                    student.save()
+    student.attending = request.POST["attending"] == "true"
+    student.save()
 
 
 @staff_member_required

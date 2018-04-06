@@ -1,6 +1,8 @@
 
-const present = $("#present").append("<tbody>");
-const absent = $("#absent").append("<tbody>");
+const present = $("<tbody>");
+$("#present").append(present);
+const absent = $("<tbody>");
+$("#absent").append(absent);
 const students = [];
 
 
@@ -31,9 +33,12 @@ class Student {
 }
 
 function get() {
-  $.ajax("/grading/api/attendance/").then(data => {
+  console.log("Get!");
 
-    while (present.lastChild) present.removeChild(present.lastChild);
+  $.ajax("/grading/api/attendance/?_=" + new Date().getTime()).then(data => {
+
+    present.empty();
+    absent.empty();
 
     for (let row of JSON.parse(data)) {
       let student = new Student(row);
@@ -43,23 +48,29 @@ function get() {
         let item = $(
           "<tr><td>" + student.name + "</td>" +
           "<td>" + student.school + "</td>" +
-          "<td><a href='" + "" + "'>Mark absent</a></td></tr>");
+          "<td><a onclick='post(" + student.id + ", false)'>Mark absent</a></td></tr>");
           items.push(item);
           present.append(item);
-      }
-      else {
+      } else {
         let item = $(
           "<tr><td>" + student.name + "</td>" +
           "<td>" + student.school + "</td>" +
-          "<td><a href='" + "" + "'>Mark present</a></td></tr>");
+          "<td><a onclick='post(" + student.id + ", true)'>Mark present</a></td></tr>");
         items.push(item);
         absent.append(item);
       }
 
     }
   }, error => {
-
+    window.alert("Failed to access attendance API.");
   });
+}
+
+
+function post(id, attending) {
+  $.post("/grading/api/attendance/", {id: id, attending: attending}).then(() => {
+    setTimeout(get, 250);
+  })
 }
 
 
