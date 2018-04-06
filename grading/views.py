@@ -59,6 +59,12 @@ class StudentsView(ListView, StaffMemberRequired):
     template_name = "grading/student/view.html"
     queryset = Student.current().order_by("last_name").all()
     context_object_name = "students"
+    paginate_by = 5
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["total"] = Student.current().count()
+        return context
 
 
 @staff_member_required

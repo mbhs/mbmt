@@ -331,6 +331,10 @@ table.attendance input[type="radio"]+label {
 }
 table.attendance input[type="radio"]:checked+label { font-weight: bold; }
 
+.paginator {
+  text-align: center;
+}
+
 span.newline {
   display: block;
 }
