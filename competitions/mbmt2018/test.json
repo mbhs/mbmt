@@ -1,5 +1,5 @@
 {
-  "grader": "competitions.mbmt2017.grading",
+  "grader": "competitions.mbmt2018.grading",
   "rounds": [
     {
       "ref": "subject1",
