@@ -62,7 +62,7 @@ class StudentsView(ListView, StaffMemberRequired):
 
     def get_queryset(self):
         students = Student.current().order_by("last_name").all()
-        if self.request.GET["search"]:
+        if "search" in self.request.GET:
             search = self.request.GET["search"].lower()
             return list(filter(lambda student: search in student.get_full_name().lower(), students))
         return students
@@ -73,9 +73,24 @@ class StudentsView(ListView, StaffMemberRequired):
         return context
 
 
-@staff_member_required
-def teams(request):
-    return render(request, "grading/team/view.html", {"teams": Team.current().order_by("number").all()})
+class TeamsView(ListView, StaffMemberRequired):
+    """Get the list of all students for grading."""
+
+    template_name = "grading/team/view.html"
+    context_object_name = "teams"
+    paginate_by = 50
+
+    def get_queryset(self):
+        teams = Team.current().order_by("number").all()
+        if "search" in self.request.GET:
+            search = self.request.GET["search"].lower()
+            return list(filter(lambda team: search in team.name.lower() or str(team.number) == search, teams))
+        return teams
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["total"] = Team.current().count()
+        return context
 
 
 @staff_member_required

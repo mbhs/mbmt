@@ -9,7 +9,7 @@ urlpatterns = [
 
     # Grading views
     url(r"^grade/students/$", views.StudentsView.as_view(), name="students"),
-    url(r"^grade/teams/$", views.teams, name="teams"),
+    url(r"^grade/teams/$", views.TeamsView.as_view(), name="teams"),
     url(r"^grade/(?P<grouping>\w+)/(?P<any_id>\d+)/(?P<round_id>\w+)/$", views.score, name="score"),
     url(r"^grade/statistics/$", views.statistics, name="statistics"),
 
