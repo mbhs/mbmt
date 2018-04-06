@@ -132,13 +132,13 @@ class Grader(CompetitionGrader):
             elif question.number == 26:
                 value = 0 if e <= 0 else 12*min(e/a, a/e)**3
             elif question.number == 27:
-                value = max(0, 12-6*abs(a-e))
+                value = 0 if e <= 0 else max(0, 12-6*abs(a-e))
             elif question.number == 28:
-                value = max(0, 12-120*abs(a-e)/a)
+                value = 0 if e <= 0 else max(0, 12-120*abs(a-e)/a)
             elif question.number == 29:
                 value = 0 if e <= 0 else 12*min(e/a, a/e)
             elif question.number == 30:
-                value = max(0, 12-500*(abs(a-e)/a)**2)
+                value = 0 if e <= 0 else max(0, 12-500*(abs(a-e)/a)**2)
         return value * question.weight
 
     def z_score(self, raw_scores):
