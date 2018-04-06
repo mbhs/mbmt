@@ -1,5 +1,4 @@
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.admin.views.decorators import staff_member_required
 from django.views import View
 from django.views.generic import ListView
@@ -178,10 +177,16 @@ def shirt_sizes(request):
             ("Student", Student.current().values_list("first_name", "last_name", "team__school__name", "shirt_size"))]})
 
 
-@login_required
 @staff_member_required
 def attendance(request):
-    """Display the attendance page."""
+    """Render the attendance page."""
+
+    return render(request, "grading/attendance.html")
+
+
+@staff_member_required
+def attendance_get(request):
+    """Get the attendance list."""
 
     # If data is posted
     if request.method == "POST":
@@ -189,11 +194,12 @@ def attendance(request):
         return redirect("attendance")
 
     # Format students into nice columns
-    students = Student.current().order_by("last_name").values_list("id", "first_name", "last_name", "attending")
-    return render(request, "grading/attendance.html", {"students": students})
+    students = []
+    for student in Student.current().order_by("last_name"):
+        students.append((student.id, student.get_full_name(), student.attending, student.team.school.name))
+    return HttpResponse(json.dumps(students))
 
 
-@login_required
 @staff_member_required
 def attendance_post(request):
     """Handle post data from the attendance.

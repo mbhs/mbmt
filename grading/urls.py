@@ -15,6 +15,8 @@ urlpatterns = [
 
     # Logistics
     url(r"^attendance/$", views.attendance, name="attendance"),
+    url(r"^api/attendance/$", views.attendance_get, name="api_attendance"),
+
     url(r"^shirts/$", views.shirt_sizes, name="shirt_sizes"),
     url(r"^tags/students/$", views.student_name_tags, name="tags_students"),
     url(r"^tags/teachers/$", views.teacher_name_tags, name="tags_teachers"),

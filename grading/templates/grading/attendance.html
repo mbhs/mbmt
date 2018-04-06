@@ -1,31 +1,31 @@
 {% extends "shared/base.html" %}
+{% load staticfiles %}
 
 {% block content %}
-<form action="{% url "grading:attendance" %}" method="post">
-    {% csrf_token %}
-    <button type="submit" class="save btn btn-primary">Save</button>
-    <table id="attendance" class="attendance table table-striped">
-        <tr>
-            <th class="attending">Attending</th>
-            <th class="name" colspan="100%">Name</th>
-        </tr>
-        {% for id, first_name, last_name, attending in students %}
-        <tr>
-            <td class="attending">
-                <input id="present#{{ id }}" type="radio" name="present#{{ id }}" value="True" {% if attending %}checked{% endif %}>
-                <label for="present#{{ id }}">present</label>
-                <input id="absent#{{ id }}" type="radio" name="present#{{ id }}" value="False" {% if attending is False %}checked{% endif %}>
-                <label for="absent#{{ id }}">absent</label>
-                <!--input name="{{ id }}" type="checkbox" value="present" {% if attending %}checked{% endif %}>
-                <input name="{{ id }}" type="hidden" value="absent"-->
-            </td>
-            <td class="name">
-                {{ first_name }} {{ last_name }}
-            </td>
-        </tr>
-        {% endfor %}
-    </table>
-    <button type="submit" class="save btn btn-primary">Save</button>
-</form>
+
+<h1>Attendance</h1>
+<div class="form-group">
+    <input id="search" type="text" placeholder="Student name" class="form-control" oninput="update()">
+</div>
+
+<h2 class="bump-down">Present</h2>
+<table id="present" class="table table-striped">
+    <tr>
+        <th class="name">Name</th>
+        <th class="school">School</th>
+        <th class="attending">Attending</th>
+    </tr>
+</table>
+
+<h2 class="bump-down">Absent</h2>
+<table id="absent" class="table table-striped">
+    <tr>
+        <th class="name">Name</th>
+        <th class="school">School</th>
+        <th class="attending">Attending</th>
+    </tr>
+</table>
+
+<script type="text/javascript" src="{% static "js/attendance.js" %}"></script>
 
 {% endblock %}
