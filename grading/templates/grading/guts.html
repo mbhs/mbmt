@@ -1,11 +1,10 @@
 {% extends "shared/base.html" %}
 {% load staticfiles %}
 
-{% block extrahead %}
+{% block head %}
 <style>
-    .container {
-        width: 100%;
-    }
+    #content { max-width: 100% !important; }
+    .container { margin: 0; width: 100%; }
 </style>
 {% endblock %}
 
@@ -18,27 +17,27 @@
 <table class="scoreboard">
     <tr>
         <td valign="top">
-            <h2>Ramanujan</h2>
+            <h2>{{ divisions.0 }}</h2>
             <table class="table table-striped">
-                <tbody id="ramanujan1"></tbody>
+                <tbody id="{{ divisions.0 | lower }}1"></tbody>
             </table>
         </td>
         <td valign="top">
             <h2>&nbsp;</h2>
             <table class="table table-striped">
-                <tbody id="ramanujan2"></tbody>
+                <tbody id="{{ divisions.0 | lower }}2"></tbody>
             </table>
         </td>
         <td valign="top">
-            <h2>Pascal</h2>
+            <h2>{{ divisions.1 }}</h2>
             <table class="table table-striped">
-                <tbody id="pascal1"></tbody>
+                <tbody id="{{ divisions.1 | lower }}1"></tbody>
             </table>
         </td>
         <td valign="top">
             <h2>&nbsp;</h2>
             <table class="table table-striped">
-                <tbody id="pascal2"></tbody>
+                <tbody id="{{ divisions.1 | lower }}2"></tbody>
             </table>
         </td>
     </tr>

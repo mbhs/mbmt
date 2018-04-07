@@ -263,7 +263,7 @@ def live(request, round_id):
     """Get the live guts scoreboard."""
 
     if round_id == "guts":
-        return render(request, "grading/guts.html")
+        return render(request, "grading/guts.html", {"divisions": (DIVISIONS[0][1], DIVISIONS[1][1])})
     else:
         return redirect("student_view")
 
