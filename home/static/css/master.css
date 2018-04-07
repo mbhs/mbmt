@@ -319,9 +319,26 @@ table.teams .team,
 table.teams .guts,
 table.teams .division { width: 130px; }
 
+@media(max-width: 1460px) {
+  .break { display: block; height: 10px; }
+}
+
+.break { flex: 0; }
 
 table.attendance a {
   cursor: pointer;
+}
+
+.flexible {
+  display: flex;
+  justify-content: space-between;
+  flex-grow: 1;
+  flex-basis: 100%;
+}
+
+.flexible div {
+  max-width: 24%;
+  width: 24%;
 }
 
 #loading {
