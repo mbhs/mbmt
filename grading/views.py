@@ -318,7 +318,7 @@ def student_scoreboard(request):
 
     if request.method == "POST" and "recalculate" in request.POST:
         grader.calculate_individual_scores(use_cache=False)
-        return redirect("student_scoreboard")
+        return redirect("grading:scoreboard_students")
 
     try:
         individual_scores = grading.prepare_individual_scores(
@@ -341,7 +341,7 @@ def team_scoreboard(request):
     grader = Competition.current().grader
     if request.method == "POST" and "recalculate" in request.POST:
         grader.calculate_team_scores(use_cache=False)
-        return redirect("team_scoreboard")
+        return redirect("grading:scoreboard_teams")
 
     try:
         team_scores = grader.calculate_team_scores(use_cache=True)

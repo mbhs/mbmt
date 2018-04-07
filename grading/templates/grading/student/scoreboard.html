@@ -13,7 +13,7 @@
 
 <h1 class="scoreboard-header">
     Individual Scores
-    <form action="{% url 'grading:students' %}" method="POST" class="recalculate right">
+    <form action="{% url 'grading:scoreboard_students' %}" method="POST" class="recalculate right">
         {% csrf_token %}
         <input type="hidden" name="recalculate">
         <button type="submit" class="btn btn-primary save padded">Recalculate</button>
