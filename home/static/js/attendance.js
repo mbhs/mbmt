@@ -27,7 +27,8 @@ class Student {
   constructor(row) {
     this.id = row[0];
     this.name = row[1];
-    this.school = row[3];
+    this.school = row[4];
+    this.division = row[3];
     this.attending = row[2];
   }
 
@@ -49,6 +50,7 @@ function get() {
         let item = $(
           "<tr><td>" + student.name + "</td>" +
           "<td>" + student.school + "</td>" +
+          "<td>" + student.division + "</td>" +
           "<td><a id='mark-" + student.id + "' onclick='post(" + student.id + ", false)'>Mark absent</a></td></tr>");
           items.push(item);
           present.append(item);
@@ -56,6 +58,7 @@ function get() {
         let item = $(
           "<tr><td>" + student.name + "</td>" +
           "<td>" + student.school + "</td>" +
+          "<td>" + student.division + "</td>" +
           "<td><a id='mark-" + student.id + "' onclick='post(" + student.id + ", true)'>Mark present</a></td></tr>");
         items.push(item);
         absent.append(item);

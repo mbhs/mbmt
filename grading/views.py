@@ -222,7 +222,9 @@ def attendance_get(request):
     # Format students into nice columns
     students = []
     for student in Student.current().order_by("last_name"):
-        students.append((student.id, student.get_full_name(), student.attending, student.team.school.name))
+        students.append((
+            student.id, student.get_full_name(), student.attending,
+            student.team.get_division_display(), student.team.school.name))
     return HttpResponse(json.dumps(students))
 
 
