@@ -259,20 +259,20 @@ def chaperone_name_tags(request):
     return render(request, "grading/tags/chaperones.html", {"chaperones": Chaperone.current()})
 
 
-def live(request, round):
+def live(request, round_id):
     """Get the live guts scoreboard."""
 
-    if round == "guts":
+    if round_id == "guts":
         return render(request, "grading/guts.html")
     else:
         return redirect("student_view")
 
 
 @staff_member_required
-def live_update(request, round):
+def live_update(request, round_id):
     """Get the live scoreboard update."""
 
-    if round == "guts":
+    if round_id == "guts":
         grader = Competition.current().grader
         scores = grader.guts_live_round_scores(use_cache_before=20)
         named_scores = dict()
