@@ -1,11 +1,10 @@
 {% extends "shared/base.html" %}
 {% load staticfiles %}
 
-{% block extrahead %}
+{% block head %}
 <style>
-    .container {
-        width: 100%;
-    }
+    #content { max-width: 100% !important; }
+    .container { margin: 0; width: 100%; }
 </style>
 {% endblock %}
 
