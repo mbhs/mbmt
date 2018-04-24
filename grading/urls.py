@@ -29,6 +29,6 @@ urlpatterns = [
     url(r"^live/(?P<round_id>\w+)/$", views.live, name="live"),
 
     # Sponsor scores
-    url(r"^teams/scores/$", views.sponsor_scoreboard, name="sponsor_scoreboard"),
+    url(r"^scoreboard/sponsors/$", views.sponsor_scoreboard, name="scoreboard_sponsors"),
 
 ]

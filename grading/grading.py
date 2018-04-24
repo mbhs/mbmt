@@ -308,6 +308,7 @@ def prepare_school_team_scores(school, guts_scores, team_scores, team_individual
     for division in sorted(overall_scores.keys()):
         division_name = coaches.models.DIVISIONS_MAP[division]
         teams = []
+        print(overall_scores)
         for team in overall_scores[division]:
             if team.school != school:
                 continue
@@ -329,7 +330,7 @@ def prepare_school_individual_scores(school, scores):
     for division in scores:
         students = {}
         for i, subject in enumerate(sorted(coaches.models.SUBJECTS_MAP.keys())):
-            for student in scores[division][subject]:
+            for student in scores[division].get(subject, []):
                 if student.team.school != school:
                     continue
                 if student not in students:

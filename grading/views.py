@@ -293,19 +293,27 @@ def sponsor_scoreboard(request):
     """Get the sponsor scoreboard."""
 
     grader = Competition.current().grader
-    subject_scores = grader.cache_get("subject_scores")
-    grader.calculate_team_scores(use_cache=True)
-    if subject_scores is None:
-        grader.calculate_individual_scores(use_cache=False)
 
-    school = request.user.school
-    individual_scores = grading.prepare_school_individual_scores(school, grader.cache_get("subject_scores"))
+    # Check subject scores
+    subject_scores = grader.cache_get("subject_scores")
+    if subject_scores is None:
+        subject_scores = grader.calculate_individual_scores(use_cache=False)
+
+    # Check team scores
+    team_scores = grader.cache_get("team_overall_scores")
+    if team_scores is None:
+        team_scores = grader.calculate_team_scores(use_cache=True)
+
+    school = Coaching.current(coach=request.user).first().school
+    individual_scores = grading.prepare_school_individual_scores(school, subject_scores)
     team_scores = grading.prepare_school_team_scores(
         school,
         grader.cache_get("raw_guts_scores"),
         grader.cache_get("raw_team_scores"),
         grader.cache_get("team_individual_scores"),
-        grader.calculate_team_scores(use_cache=True))
+        team_scores)
+
+    print(individual_scores, team_scores)
 
     return render(request, "grading/scoring.html", {
         "individual_scores": individual_scores,
