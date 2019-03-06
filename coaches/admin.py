@@ -28,8 +28,8 @@ class SchoolAdmin(admin.ModelAdmin):
 class TeamAdmin(admin.ModelAdmin):
     """Administrative view for team model."""
 
-    list_display = ["name", "school_name", "sponsor_name", "division"]
-    ordering = ["school", "name"]
+    list_display = ["name", "school_name", "sponsor_name", "division", "competition_name"]
+    ordering = ["competition__name", "school", "name"]
 
     def school_name(self, obj: models.Team):
         """Get the school name."""
@@ -45,6 +45,11 @@ class TeamAdmin(admin.ModelAdmin):
             return "{} {}".format(coach.first_name, coach.last_name)
         except models.Coaching.DoesNotExist:
             return ""
+
+    def competition_name(selfself, obj: models.Team):
+        """"Get the competition year"""
+
+        return obj.competition.name
 
 
 admin.site.register(models.School, SchoolAdmin)
