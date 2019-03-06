@@ -29,7 +29,7 @@ class TeamAdmin(admin.ModelAdmin):
     """Administrative view for team model."""
 
     list_display = ["name", "school_name", "sponsor_name", "division", "competition_name"]
-    ordering = ["competition__name", "school", "name"]
+    ordering = ["-competition__name", "school", "name"]
 
     def school_name(self, obj: models.Team):
         """Get the school name."""
@@ -46,13 +46,40 @@ class TeamAdmin(admin.ModelAdmin):
         except models.Coaching.DoesNotExist:
             return ""
 
-    def competition_name(selfself, obj: models.Team):
+    def competition_name(self, obj: models.Team):
         """"Get the competition year"""
 
         return obj.competition.name
 
 
+class StudentAdmin(admin.ModelAdmin):
+    """Administrative view for the student model."""
+
+    list_display = ["last_name", "first_name", "grade", "team_name", "team_division", "school_name", "competition_name"]
+    ordering = ["-team__competition__name", "team__school", "team__name", "last_name", "first_name"]
+
+    def team_name(self, obj: models.Student):
+        """Get student's team name."""
+
+        return obj.team.name
+
+    def team_division(self, obj: models.Student):
+        """Get student division"""
+
+        return obj.team.division
+
+    def school_name(self, obj: models.Student):
+        """Get student's school"""
+
+        return obj.team.school.name
+
+    def competition_name(self, obj: models.Student):
+        """Get student's competition year"""
+
+        return obj.team.competition.name
+
+
 admin.site.register(models.School, SchoolAdmin)
 admin.site.register(models.Team, TeamAdmin)
 admin.site.register(models.Chaperone)
-admin.site.register(models.Student)
+admin.site.register(models.Student, StudentAdmin)
