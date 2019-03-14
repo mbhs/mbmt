@@ -1,7 +1,18 @@
 {% extends "shared/base.html" %}
+{% load crispy_forms_tags %}
+
 
 {% block content %}
+
+<form name="stats" method="post">
+    {% csrf_token %}
+    <div class="form-group fancy-group team-form">
+        <div class="team-division">{{ stat_form.year|as_crispy_field }}</div>
+    </div>
+</form>
+
 <h1>{{ current.name }} Problem Statistics</h1>
+
 
 {% for division_name, division in stats %}
 <h2>{{ division_name|capfirst }}</h2>

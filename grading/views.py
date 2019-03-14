@@ -3,7 +3,7 @@ from django.contrib.admin.views.decorators import staff_member_required
 from django.views.decorators.csrf import csrf_exempt
 from django.views import View
 from django.views.generic import ListView
-from django.shortcuts import render, redirect, HttpResponse
+from django.shortcuts import render, redirect, HttpResponse, get_object_or_404
 from django.db.models import Q
 
 import json
@@ -16,6 +16,7 @@ from home.models import User, Competition
 from coaches.models import Coaching, Student, Team, Chaperone, DIVISIONS_MAP, DIVISIONS, SUBJECTS
 from .models import Round, Question, Answer, ESTIMATION
 from . import grading
+from .forms import StatsForm
 
 
 # Staff check
@@ -368,9 +369,14 @@ def team_scoreboard(request):
 
 @staff_member_required
 def statistics(request):
-    """View statistics on the last competition."""
+    """View statistics on the desired competition."""
+    if request.method == "POST":
+        current = get_object_or_404(Competition, pk=request.POST.get("year",""))
+    else:
+        current = Competition.current()
 
-    current = Competition.current()
+    stat_form = StatsForm()
+
     division_stats = []
     for division, division_name in DIVISIONS:
         stats = []
@@ -416,4 +422,4 @@ def statistics(request):
                 stats.append((round_ref + " estimation", tuple(estimation_guesses.items())))
         division_stats.append((division_name, stats))
 
-    return render(request, "grading/statistics.html", {"stats": division_stats, "current": current})
+    return render(request, "grading/statistics.html", {"stats": division_stats, "current": current, "stat_form": stat_form})
