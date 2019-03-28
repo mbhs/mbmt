@@ -338,8 +338,10 @@ def student_scoreboard(request):
         context = {
             "individual_scores": individual_scores,
             "subject_scores": subject_scores,
-            "individual_powers": grader.individual_powers,
-            "individual_bonus": grader.individual_bonus}
+            "individual_powers": grader.individual_weight,
+            "individual_bonus": {}}
+            #"individual_powers": grader.individual_powers,
+            #"individual_bonus": grader.individual_bonus}
     except Exception:
         context = {"error": traceback.format_exc().replace("\n", "<br>")}
     return render(request, "grading/student/scoreboard.html", context)

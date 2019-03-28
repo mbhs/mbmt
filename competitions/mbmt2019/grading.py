@@ -1,18 +1,17 @@
 """The official MBMT 2019 grading algorithm.
-
 The following file is intended for use as a modular plugin that
 implements various grading functions for the MBMT website. In order
 grading functions must be registered to either a round ID and
 optionally a question ID.
 
-No change from 2018 as of 12/17/18 - Ian
+Changed to new algorithm --Daniel, 3/26/19
 """
 
 
 from django.db.models import Q
 
 import math
-import statistics
+import itertools
 
 import scipy.optimize
 
@@ -28,25 +27,20 @@ GUTS = "guts"
 TEAM = "team"
 
 
-def normalize(array, n):
-    """Divide array values by n."""
+def multiply(array, l):
+    """Multiply array values by l."""
 
-    return list(map(lambda x: x/n, array))
+    return dict(map(lambda t: (t[0], dict(map(lambda u: (u[0], u[1]*l), t[1].items()))), array.items()))
 
 
 class Grader(CompetitionGrader):
-    """Grader specific to MBMT 2017."""
-
-    LAMBDA = 0.52
-
+    """Grader specific to MBMT 2019."""
     cache = {}
 
     def __init__(self, competition: g.Competition):
-        """Initialize the MBMT 2017 grader."""
-
         super().__init__(competition)
-        self.individual_bonus = {}
-        self.individual_powers = {}
+        self.individual_weight = {}
+        self.individual_maxes = {}
 
         # Question graders
         self.register_question_grader(
@@ -62,7 +56,8 @@ class Grader(CompetitionGrader):
     def _calculate_individual_modifiers(self, round1, round2):
         """Calculate the point bonuses for an individual round."""
 
-        self.individual_bonus = {}
+        self.individual_weight = {}
+        self.individual_maxes = ChillDictionary()
 
         factors = ChillDictionary({division: ChillDictionary() for division in c.DIVISIONS_MAP})
         for i, round in enumerate((round1, round2)):
@@ -84,37 +79,24 @@ class Grader(CompetitionGrader):
                     factors[division][subject][question.number][1] += 1
 
         for division in factors:
-            self.individual_bonus[division] = {}
+            self.individual_weight[division] = {}
             for subject in factors[division]:
-                self.individual_bonus[division][subject] = {}
+                self.individual_weight[division][subject] = {}
                 for question in factors[division][subject]:
                     correct, total = factors[division][subject][question]
-                    self.individual_bonus[division][subject][question] = (
-                        0 if correct == 0 else self.LAMBDA * math.log(total / (correct+1)))
-
-    def _power_average_partial(self, scores):
-        """Return a partial that averages scores raised to a power."""
-
-        def power_average(d):
-            return 0.375 - 1.0/len(scores) * sum(pow(score, d) for score in scores if score != 0)
-        return power_average
-
-    def _calculate_individual_exponent(self, scores):
-        """Determines the exponent for an individual subject test."""
-
-        return scipy.optimize.newton(self._power_average_partial(scores), 1, tol=0.0001, maxiter=1000)
+                    weight = 2 + math.log((total+2) / (correct+2))
+                    self.individual_weight[division][subject][question] = weight
+                    self.individual_maxes[division][subject] = self.individual_maxes[division].get(subject, 0) + weight
 
     def subject1_question_grader(self, question, answer):
         """Grade an individual question."""
 
-        return (question.weight * (answer.value or 0) * (1 +
-                self.individual_bonus[answer.student.team.division][answer.student.subject1][question.number]))
+        return question.weight * (answer.value or 0) * self.individual_weight[answer.student.team.division][answer.student.subject1][question.number]
 
     def subject2_question_grader(self, question, answer):
         """Grade an individual question."""
 
-        return (question.weight * (answer.value or 0) * (1 +
-                self.individual_bonus[answer.student.team.division][answer.student.subject2][question.number]))
+        return question.weight * (answer.value or 0) * self.individual_weight[answer.student.team.division][answer.student.subject2][question.number]
 
     def guts_question_grader(self, question: g.Question, answer: g.Answer):
         """Grade a guts question."""
@@ -129,29 +111,16 @@ class Grader(CompetitionGrader):
                 value = 0
             #change this every year to modify the estimation formulas
             elif question.number == 26:
-                value = 0 if e <= 0 else 12*min(e/a, a/e)**3
+                value = 0 if e <= 0 else max(0, 12-abs(a-e)/5) / 12
             elif question.number == 27:
-                value = 0 if e <= 0 else max(0, 12-6*abs(a-e))
+                value = 0 if e <= 0 else max(0, 12-100*abs(a-e)) / 12
             elif question.number == 28:
-                value = 0 if e <= 0 else max(0, 12-120*abs(a-e)/a)
+                value = 0 if e <= 0 else max(0, 12-5*abs(a-e)) / 12
             elif question.number == 29:
-                value = 0 if e <= 0 else 12*min(e/a, a/e)
+                value = 0 if e <= 0 else 12*max(0, 1-3*abs(a-e)/a) / 12
             elif question.number == 30:
-                value = 0 if e <= 0 else max(0, 12-500*(abs(a-e)/a)**2)
+                value = 0 if e <= 0 else max(0, 12-abs(a-e)/2000) / 12
         return value * question.weight
-
-    def z_score(self, raw_scores):
-        """General team round grader based on Z score."""
-
-        scores = ChillDictionary()
-        for division in raw_scores:
-            scores[division] = ChillDictionary()
-            data = list(map(lambda team: raw_scores[division][team], raw_scores[division]))
-            mean = statistics.mean(data)
-            dev = statistics.stdev(data, mean)
-            for team in raw_scores[division]:
-                scores[division][team] = 0 if dev == 0 else (raw_scores[division][team] - mean) / dev
-        return scores.dict()
 
     @cached(cache, "team_scores")
     def team_round_grader(self, round: g.Round):
@@ -159,7 +128,12 @@ class Grader(CompetitionGrader):
 
         raw_scores = self.grade_round(round)
         self.cache_set("raw_team_scores", raw_scores)
-        return self.z_score(raw_scores)
+
+        maxscore = 0
+        for q in round.questions.all():
+            maxscore += q.weight
+        return multiply(raw_scores, 1/maxscore)
+
 
     # Cached for use in live grading
     @cached(cache, "guts_scores")
@@ -168,7 +142,11 @@ class Grader(CompetitionGrader):
 
         raw_scores = self.grade_round(round)
         self.cache_set("raw_guts_scores", raw_scores)
-        return self.z_score(raw_scores)
+
+        maxscore = 0
+        for q in round.questions.all():
+            maxscore += q.weight
+        return multiply(raw_scores, 1/maxscore)
 
     @cached(cache, "raw_guts_score")
     def guts_live_round_scores(self):
@@ -176,6 +154,44 @@ class Grader(CompetitionGrader):
 
         round = self.competition.rounds.filter(ref="guts").first()
         return self.grade_round(round)
+
+    def logistic_regularization(self, categories, observations, weights=None):
+        if not weights:
+            weights = {c:1 for c in categories}
+        d = len(categories)
+        def transform(s, a):
+            return s/(s+math.e**a*(1-s))
+        def loss(x):
+            # Calc exponents
+            factors = {}
+            for i in range(d-1):
+                factors[categories[i]] = x[i]
+            factors[categories[d-1]] = -sum([weights[categories[i]]*x[i]for i in range(d-1)])/weights[categories[d-1]]
+
+            L = 0
+
+            for obs in observations.values():
+                for c1, c2 in itertools.combinations(obs.keys(), 2):
+                    L += weights[c1] * weights[c2] * obs[c1]*obs[c2]*(transform(obs[c1], factors[c1]) - transform(obs[c2], factors[c2]))**2
+            return L
+        results = scipy.optimize.least_squares(loss, [0]*(d-1), ftol=1e-12)
+        x = results.x
+        factors = {}
+        for i in range(d-1):
+            factors[categories[i]] = x[i]
+        factors[categories[d-1]] = -sum([weights[categories[i]]*x[i]for i in range(d-1)])/weights[categories[d-1]]
+        print(factors)
+
+        normalized = {}
+        for inst, obs in observations.items():
+            normalized[inst] = sum([weights[c] * transform(obs.get(c, 0), factors[c]) for c in categories])
+        return normalized
+
+    def logistic_regularization_mdiv(self, categories, observations, weights=None):
+        normalized = {}
+        for k, v in observations.items():
+            normalized[k] = self.logistic_regularization(categories, v, weights)
+        return normalized
 
     @cached(cache, "individual_scores")
     def calculate_individual_scores(self):
@@ -199,7 +215,7 @@ class Grader(CompetitionGrader):
                 subject_scores[division][subject] = ChillDictionary()
 
             split_scores[division] = ChillDictionary()
-            for student in set(raw_scores2[division].keys()) & set(raw_scores2[division].keys()):
+            for student in set(raw_scores1[division].keys()) & set(raw_scores2[division].keys()):
 
                 # Skip students not attending
                 if not student.attending:
@@ -207,49 +223,14 @@ class Grader(CompetitionGrader):
 
                 score1 = raw_scores1[division][student]
                 score2 = raw_scores2[division][student]
-                split_scores[division][student] = {student.subject1: score1, student.subject2: score2}
+                split_scores[division][student] = {student.subject1: score1 / self.individual_maxes[division][student.subject1],
+                                                   student.subject2: score2 / self.individual_maxes[division][student.subject2]}
                 subject_scores[division][student.subject1][student] = score1
                 subject_scores[division][student.subject2][student] = score2
 
         self.cache_set("subject_scores", subject_scores.dict())
 
-        powers = ChillDictionary()
-        max_scores = ChillDictionary()
-        for division in subject_scores:
-            for subject in subject_scores[division]:
-                # scores = list(filter(lambda x: x > 0, subject_scores[division][subject].values()))
-                scores = list(subject_scores[division][subject].values())
-                high = 0 if not scores else max(scores)
-                max_scores[division][subject] = high
-
-                # Doesn't work for fewer than 3 scores
-                if len(scores) >= 3:
-                    powers[division][subject] = self._calculate_individual_exponent(normalize(scores, high))
-
-                # Doesn't work for fewer than 3 scores
-                else:
-                    powers[division][subject] = 0
-        self.individual_powers = powers.dict()
-
-        raw_scores = ChillDictionary()
-        final_scores = ChillDictionary()
-        for division in split_scores:
-            final_scores[division] = ChillDictionary()
-            for student in split_scores[division]:
-                score = 0
-                raw_score = []
-                for subject in split_scores[division][student]:
-                    if split_scores[division][student][subject] != 0:
-                        score += pow(
-                            split_scores[division][student][subject] / max_scores[division][subject],
-                            powers[division][subject])
-                        raw_score.append(split_scores[division][student][subject])
-                raw_scores[division][student] = score
-                final_scores[division][student] = score
-
-        self.cache_set("raw_individual_scores", raw_scores.dict())
-
-        return final_scores.dict()
+        return self.logistic_regularization_mdiv(list(c.SUBJECTS_MAP.keys()), split_scores)
 
     @cached(cache, "team_individual_scores")
     def calculate_team_individual_scores(self):
@@ -263,8 +244,7 @@ class Grader(CompetitionGrader):
             for student in team.students.all():
                 if student.attending and team.division in raw_scores and student in raw_scores[team.division]:
                     score += raw_scores[team.division][student]
-                    count += 1
-            final_scores[team.division][team] = 0 if count == 0 else score / count
+            final_scores[team.division][team] = score / 10
         return final_scores.dict()
 
     @cached(cache, "team_overall_scores")
@@ -277,18 +257,14 @@ class Grader(CompetitionGrader):
         team_round_scores = self.team_round_grader(team_round, use_cache=use_cache)
         guts_round_scores = self.guts_round_grader(guts_round, use_cache=use_cache)
 
-        final_scores = ChillDictionary()
-        for team in c.Team.current():
-            score = 0
-            if team in individual_scores[team.division]:
-                score += 0.4 * individual_scores[team.division][team]
-            if team in team_round_scores[team.division]:
-                score += 0.3 * team_round_scores[team.division][team]
-            if team in guts_round_scores[team.division]:
-                score += 0.3 * guts_round_scores[team.division][team]
+        raw_teamscores = ChillDictionary()
 
-            final_scores[team.division][team] = score
-        return final_scores.dict()
+        for team in c.Team.current():
+            raw_teamscores[team.division][team]["indiv"] = individual_scores[team.division][team]
+            raw_teamscores[team.division][team]["team"] = team_round_scores[team.division][team]
+            raw_teamscores[team.division][team]["guts"] = guts_round_scores[team.division][team]
+
+        return self.logistic_regularization_mdiv(["indiv", "team", "guts"], raw_teamscores, {"indiv": 50, "team": 25, "guts": 25})
 
     def grade_competition(self):
         """Grade the entire competition."""
