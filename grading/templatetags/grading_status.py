@@ -16,7 +16,10 @@ def grading_status(team_or_student, round):
     """Check the grading status for a team or student by round."""
 
     if isinstance(round, str):
-        round = Round.objects.filter(ref=round).first()
+        if isinstance(team_or_student, Team):
+            round = Round.objects.filter(ref=round, competition=team_or_student.competition).first()
+        if isinstance(team_or_student, Student):
+            round = Round.objects.filter(ref=round, competition=team_or_student.team.competition).first()
 
     tags = ""
     if isinstance(team_or_student, Team):
