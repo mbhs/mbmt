@@ -1,4 +1,5 @@
 {% extends "home/../shared/base.html" %}
+{% load static %}
 
 {% block content %}
 
@@ -70,7 +71,7 @@
     <li>If a question specifies an answer form, such as a + b*sqrt(2), please adhere to the specified form.</li>
 </ol>
 
-Further clarifications on terminology, notation, and acceptable answer forms can be found at <a href="http://mbmt.mbhs.edu/location/filename.pdf">this conventions document linked here</a>.
+Further clarifications on terminology, notation, and acceptable answer forms can be found at <a href="{% static "files/Conventions.pdf" %}">this conventions document linked here</a>.
 
 <a name="awards"></a><h3>Scoring and Awards</h3>
 <ol>
@@ -81,6 +82,6 @@ Further clarifications on terminology, notation, and acceptable answer forms can
 <li>The highest scoring 6th grade student in the Descartes division will receive the <strong>Young Scholar Award</strong>.</li>
 </ol>
 
-A more detailed guide to the scoring algorithm we use can be found at <a href="http://mbmt.mbhs.edu/location/filename.pdf">the scoring document linked here</a>.
+A more detailed guide to the scoring algorithm we use can be found at <a href="{% static "files/Scoring.pdf" %}">the scoring document linked here</a>.
 
 {% endblock %}
