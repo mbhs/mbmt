@@ -20,3 +20,4 @@ deployed/
 
 # Various data
 *.json
+!**/test.json
