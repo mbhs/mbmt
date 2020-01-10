@@ -82,8 +82,8 @@ class Team(models.Model):
 
     name = models.CharField(max_length=64)
     number = models.IntegerField(default=0)
-    school = models.ForeignKey(School, related_name="teams", on_delete=models.CASCADE)
-    competition = models.ForeignKey(Competition, related_name="teams", on_delete=models.CASCADE)
+    school = models.ForeignKey(School, related_name="teams")
+    competition = models.ForeignKey(Competition, related_name="teams")
     division = models.IntegerField(choices=DIVISIONS)
 
     def __str__(self):
@@ -109,7 +109,7 @@ class Student(models.Model):
     first_name = models.CharField(max_length=64)
     last_name = models.CharField(max_length=64)
 
-    team = models.ForeignKey(Team, related_name="students", on_delete=models.CASCADE)
+    team = models.ForeignKey(Team, related_name="students")
     subject1 = models.CharField(max_length=2, blank=True, choices=SUBJECTS, verbose_name="Subject 1")
     subject2 = models.CharField(max_length=2, blank=True, choices=SUBJECTS, verbose_name="Subject 2")
 
@@ -149,8 +149,8 @@ class Student(models.Model):
 class Chaperone(models.Model):
     """A chaperone for a team."""
 
-    competition = models.ForeignKey(Competition, on_delete=models.CASCADE)
-    school = models.ForeignKey(School, on_delete=models.CASCADE)
+    competition = models.ForeignKey(Competition)
+    school = models.ForeignKey(School)
 
     first_name = models.CharField(max_length=60)
     last_name = models.CharField(max_length=60)
