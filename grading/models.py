@@ -28,7 +28,7 @@ class Round(models.Model):
 
     ref = models.CharField(max_length=12)
     name = models.CharField(max_length=64)
-    competition = models.ForeignKey(Competition, related_name="rounds")
+    competition = models.ForeignKey(Competition, related_name="rounds", on_delete=models.CASCADE)
     grouping = models.IntegerField(choices=_ROUND_GROUPINGS)
 
     # TODO: consider having general polymorphic rounds
@@ -53,7 +53,7 @@ class Round(models.Model):
 class Question(models.Model):
     """A question container model."""
 
-    round = models.ForeignKey(Round, related_name="questions")
+    round = models.ForeignKey(Round, related_name="questions", on_delete=models.CASCADE)
     number = models.IntegerField()
     label = models.CharField(max_length=32)
     type = models.IntegerField(choices=_QUESTION_TYPES)
@@ -89,9 +89,9 @@ class Question(models.Model):
 class Answer(models.Model):
     """An answer to a question."""
 
-    question = models.ForeignKey(Question, related_name="answers")
-    student = models.ForeignKey(Student, related_name="answers", null=True, blank=True)
-    team = models.ForeignKey(Team, related_name="answers", null=True, blank=True)
+    question = models.ForeignKey(Question, related_name="answers", on_delete=models.CASCADE)
+    student = models.ForeignKey(Student, related_name="answers", null=True, blank=True, on_delete=models.CASCADE)
+    team = models.ForeignKey(Team, related_name="answers", null=True, blank=True, on_delete=models.CASCADE)
     value = models.FloatField(null=True, blank=True)
 
     # TODO: answers have to be queried for statistics, so either the
