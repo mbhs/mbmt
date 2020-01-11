@@ -16,6 +16,8 @@ $ cd mbmt
 $ virtualenv env
 ```
 
+SFTP/SCP (using CyberDuck or PuTTY) to transfer db.sqlite3 from sargon to your local version.
+
 Activate your virtual environment and install the dependencies. Activation varies by operating system.
 
 ```
