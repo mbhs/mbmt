@@ -12,8 +12,8 @@ SUBJECTS = (
 SUBJECTS_MAP = dict(SUBJECTS)
 
 DIVISIONS = (
-    (1, "Leibniz"),  # Harder
-    (2, "Descartes"))
+    (1, "Zermelo"),  # Harder
+    (2, "Dedekind"))
 DIVISIONS_MAP = dict(DIVISIONS)
 
 GRADES = (
