@@ -196,6 +196,7 @@ def team_edit(request, pk=None, competition=None, school=None):
                 student.team = team
                 student.save()
 
+            print("TEAM REGISTERED")
             return redirect("coaches:index")
 
     else:
