@@ -17,3 +17,5 @@ class CompetitionAdmin(admin.ModelAdmin):
 
 
 admin.site.register(models.Competition, CompetitionAdmin)
+admin.site.register(models.Writer)
+admin.site.register(models.Organizer)
