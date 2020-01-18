@@ -3,78 +3,38 @@
     "model": "home.organizer",
     "pk": 1,
     "fields": {
-      "image": "/media/fixtures/daniel.JPG",
-      "order": 1,
-      "name": "Daniel Zhu",
-      "role": "Problems Czar"
-    }
-  },
-  {
-    "model": "home.organizer",
-    "pk": 2,
-    "fields": {
-      "image": "/media/fixtures/stav.JPG",
-      "order": 2,
-      "name": "Jacob Stavrianos",
-      "role": "Logistics"
-    }
-  },
-  {
-    "model": "home.organizer",
-    "pk": 3,
-    "fields": {
-      "image": "/media/fixtures/steven.JPG",
-      "order": 3,
-      "name": "Steven Qu",
-      "role": "Problem Writing"
-    }
-  },
-  {
-    "model": "home.organizer",
-    "pk": 4,
-    "fields": {
-      "image": "/media/fixtures/haydn.JPG",
-      "order": 4,
-      "name": "Haydn Gwyn",
-      "role": "Test Composition"
-    }
-  },
-  {
-    "model": "home.organizer",
-    "pk": 5,
-    "fields": {
       "image": "/media/fixtures/emmy.JPG",
-      "order": 5,
+      "order": 1,
       "name": "Emmy Song",
       "role": "Communications"
     }
   },
   {
     "model": "home.organizer",
-    "pk": 6,
+    "pk": 2,
     "fields": {
       "image": "/media/fixtures/ambrose.JPG",
-      "order": 6,
+      "order": 2,
       "name": "Ambrose Yang",
       "role": "Problem Writing"
     }
   },
   {
     "model": "home.organizer",
-    "pk": 7,
+    "pk": 3,
     "fields": {
       "image": "/media/fixtures/shawn.JPG",
-      "order": 7,
+      "order": 3,
       "name": "Shawn Zhao",
       "role": "Logistics"
     }
   },
   {
     "model": "home.organizer",
-    "pk": 8,
+    "pk": 4,
     "fields": {
       "image": "/media/fixtures/schwartz.JPG",
-      "order": 7,
+      "order": 4,
       "name": "Jeremy Schwartz",
       "role": "Teacher Sponsor"
     }
@@ -83,173 +43,124 @@
     "model": "home.writer",
     "pk": 1,
     "fields": {
-      "name": "Haydn Gwyn"
+      "name": "Daniel Monroe"
     }
   },
   {
     "model": "home.writer",
     "pk": 2,
     "fields": {
-      "name": "Daniel Monroe"
+      "name": "Jason Hsu"
     }
   },
   {
     "model": "home.writer",
     "pk": 3,
     "fields": {
-      "name": "Jason Hsu"
+      "name": "Eva Quittman"
     }
   },
   {
     "model": "home.writer",
     "pk": 4,
     "fields": {
-      "name": "Jacob Stavrianos"
+      "name": "Emmy Song"
     }
   },
   {
     "model": "home.writer",
     "pk": 5,
     "fields": {
-      "name": "Eva Quittman"
+      "name": "Ambrose Yang"
     }
   },
   {
     "model": "home.writer",
     "pk": 6,
     "fields": {
-      "name": "Reynald Oliveria"
+      "name": "Timothy Qian"
     }
   },
   {
     "model": "home.writer",
     "pk": 7,
     "fields": {
-      "name": "Emmy Song"
+      "name": "Seung-Hyun Kwon"
     }
   },
   {
     "model": "home.writer",
     "pk": 8,
     "fields": {
-      "name": "Ambrose Yang"
+      "name": "Rohit Harapanhalli"
     }
   },
   {
     "model": "home.writer",
     "pk": 9,
     "fields": {
-      "name": "Steven Qu"
+      "name": "Shrujana Kunnam"
     }
   },
   {
     "model": "home.writer",
     "pk": 10,
     "fields": {
-      "name": "Timothy Qian"
+      "name": "Claire Zhang"
     }
   },
   {
     "model": "home.writer",
     "pk": 11,
     "fields": {
-      "name": "Kevin A. Zhou"
+      "name": "Douglas Chen"
     }
   },
   {
     "model": "home.writer",
     "pk": 12,
     "fields": {
-      "name": "Seung-Hyun Kwon"
+      "name": "Chris Tong"
     }
   },
   {
     "model": "home.writer",
     "pk": 13,
     "fields": {
-      "name": "Olivia Fan"
+      "name": "Cato Wang"
     }
   },
   {
     "model": "home.writer",
     "pk": 14,
     "fields": {
-      "name": "Rohit Harapanhalli"
+      "name": "Gabriel Wu"
     }
   },
   {
     "model": "home.writer",
     "pk": 15,
     "fields": {
-      "name": "Shrujana Kunnam"
+      "name": "Leo He"
     }
   },
   {
     "model": "home.writer",
     "pk": 16,
     "fields": {
-      "name": "Claire Zhang"
+      "name": "Jesse Silverberg"
     }
   },
   {
     "model": "home.writer",
     "pk": 17,
     "fields": {
-      "name": "Douglas Chen"
-    }
-  },
-  {
-    "model": "home.writer",
-    "pk": 18,
-    "fields": {
-      "name": "Chris Tong"
-    }
-  },
-  {
-    "model": "home.writer",
-    "pk": 19,
-    "fields": {
-      "name": "Daniel Zhu"
-    }
-  },
-  {
-    "model": "home.writer",
-    "pk": 20,
-    "fields": {
-      "name": "Cato Wang"
-    }
-  },
-  {
-    "model": "home.writer",
-    "pk": 21,
-    "fields": {
-      "name": "Gabriel Wu"
-    }
-  },
-  {
-    "model": "home.writer",
-    "pk": 22,
-    "fields": {
-      "name": "Leo He"
-    }
-  },
-  {
-    "model": "home.writer",
-    "pk": 23,
-    "fields": {
-      "name": "Jesse Silverberg"
-    }
-  },
-  {
-    "model": "home.writer",
-    "pk": 24,
-    "fields": {
       "name": "Henry Ren"
     }
   },
   {
     "model": "home.writer",
-    "pk": 25,
+    "pk": 18,
     "fields": {
       "name": "Shawn Zhao"
     }
