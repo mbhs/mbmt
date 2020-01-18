@@ -8,7 +8,9 @@ SUBJECTS = (
     ("al", "Algebra"),
     ("nt", "Number Theory"),
     ("ge", "Geometry"),
-    ("cp", "Counting and Probability"))
+    ("cp", "Counting and Probability"),
+    ("g1", "General Test 1"),
+    ("g2", "General Test 2"))
 SUBJECTS_MAP = dict(SUBJECTS)
 
 DIVISIONS = (
