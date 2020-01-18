@@ -196,6 +196,7 @@ def team_edit(request, pk=None, competition=None, school=None):
                 student.team = team
                 student.save()
 
+            print("TEAM REGISTERED")
             return redirect("coaches:index")
 
     else:
@@ -211,7 +212,8 @@ def team_edit(request, pk=None, competition=None, school=None):
         "student_helper": PrettyHelper(),
         "competition": competition,
         "school": school,
-        "harder": models.DIVISIONS[0][1]})
+        "harder": models.DIVISIONS[0][1],
+        "easier": models.DIVISIONS[1][1]})
 
 
 @login_required
