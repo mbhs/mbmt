@@ -16,7 +16,7 @@
 <p>
     For a complete explanation regarding what team compositions are allowed, see the <a href="{% url "home:rules" %}" target="_blank">rules</a>.
     Note that this year, the {{ harder }} division is harder.
-    This year, students in the {{ easier }} division should only be competing in "General Test 1" and "General Test 2".
+    This year, students in the {{ easier }} division will take two general tests in place of subject-specific tests.
 </p>
 
 {% if student_forms.non_form_errors %}
@@ -56,4 +56,20 @@
     </div>
 </form>
 
+<script>
+$('select[name=division]').change(function(e){
+  if ($('select[name=division]').val() == '1'){
+      $('.student-subjects select').val('');
+    $('.student-subjects select option').prop('disabled',false);
+    $('.student-subjects select option[value=g1]').prop('disabled',true);
+      $('.student-subjects select option[value=g2]').prop('disabled',true);
+  }else{
+      $('.student-subject1 select').val('g1');
+      $('.student-subject2 select').val('g2');
+      $('.student-subjects select option').prop('disabled',true);
+      $('.student-subject1 select option[value=g1]').prop('disabled',false);
+      $('.student-subject2 select option[value=g2]').prop('disabled',false);
+  }
+});
+</script>
 {% endblock %}
