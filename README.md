@@ -40,5 +40,4 @@ $ python manage.py runserver
 ```
 ## TODO
 
-* Fix form updating for lower division
 * Scoreboard/grading errors
