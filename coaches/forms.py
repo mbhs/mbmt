@@ -107,6 +107,8 @@ class StudentForm(forms.ModelForm):
 
         cleaned_data = super().clean()
         if any(cleaned_data.values()):
+            if cleaned_data=={'first_name': '', 'last_name': '', 'subject1': 'g1', 'subject2': 'g2', 'grade': '', 'shirt_size': '', 'id': None}:
+                return cleaned_data
             if not cleaned_data["first_name"] or not cleaned_data["last_name"]:
                 raise ValidationError("A first and last name is required.")
             if not cleaned_data["subject1"] or not cleaned_data["subject2"]:
@@ -114,6 +116,12 @@ class StudentForm(forms.ModelForm):
                     cleaned_data["first_name"], cleaned_data["last_name"]))
             if cleaned_data["subject1"] == cleaned_data["subject2"]:
                 raise ValidationError("The subject tests for {} {} must be different.".format(
+                    cleaned_data["first_name"], cleaned_data["last_name"]))
+            if not cleaned_data["grade"]:
+                raise ValidationError("A grade level is required for {} {}.".format(
+                    cleaned_data["first_name"], cleaned_data["last_name"]))
+            if not cleaned_data["shirt_size"]:
+                raise ValidationError("A shirt size is required for {} {}.".format(
                     cleaned_data["first_name"], cleaned_data["last_name"]))
         return cleaned_data
 
@@ -162,24 +170,18 @@ class StudentFormSet(NaiveStudentFormSet):
             for subject, count in subjects.items():
                 if count < 1 and subject != "General Test 1" and subject != "General Test 2":
                     raise ValidationError("There must be at least one student in subject {}.".format(subject))
-                if count > 0 and (subject == "General Test 1" or subject == "General Test 2"):
-                    raise ValidationError("General Tests are only for the lower division.")
         elif len(students) == 4:
             for subject, count in subjects.items():
                 if count < 1 and subject != "General Test 1" and subject != "General Test 2":
                     raise ValidationError("There must be at least one student in subject {}.".format(subject))
                 if count > 3 and subject != "General Test 1" and subject != "General Test 2":
                     raise ValidationError("There can be at most three items in subject {}.".format(subject))
-                if count > 0 and (subject == "General Test 1" or subject == "General Test 2"):
-                    raise ValidationError("General Tests are only for the lower division.")
         elif len(students) == 5:
             for subject, count in subjects.items():
                 if count < 2 and subject != "General Test 1" and subject != "General Test 2":
                     raise ValidationError("There must be at least two items in subject {}.".format(subject))
-                if count > 0 and (subject == "General Test 1" or subject == "General Test 2"):
-                    raise ValidationError("General Tests are only for the lower division.")
-        else:
-            raise ValidationError("General Tests are only for the lower division.")
+        elif len(students)==2:
+            raise ValidationError("We do not accept teams of two. Please either add a student to make a team of three, or register each student as an individual.")
         return data
 
 

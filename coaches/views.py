@@ -193,8 +193,9 @@ def team_edit(request, pk=None, competition=None, school=None):
 
             form_students = student_forms.save(commit=False)
             for student in form_students:
-                student.team = team
-                student.save()
+                if student.first_name!='':
+                    student.team = team
+                    student.save()
 
             print("TEAM REGISTERED")
             return redirect("coaches:index")
