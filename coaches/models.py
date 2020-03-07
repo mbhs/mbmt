@@ -108,16 +108,16 @@ class Team(models.Model):
 class Student(models.Model):
     """A student participating in the competition."""
 
-    first_name = models.CharField(max_length=64,blank=True)
-    last_name = models.CharField(max_length=64,blank=True)
+    first_name = models.CharField(max_length=64)
+    last_name = models.CharField(max_length=64)
 
     team = models.ForeignKey(Team, related_name="students", on_delete=models.CASCADE)
     subject1 = models.CharField(max_length=2, blank=True, choices=SUBJECTS, verbose_name="Subject 1")
     subject2 = models.CharField(max_length=2, blank=True, choices=SUBJECTS, verbose_name="Subject 2")
 
-    grade = models.IntegerField(choices=GRADES,blank=True)
+    grade = models.IntegerField(choices=GRADES)
 
-    shirt_size = models.IntegerField(choices=SHIRT_SIZES,blank=True)
+    shirt_size = models.IntegerField(choices=SHIRT_SIZES)
     attending = models.NullBooleanField(default=False)
 
     class Meta:
