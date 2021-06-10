@@ -12,7 +12,7 @@ django-picklefield = "==0.3.2"
 pyyaml = "==5.1"
 scipy = "*"
 pillow = "*"
-django = "==1.11.23"
+django = "==2.2.24"
 
 
 [dev-packages]
