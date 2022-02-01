@@ -25,7 +25,7 @@ SECRET_KEY = "gs_#tr9z%vw1y9u8(%wy+u$ti%v&kt8dz(06$a^jn^kd6o22ce"
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["127.0.0.1", "localhost", "mbmt.mbhs.edu"]
+ALLOWED_HOSTS = ["50.210.145.101","127.0.0.1", "localhost", "mbmt.mbhs.edu"]
 
 
 # Application definition
