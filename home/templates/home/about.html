@@ -7,6 +7,17 @@
 
 MBMT is proudly organized and executed entirely by students from the Montgomery Blair High School Math Team.
 
+<h2>Problem Writers</h2>
+
+<p>We're very thankful to our problem writers, without whom we wouldn't have a contest:</p>
+
+<ul class="writers">
+    {% for writer in writers %}
+    <li>{{ writer.name }}</li>
+    {% endfor %}
+</ul>
+
+
 <h2>Past Contest Organizers</h2>
 
 <div class="row organizers">
@@ -18,16 +29,6 @@ MBMT is proudly organized and executed entirely by students from the Montgomery 
     </div>
     {% endfor %}
 </div>
-
-<h2>Past Problem Writers</h2>
-
-<p>We're very thankful to our problem writers, without whom we wouldn't have a contest:</p>
-
-<ul class="writers">
-    {% for writer in writers %}
-    <li>{{ writer.name }}</li>
-    {% endfor %}
-</ul>
 
 <h2>Website</h2>
 
@@ -42,7 +43,7 @@ The source is on <a href="https://github.com/mbhs/mbmt">Github</a>.
 
 <h2>Past Sponsors</h2>
 
-<p>MBMT was sponsored by the Magnet Foundation, Art of Problem Solving, Expii, and Maplesoft.</p>
+<p>Past contests have been sponsored by the Montgomery Blair Magnet Foundation, Art of Problem Solving, Expii, and Maplesoft.</p>
 
 <div class="sponsors">
     <a href="http://www.mbhsmagnet.org/"><img src="{% static "images/magnet.jpg" %}" height="150px"></a>
