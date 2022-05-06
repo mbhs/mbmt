@@ -9,8 +9,6 @@ SUBJECTS = (
     ("nt", "Number Theory"),
     ("ge", "Geometry"),
     ("cp", "Counting and Probability"),
-    # ("g1", "General Test 1"),
-    # ("g2", "General Test 2")
     )
 SUBJECTS_MAP = dict(SUBJECTS)
 
@@ -26,7 +24,6 @@ GRADES = (
     (8, "8th"))
 
 SHIRT_SIZES = (
-    # (0, "Default"),
     (1, "Adult Small"),
     (2, "Adult Medium"),
     (3, "Adult Large"),
