@@ -159,29 +159,29 @@ class StudentFormSet(NaiveStudentFormSet):
             subject: len(list(filter(lambda student: code in (student.subject1, student.subject2), students)))
             for code, subject in models.SUBJECTS}
 
-        fits_lower_division = True
-        for student in students:
-            if student.subject1 != "g1" or student.subject2 != "g2":
-                fits_lower_division = False
+        # fits_lower_division = True
+        # for student in students:
+        #     if student.subject1 != "g1" or student.subject2 != "g2":
+        #         fits_lower_division = False
 
-        if fits_lower_division:
-            return data
-        elif len(students) == 3:
-            for subject, count in subjects.items():
-                if count < 1 and subject != "General Test 1" and subject != "General Test 2":
-                    raise ValidationError("There must be at least one student in subject {}.".format(subject))
-        elif len(students) == 4:
-            for subject, count in subjects.items():
-                if count < 1 and subject != "General Test 1" and subject != "General Test 2":
-                    raise ValidationError("There must be at least one student in subject {}.".format(subject))
-                if count > 3 and subject != "General Test 1" and subject != "General Test 2":
-                    raise ValidationError("There can be at most three items in subject {}.".format(subject))
-        elif len(students) == 5:
-            for subject, count in subjects.items():
-                if count < 2 and subject != "General Test 1" and subject != "General Test 2":
-                    raise ValidationError("There must be at least two items in subject {}.".format(subject))
-        elif len(students)==2:
-            raise ValidationError("We do not accept teams of two. Please either add a student to make a team of three, or register each student as an individual.")
+        # if fits_lower_division:
+        #     return data
+        # elif len(students) == 3:
+        #     for subject, count in subjects.items():
+        #         if count < 1 and subject != "General Test 1" and subject != "General Test 2":
+        #             raise ValidationError("There must be at least one student in subject {}.".format(subject))
+        # elif len(students) == 4:
+        #     for subject, count in subjects.items():
+        #         if count < 1 and subject != "General Test 1" and subject != "General Test 2":
+        #             raise ValidationError("There must be at least one student in subject {}.".format(subject))
+        #         if count > 3 and subject != "General Test 1" and subject != "General Test 2":
+        #             raise ValidationError("There can be at most three items in subject {}.".format(subject))
+        # elif len(students) == 5:
+        #     for subject, count in subjects.items():
+        #         if count < 2 and subject != "General Test 1" and subject != "General Test 2":
+        #             raise ValidationError("There must be at least two items in subject {}.".format(subject))
+        # elif len(students)==2:
+        #     raise ValidationError("We do not accept teams of two. Please either add a student to make a team of three, or register each student as an individual.")
         return data
 
 
