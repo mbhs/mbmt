@@ -1,5 +1,4 @@
 from django.core.management.base import BaseCommand, CommandError
-from django.db.models.query import Q
 from grading import models
 
 import os
@@ -20,14 +19,8 @@ def load(path, loader=json.load):
     with open(path, "r") as file:
         c = loader(file)
 
-    # Create the competition and save.
-    competition = models.Competition(
-        id=c["id"], name=c["name"],
-        date=date(c["dates"]["competition"]),
-        date_registration_start=date(c["dates"]["registration_start"]),
-        date_registration_end=date(c["dates"]["registration_end"]),
-        date_team_edit_end=date(c["dates"]["team_edit_end"]),
-        date_shirt_order_end=date(c["dates"]["shirt_order_end"]))
+    competition = models.Competition.current()
+    competition._grader = c["grader"]
     competition.save()
 
     # Clear old stuff
@@ -53,11 +46,6 @@ def load(path, loader=json.load):
             qc += 1
         print("{0.name}: {1} questions".format(round, qc))
 
-    # Activate the competition if none are activated
-    if not models.Competition.current():
-        competition.active = True
-        competition.save()
-
 
 class Command(BaseCommand):
     """Import a competition file into the database."""
@@ -68,21 +56,9 @@ class Command(BaseCommand):
         subparsers = parser.add_subparsers(dest="command", metavar="command")
         load_parser = subparsers.add_parser("load", help="load a competition file", cmd=self)
         load_parser.add_argument("file", help="competition JSON summary")
-        activate_parser = subparsers.add_parser("activate", help="activate a competition", cmd=self)
-        activate_parser.add_argument("id", help="competition name, nickname, or index")
-        subparsers.add_parser("list", help="list loaded competitions", cmd=self)
-        delete_parser = subparsers.add_parser("delete", help="delete a competition", cmd=self)
-        delete_parser.add_argument("id", help="competition name, nickname, or index")
 
     def handle(self, *args, **kwargs):
         """Handle a call to the command."""
-
-        if kwargs["command"] == "list":
-            for competition in models.Competition.objects.all():
-                print("  {1:<2} {0.id:<12} {0.name:<20}".format(competition, "*" if competition.active else ""))
-
-        if kwargs["command"] == "delete":
-            models.Competition.current().delete()
 
         if kwargs["command"] == "load":
             start = time.time()
@@ -92,7 +68,5 @@ class Command(BaseCommand):
             load(path)
             print("Done in {} seconds!".format(round(time.time() - start, 3)))
 
-        if kwargs["command"] == "activate":
-            search = kwargs["id"]
-            selected = models.Competition.objects.filter(Q(id=search) | Q(name=search)).first()
-            selected.activate()
+        else:
+            print("The current competition is {}.".format(models.Competition.current().name))

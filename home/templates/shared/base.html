@@ -10,6 +10,7 @@
         <script type="text/javascript" src="{% static "js/jquery.min.js" %}"></script>
         <script type="text/javascript" src="{% static "js/bootstrap.min.js" %}"></script>
         <script type="text/javascript" src="{% static "js/email.js" %}"></script>
+        <link rel="shortcut icon" type="image/png" href="{% static 'images/favicon.ico' %}"/>
         {% block head %}{% endblock %}
     </head>
     <body>
@@ -37,9 +38,45 @@
                         {% block shortcuts %}
                         {% if user.is_authenticated %}
                         {% if user.is_staff %}
-
+                        <li><a href="{% url "grading:index" %}">Overview</a></li>
+                        <li><a href="{% url "grading:attendance" %}">Attendance</a></li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                Grading <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a href="{% url "grading:students" %}">Individuals</a></li>
+                                <li><a href="{% url "grading:teams" %}">Teams</a></li>
+                                <li><a href="{% url "grading:statistics" %}">Statistics</a></li>
+                            </ul>
+                        </li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                Scoreboard <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a href="{% url "grading:scoreboard_students" %}">Individuals</a></li>
+                                <li><a href="{% url "grading:scoreboard_teams" %}">Teams</a></li>
+                                <li><a href="{% url "grading:live" "guts" %}">Live</a></li>
+                            </ul>
+                        </li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                Logistics <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a href="{% url "grading:tags_students" %}">Student tags</a></li>
+                                <li><a href="{% url "grading:tags_teachers" %}">Teacher tags</a></li>
+                                <li><a href="{% url "grading:tags_chaperones" %}">Chaperone tags</a></li>
+                                <li><a href="{% url "grading:shirt_sizes" %}">Shirt sizes</a></li>
+                            </ul>
+                        </li>
+                        {% if user.is_superuser %}
+                        <li><a href="{% url "admin:index" %}">Admin</a></li>
+                        {% endif %}
                         {% else %}
                         <li><a href="{% url "coaches:index" %}">Coaching</a></li>
+                        <li><a href="{% url "grading:scoreboard_sponsors" %}">Scoreboard</a></li>
                         {% endif %}
                         <li><a href="{% url "home:logout" %}">Logout</a></li>
                         {% else %}
@@ -58,7 +95,7 @@
         </div>
         <footer class="footer">
             <div class="container">
-                <span class="text-muted">Copyright &copy; 2014-17 Montgomery Blair Math Team.</span>
+                <span class="text-muted">Copyright &copy; 2014-22 Montgomery Blair Math Team.</span>
             </div>
         </footer>
     </body>

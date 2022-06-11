@@ -1,0 +1,33 @@
+{% extends "shared/base.html" %}
+
+{% block content %}
+
+<h1>Overview</h1>
+
+<table id="chaperones" class="table table-striped">
+    <tr>
+        <th>School</th>
+        <th>Coach</th>
+        <th>Students</th>
+        <th>Teams</th>
+        <th>Chaperones</th>
+    </tr>
+    {% for map in coaching %}
+    <tr>
+        <td>{{ map.school.name }}</td>
+        <td>{{ map.coach.get_full_name }}</td>
+        <td>{{ map.students.count }}</td>
+        <td>{{ map.teams.count }}</td>
+        <td>{{ map.chaperones.count }}</td>
+    </tr>
+    {% endfor %}
+    <tr>
+        <td>Total</td>
+        <td>{{ coaching.count }}</td>
+        <td>{{ students }}</td>
+        <td>{{ teams }}</td>
+        <td>{{ chaperones }}</td>
+    </tr>
+</table>
+
+{% endblock %}

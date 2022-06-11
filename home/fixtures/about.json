@@ -3,196 +3,166 @@
     "model": "home.organizer",
     "pk": 1,
     "fields": {
-      "image": "/media/fixtures/david.jpg",
+      "image": "/media/fixtures/emmy.JPG",
       "order": 1,
-      "name": "David Wu",
-      "role": "Logistics"
+      "name": "Emmy Song",
+      "role": "Communications"
     }
   },
   {
     "model": "home.organizer",
     "pk": 2,
     "fields": {
-      "image": "/media/fixtures/annie.jpg",
+      "image": "/media/fixtures/ambrose.JPG",
       "order": 2,
-      "name": "Annie Zhao",
-      "role": "Communications"
+      "name": "Ambrose Yang",
+      "role": "Problem Writing"
     }
   },
   {
     "model": "home.organizer",
     "pk": 3,
     "fields": {
-      "image": "/media/fixtures/guang.jpg",
+      "image": "/media/fixtures/shawn.JPG",
       "order": 3,
-      "name": "Guang Cui",
-      "role": "Problem Czar"
+      "name": "Shawn Zhao",
+      "role": "Logistics"
     }
   },
   {
     "model": "home.organizer",
     "pk": 4,
     "fields": {
-      "image": "/media/fixtures/jyo.jpg",
+      "image": "/media/fixtures/schwartz.JPG",
       "order": 4,
-      "name": "Jyotsna Rao",
-      "role": "Competition Day"
-    }
-  },
-  {
-    "model": "home.organizer",
-    "pk": 5,
-    "fields": {
-      "image": "/media/fixtures/steven.jpg",
-      "order": 5,
-      "name": "Steven Qu",
-      "role": "Logistics"
-    }
-  },
-  {
-    "model": "home.organizer",
-    "pk": 6,
-    "fields": {
-      "image": "/media/fixtures/stav.jpg",
-      "order": 6,
-      "name": "Jacob Stavrianos",
-      "role": "Competition Day"
-    }
-  },
-  {
-    "model": "home.organizer",
-    "pk": 7,
-    "fields": {
-      "image": "/media/fixtures/daniel.jpg",
-      "order": 7,
-      "name": "Daniel Zhu",
-      "role": "Problem Czar"
+      "name": "Jeremy Schwartz",
+      "role": "Teacher Sponsor"
     }
   },
   {
     "model": "home.writer",
     "pk": 1,
     "fields": {
-      "name": "Steven Qu"
+      "name": "Daniel Monroe"
     }
   },
   {
     "model": "home.writer",
     "pk": 2,
     "fields": {
-      "name": "Guang Cui"
+      "name": "Jason Hsu"
     }
   },
   {
     "model": "home.writer",
     "pk": 3,
     "fields": {
-      "name": "Kevin Qian"
+      "name": "Eva Quittman"
     }
   },
   {
     "model": "home.writer",
     "pk": 4,
     "fields": {
-      "name": "Jyotsna Rao"
+      "name": "Emmy Song"
     }
   },
   {
     "model": "home.writer",
     "pk": 5,
     "fields": {
-      "name": "David Wu"
+      "name": "Ambrose Yang"
     }
   },
   {
     "model": "home.writer",
     "pk": 6,
     "fields": {
-      "name": "Daniel Zhu"
+      "name": "Timothy Qian"
     }
   },
   {
     "model": "home.writer",
     "pk": 7,
     "fields": {
-      "name": "Kevin A. Zhou"
+      "name": "Seung-Hyun Kwon"
     }
   },
   {
     "model": "home.writer",
     "pk": 8,
     "fields": {
-      "name": "Haydn Gwyn"
+      "name": "Rohit Harapanhalli"
     }
   },
   {
     "model": "home.writer",
     "pk": 9,
     "fields": {
-      "name": "Jason Hsu"
+      "name": "Shrujana Kunnam"
     }
   },
   {
     "model": "home.writer",
     "pk": 10,
     "fields": {
-      "name": "Jacob Stavrianos"
+      "name": "Claire Zhang"
     }
   },
   {
     "model": "home.writer",
     "pk": 11,
     "fields": {
-      "name": "Jesse Silverberg"
+      "name": "Douglas Chen"
     }
   },
   {
     "model": "home.writer",
     "pk": 12,
     "fields": {
-      "name": "Jason Hsu"
+      "name": "Chris Tong"
     }
   },
   {
     "model": "home.writer",
     "pk": 13,
     "fields": {
-      "name": "Dilhan Salgado"
+      "name": "Cato Wang"
     }
   },
   {
     "model": "home.writer",
     "pk": 14,
     "fields": {
-      "name": "Daniel Monroe"
+      "name": "Gabriel Wu"
     }
   },
   {
     "model": "home.writer",
     "pk": 15,
     "fields": {
-      "name": "Ambrose Yang"
+      "name": "Leo He"
     }
   },
   {
     "model": "home.writer",
     "pk": 16,
     "fields": {
-      "name": "Seung-Hyun Kwon"
+      "name": "Jesse Silverberg"
     }
   },
   {
     "model": "home.writer",
     "pk": 17,
     "fields": {
-      "name": "Emmy Song"
+      "name": "Henry Ren"
     }
   },
   {
     "model": "home.writer",
     "pk": 18,
     "fields": {
-      "name": "Eva Quittman"
+      "name": "Shawn Zhao"
     }
   }
 ]

@@ -1,7 +1,23 @@
+# Editor
 .idea/
+
+# Python
 __pycache__/
+env/
+*.pyc
+
+# Django
 db.sqlite3
-db.sqlite3.*
+db.sqlite3*
 /static/
 migrations/
-env/
+
+# Logging
+mbmt.log*
+
+# Deploy data
+deployed/
+
+# Various data
+*.json
+!**/test.json

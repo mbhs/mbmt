@@ -1,5 +1,9 @@
-from django.contrib.auth.decorators import login_required, permission_required
-from django.shortcuts import render, redirect, HttpResponse
+from django.contrib.auth.decorators import login_required
+from django.contrib.admin.views.decorators import staff_member_required
+from django.views.decorators.csrf import csrf_exempt
+from django.views import View
+from django.views.generic import ListView
+from django.shortcuts import render, redirect, HttpResponse, get_object_or_404
 from django.db.models import Q
 
 import json
@@ -8,41 +12,84 @@ import collections
 import itertools
 import traceback
 
-import home.models
-from . import models
+from home.models import User, Competition
+from coaches.models import Coaching, Student, Team, Chaperone, DIVISIONS_MAP, DIVISIONS, SUBJECTS
+from .models import Round, Question, Answer, ESTIMATION
 from . import grading
+from .forms import StatsForm
 
 
-def columnize(objects, columns):
-    """Return a list of rows of a column layout."""
+# Staff check
 
-    size = math.ceil(len(objects) / columns)
-    return list(itertools.zip_longest(*[objects[i:i+size] for i in range(0, len(objects), size)]))
+class StaffMemberRequired(View):
+    """Mixin that verifies a requesting user is a staff member."""
 
+    def dispatch(self, request, *args, **kwargs):
+        """Dispatch a request."""
 
-@permission_required("grading.can_grade")
-def view_students(request):
-    return render(request, "grading/student/view.html", {
-        "students": home.models.Student.current().order_by("name").all()})
-
-
-@permission_required("grading.can_grade")
-def view_teams(request):
-    return render(request, "grading/team/view.html", {
-        "teams": home.models.Team.current().order_by("number").all()})
+        if not request.user.is_staff:
+            return redirect("coaches:index")
+        return super().dispatch(request, *args, **kwargs)
 
 
-@permission_required("grading.can_grade")
-def edit_teams(request):
-    return render(request, "grading/team/edit.html", {
-        "teams": home.models.Team.current().order_by("number").all()})
+# Dashboard utilities and logistics views. We should probably write a
+# spreadsheet generator at some point.
+
+@staff_member_required
+def index(request):
+    return render(request, "grading/index.html", {
+        "competition": Competition.current(),
+        "students": Student.current().count(),
+        "teams": Team.current().count(),
+        "chaperones": Chaperone.current().count(),
+        "coaching": Coaching.current().all()})
 
 
-@permission_required("grading.can_grade")
+class StudentsView(ListView, StaffMemberRequired):
+    """Get the list of all students for grading."""
+
+    template_name = "grading/student/view.html"
+    context_object_name = "students"
+    paginate_by = 50
+
+    def get_queryset(self):
+        students = Student.current().order_by("last_name").all()
+        if "search" in self.request.GET:
+            search = self.request.GET["search"].lower()
+            return list(filter(lambda student: search in student.get_full_name().lower(), students))
+        return students
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["total"] = Student.current().count()
+        return context
+
+
+class TeamsView(ListView, StaffMemberRequired):
+    """Get the list of all students for grading."""
+
+    template_name = "grading/team/view.html"
+    context_object_name = "teams"
+    paginate_by = 50
+
+    def get_queryset(self):
+        teams = Team.current().order_by("number").all()
+        if "search" in self.request.GET:
+            search = self.request.GET["search"].lower()
+            return list(filter(lambda team: search in team.name.lower() or str(team.number) == search, teams))
+        return teams
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["total"] = Team.current().count()
+        return context
+
+
+@staff_member_required
 def score(request, grouping, any_id, round_id):
     """Scoring view."""
 
-    competition = models.Competition.current()
+    competition = Competition.current()
     round = competition.rounds.filter(ref=round_id).first()
 
     if grouping == "team":
@@ -51,17 +98,18 @@ def score(request, grouping, any_id, round_id):
         return score_individual(request, any_id, round)
 
 
+@staff_member_required
 def score_team(request, team_id, round):
     """Scoring view for a team."""
 
     # Iterate questions and get answers
-    team = home.models.Team.objects.filter(id=team_id).first()
+    team = Team.objects.filter(id=team_id).first()
     answers = []
     question_answer = []
     for question in round.questions.order_by("number").all():
-        answer = models.Answer.objects.filter(team=team, question=question).first()
+        answer = Answer.objects.filter(team=team, question=question).first()
         if not answer:
-            answer = models.Answer(team=team, question=question)
+            answer = Answer(team=team, question=question)
             answer.save()
         answers.append(answer)
         question_answer.append((question, answer))
@@ -69,7 +117,7 @@ def score_team(request, team_id, round):
     # Update the answers
     if request.method == "POST":
         update_answers(request, answers)
-        return redirect("team_view")
+        return redirect("grading:teams")
 
     # Render the grading view
     return render(request, "grading/grader.html", {
@@ -80,17 +128,18 @@ def score_team(request, team_id, round):
         "mode": "team"})
 
 
+@staff_member_required
 def score_individual(request, student_id, round):
     """Scoring view for an individual."""
 
     # Iterate questions and get answers
-    student = home.models.Student.objects.filter(id=student_id).first()
+    student = Student.objects.filter(id=student_id).first()
     answers = []
     question_answer = []
     for question in round.questions.order_by("number").all():
-        answer = models.Answer.objects.filter(student=student, question=question).first()
+        answer = Answer.objects.filter(student=student, question=question).first()
         if not answer:
-            answer = models.Answer(student=student, question=question)
+            answer = Answer(student=student, question=question)
             answer.save()
         answers.append(answer)
         question_answer.append((question, answer))
@@ -98,17 +147,18 @@ def score_individual(request, student_id, round):
     # Update the answers
     if request.method == "POST":
         update_answers(request, answers)
-        return redirect("student_view")
+        return redirect("grading:students")
 
     # Render the grading view
     return render(request, "grading/grader.html", {
-        "name": student.name,
+        "name": student.get_full_name(),
         "division": student.team.get_division_display,
         "round": round,
         "question_answer": question_answer,
         "mode": "student"})
 
 
+@staff_member_required
 def update_answers(request, answers):
     """Update the answers to a round by an individual or group."""
 
@@ -122,107 +172,115 @@ def update_answers(request, answers):
 
 
 @login_required
-@permission_required("grading.can_grade")
-def shirts(request):
+@staff_member_required
+def shirt_sizes(request):
     """Shirt sizes view."""
 
-    teams = home.models.Team.current()
-    teachers = {}
     totals = collections.Counter()
-    for team in teams:
-        if team.school.user not in teachers:
-            teachers[team.school.user] = [team.school.user, [], collections.Counter()]
-        teachers[team.school.user][1].extend(list(team.students.all()))
-        for student in team.students.all():
-            teachers[team.school.user][2][student.get_size_display()] += 1
-            totals[student.get_size_display()] += 1
-    for teacher in teachers:
-        teachers[teacher][1].sort(key=lambda x: x.name)
+    for size in Student.current().values_list("shirt_size", flat=True):
+        totals[size] += 1
+    for size in Coaching.current().values_list("shirt_size", flat=True):
+        totals[size] += 1
+    for size in Chaperone.current().values_list("shirt_size", flat=True):
+        totals[size] += 1
     return render(request, "grading/shirts.html", {
-        "teachers": list(teachers.values()),
-        "totals": totals})
+        "totals": dict(totals),
+        "groups": [
+            ("Coach", Coaching.current().values_list(
+                "coach__first_name",
+                "coach__last_name",
+                "school__name",
+                "shirt_size")),
+            ("Chaperone", Chaperone.current().values_list(
+                "first_name",
+                "last_name",
+                "school__name",
+                "shirt_size")),
+            ("Student", Student.current().values_list(
+                "first_name",
+                "last_name",
+                "team__school__name",
+                "shirt_size"))]})
 
 
-@login_required
-@permission_required("grading.can_grade")
+@staff_member_required
 def attendance(request):
-    """Display the attendance page."""
+    """Render the attendance page."""
+
+    return render(request, "grading/attendance.html")
+
+
+@csrf_exempt
+@staff_member_required
+def attendance_get(request):
+    """Get the attendance list."""
 
     # If data is posted
     if request.method == "POST":
         attendance_post(request)
-        return redirect("attendance")
+        return HttpResponse("")
 
     # Format students into nice columns
-    students = home.models.Student.current().all()
-    count = request.GET.get("columns", 4)
-    columns = columnize(students, count)
-    return render(request, "grading/attendance.html", {"students": columns})
+    students = []
+    for student in Student.current().order_by("last_name"):
+        students.append((
+            student.id, student.get_full_name(), student.attending,
+            student.team.get_division_display(), student.team.school.name))
+    return HttpResponse(json.dumps(students))
 
 
+@staff_member_required
 def attendance_post(request):
-    """Handle post data from the attendance.
+    """Handle post data from the attendance app."""
 
-    There's some degree of weirdness here, as check boxes don't post
-    anything unless they're checked. To prevent this, hidden inputs
-    are included for every check box with the absent value. The final
-    result is accessed by getting the list of posted values and
-    checking if present is in it. To minimize saves, only students
-    whose attendance has changed are modified.
-    """
+    student = Student.current(id=request.POST["id"]).first()
+    if not student:
+        return
 
-    # Iterate post data for numeric entires
-    for iid in filter(lambda x: x.isnumeric(), request.POST):
-        student = home.models.Student.objects.filter(id=iid).first()
-
-        # Check if student, check present or absent
-        if student:
-            values = request.POST.getlist(iid)
-            if "absent" in values:
-
-                # Modify in database
-                attending = "present" in request.POST.getlist(iid)
-                if student.attending != attending:
-                    student.attending = attending
-                    student.save()
+    student.attending = request.POST["attending"] == "true"
+    student.save()
 
 
-@permission_required("grading.can_grade")
+@staff_member_required
 def student_name_tags(request):
     """Display a table from which student name tags can be generated."""
 
-    return render(request, "grading/tags/students.html", {"students": home.models.Student.current()})
+    return render(request, "grading/tags/students.html", {"students": Student.current()})
 
 
-@permission_required("grading.can_grade")
+@staff_member_required
 def teacher_name_tags(request):
     """Display a table from which student name tags can be generated."""
 
-    users = home.models.User.objects.filter(
-        is_staff=False, is_superuser=False, school__isnull=False).order_by("school__name")
-    users = list(filter(lambda user: user.school and user.school.teams.count(), users))
-    return render(request, "grading/tags/teacher.html", {"teachers": users})
+    return render(request, "grading/tags/teachers.html", {"coachings": Coaching.current()})
 
 
-def live(request, round):
+@staff_member_required
+def chaperone_name_tags(request):
+    """Display a table from which chaperone name tags can be generated."""
+
+    return render(request, "grading/tags/chaperones.html", {"chaperones": Chaperone.current()})
+
+
+def live(request, round_id):
     """Get the live guts scoreboard."""
 
-    if round == "guts":
-        return render(request, "grading/guts.html")
+    if round_id == "guts":
+        return render(request, "grading/guts.html", {"divisions": (DIVISIONS[0][1], DIVISIONS[1][1])})
     else:
         return redirect("student_view")
 
 
-@permission_required("grading.can_grade")
-def live_update(request, round):
+@staff_member_required
+def live_update(request, round_id):
     """Get the live scoreboard update."""
 
-    if round == "guts":
-        grader = models.Competition.current().grader
+    if round_id == "guts":
+        grader = Competition.current().grader
         scores = grader.guts_live_round_scores(use_cache_before=20)
         named_scores = dict()
         for division in scores:
-            division_name = home.models.DIVISIONS_MAP[division]
+            division_name = DIVISIONS_MAP[division]
             named_scores[division_name] = {}
             for team in scores[division]:
                 named_scores[division_name][team.name] = scores[division][team]
@@ -235,56 +293,68 @@ def live_update(request, round):
 def sponsor_scoreboard(request):
     """Get the sponsor scoreboard."""
 
-    grader = models.Competition.current().grader
-    subject_scores = grader.cache_get("subject_scores")
-    grader.calculate_team_scores(use_cache=True)
-    if subject_scores is None:
-        grader.calculate_individual_scores(use_cache=False)
+    grader = Competition.current().grader
 
-    school = request.user.school
-    individual_scores = grading.prepare_school_individual_scores(school, grader.cache_get("subject_scores"))
+    # Check subject scores
+    subject_scores = grader.cache_get("subject_scores")
+    if subject_scores is None:
+        subject_scores = grader.calculate_individual_scores(use_cache=False)
+
+    # Check team scores
+    team_scores = grader.cache_get("team_overall_scores")
+    if team_scores is None:
+        team_scores = grader.calculate_team_scores(use_cache=True)
+
+    school = Coaching.current(coach=request.user).first().school
+    individual_scores = grading.prepare_school_individual_scores(school, subject_scores)
     team_scores = grading.prepare_school_team_scores(
         school,
         grader.cache_get("raw_guts_scores"),
         grader.cache_get("raw_team_scores"),
         grader.cache_get("team_individual_scores"),
-        grader.calculate_team_scores(use_cache=True))
+        team_scores)
+
+    print(individual_scores, team_scores)
 
     return render(request, "grading/scoring.html", {
         "individual_scores": individual_scores,
         "team_scores": team_scores})
 
 
-@permission_required("grading.can_grade")
+@staff_member_required
 def student_scoreboard(request):
     """Do final scoreboard calculations."""
 
-    grader = models.Competition.current().grader
+    grader = Competition.current().grader
+
     if request.method == "POST" and "recalculate" in request.POST:
         grader.calculate_individual_scores(use_cache=False)
-        return redirect("student_scoreboard")
+        return redirect("grading:scoreboard_students")
 
     try:
-        individual_scores = grading.prepare_individual_scores(grader.calculate_individual_scores(use_cache=True))
+        individual_scores = grading.prepare_individual_scores(
+            grader.calculate_individual_scores(use_cache=True))
         subject_scores = grading.prepare_subject_scores(grader.cache_get("subject_scores"))
         context = {
             "individual_scores": individual_scores,
             "subject_scores": subject_scores,
-            "individual_powers": grader.individual_powers,
-            "individual_bonus": grader.individual_bonus}
+            "individual_powers": grader.individual_weight,
+            "individual_bonus": {}}
+            #"individual_powers": grader.individual_powers,
+            #"individual_bonus": grader.individual_bonus}
     except Exception:
         context = {"error": traceback.format_exc().replace("\n", "<br>")}
     return render(request, "grading/student/scoreboard.html", context)
 
 
-@permission_required("grading.can_grade")
+@staff_member_required
 def team_scoreboard(request):
     """Show the team scoreboard view."""
 
-    grader = models.Competition.current().grader
+    grader = Competition.current().grader
     if request.method == "POST" and "recalculate" in request.POST:
         grader.calculate_team_scores(use_cache=False)
-        return redirect("team_scoreboard")
+        return redirect("grading:scoreboard_teams")
 
     try:
         team_scores = grader.calculate_team_scores(use_cache=True)
@@ -299,18 +369,23 @@ def team_scoreboard(request):
     return render(request, "grading/team/scoreboard.html", context)
 
 
-@permission_required("grading._can_grade")
-def view_statistics(request):
-    """View statistics on the last competition."""
+@staff_member_required
+def statistics(request):
+    """View statistics on the desired competition."""
+    if request.method == "POST":
+        current = get_object_or_404(Competition, pk=request.POST.get("year",""))
+    else:
+        current = Competition.current()
 
-    current = models.Competition.current()
+    stat_form = StatsForm()
+
     division_stats = []
-    for division, division_name in home.models.DIVISIONS:
+    for division, division_name in DIVISIONS:
         stats = []
         subject_stats = []
-        for subject, subject_name in home.models.SUBJECTS:
+        for subject, subject_name in SUBJECTS:
             question_stats_dict = {}
-            for answer in models.Answer.objects.filter(
+            for answer in Answer.objects.filter(
                     Q(student__team__division=division) &
                     Q(question__round__competition=current) &
                     (Q(question__round__ref="subject1") & Q(student__subject1=subject) |
@@ -328,10 +403,10 @@ def view_statistics(request):
         for round_ref in ["team", "guts"]:
             question_stats_dict = {}
             estimation_guesses = {}
-            for answer in models.Answer.objects.filter(
+            for answer in Answer.objects.filter(
                     Q(team__division=division) &
                     Q(question__round__competition=current) & Q(question__round__ref=round_ref)):
-                if answer.question.type == models.ESTIMATION:
+                if answer.question.type == ESTIMATION:
                     if answer.question.number not in estimation_guesses:
                         estimation_guesses[answer.question.number] = []
                     estimation_guesses[answer.question.number].append(answer.value)
@@ -349,4 +424,4 @@ def view_statistics(request):
                 stats.append((round_ref + " estimation", tuple(estimation_guesses.items())))
         division_stats.append((division_name, stats))
 
-    return render(request, "grading/statistics.html", {"stats": division_stats, "current": current})
+    return render(request, "grading/statistics.html", {"stats": division_stats, "current": current, "stat_form": stat_form})

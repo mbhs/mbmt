@@ -1,33 +1,33 @@
-{% extends "home/../../../home/templates/shared/base.html" %}
+{% extends "shared/base.html" %}
+{% load staticfiles %}
 
 {% block content %}
-<form action="{% url "attendance" %}" method="post">
-    {% csrf_token %}
-    <button type="submit" class="save btn btn-primary">Save</button>
-    <table id="attendance" class="attendance table table-striped">
-        <tr>
-            <th class="attending">&nbsp;?</th>
-            <th class="name" colspan="100%">Name</th>
-        </tr>
-        {% for row in students %}
-            <tr>
-            {% for student in row %}
-                <td class="attending">
-                {% if student %}
-                    <input name="{{ student.id }}" type="checkbox" value="present" {% if student.attending %}checked{% endif %}>
-                    <input name="{{ student.id }}" type="hidden" value="absent">
-                {% endif %}
-                </td>
-                <td class="name">
-                {% if student %}
-                    {{ student.name }}
-                {% endif %}
-                </td>
-            {% endfor %}
-            </tr>
-        {% endfor %}
-    </table>
-    <button type="submit" class="save btn btn-primary">Save</button>
-</form>
+
+<h1>Attendance <span class="right" id="loading">loading...</span></h1>
+<div class="form-group">
+    <input id="search" type="text" placeholder="Filter students" class="form-control" oninput="update()">
+</div>
+
+<h2 class="bump-down">Present</h2>
+<table id="present" class="table attendance table-striped">
+    <tr>
+        <th class="name">Name</th>
+        <th class="school">School</th>
+        <th class="division">Division</th>
+        <th class="attending">Attending</th>
+    </tr>
+</table>
+
+<h2 class="bump-down">Absent</h2>
+<table id="absent" class="table attendance table-striped">
+    <tr>
+        <th class="name">Name</th>
+        <th class="school">School</th>
+        <th class="division">Division</th>
+        <th class="attending">Attending</th>
+    </tr>
+</table>
+
+<script type="text/javascript" src="{% static "js/attendance.js" %}"></script>
 
 {% endblock %}

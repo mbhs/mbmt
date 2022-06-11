@@ -1,36 +1,41 @@
-{% load fancy_dict %}
+{% extends "shared/base.html" %}
+{% load shirt_size %}
 
-<html>
-    <head>
-        <title>Name tags</title>
-        <link rel="stylesheet" type="text/css" href="/static/css/master.css">
-    </head>
-    <body>
-        <table id="tags">
-            <tr>
-                <th>Teacher</th>
-                <th>School, students</th>
-                <th>Shirt sizes</th>
-            </tr>
-            <tr>
-                <td>Defaults</td>
-                <td>All</td>
-                <td>{{ totals|fancy_dict }}</td>
-            </tr>
-            {% for teacher, students, sizes in teachers %}
-            <tr>
-                <td>{{ teacher.get_full_name }}</td>
-                <td>{{ teacher.school.name }}</td>
-                <td>{{ sizes|fancy_dict }}</td>
-            </tr>
-            {% for student in students %}
-            <tr>
-                <td style="border: none; width: 50px;"></td>
-                <td>{{ student.name }}</td>
-                <td>{{ student.get_size_display }}</td>
-            </tr>
-            {% endfor %}
-            {% endfor %}
-        </table>
-    </body>
-</html>
+{% block content %}
+
+<h1>Shirt Sizes</h1>
+
+<h2>Totals</h2>
+<table id="shirts" class="table table-striped">
+    <tr>
+        {% for size in totals.keys %}
+        <th>{{ size|shirt_size }}</th>
+        {% endfor %}
+    </tr>
+    <tr>
+        {% for count in totals.values %}
+        <td>{{ count }}</td>
+        {% endfor %}
+    </tr>
+</table>
+
+<h2>Lookup</h2>
+<table id="people" class="table table-striped">
+    <tr>
+        <th>Name</th>
+        <th>Role</th>
+        <th>Size</th>
+    </tr>
+    {% for name, group in groups %}
+    {% for first_name, last_name, school, size in group %}
+    <tr>
+        <td>{{ first_name }} {{ last_name }}</td>
+        <td>{{ school }}</td>
+        <td>{{ name }}</td>
+        <td>{{ size|shirt_size }}</td>
+    </tr>
+    {% endfor %}
+    {% endfor %}
+</table>
+
+{% endblock %}

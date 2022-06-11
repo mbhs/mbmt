@@ -1,31 +1,75 @@
-{% extends "home/../../../home/templates/shared/base.html" %}
+{% extends "shared/base.html" %}
 {% load crispy_forms_tags %}
-{% load staticfiles %}
+{% load static %}
+
+{% block head %}
+<script type="text/javascript" src="{% static "js/validator.min.js" %}"></script>
+{% endblock %}
 
 {% block content %}
 
-<h2 class="lowerer">Edit Team</h2>
+<h1 class="lowerer">{{ school.name }}</h1>
+<p class="under">{{ competition.name }}</p>
 
-For a complete explanation regarding what team compositions are allowed, see the <a href="{% url 'rules' %}#registration">Rules</a>.
+<h2>Team Editor</h2>
+
+<p>
+    For a complete explanation regarding what team compositions are allowed, see the <a href="{% url "home:rules" %}" target="_blank">rules</a>.
+    Note that this year, the {{ harder }} division is harder.
+    This year, students in the {{ easier }} division will take two general tests in place of subject-specific tests.
+</p>
 
 {% if student_forms.non_form_errors %}
-    <br/><br/>
-    <div class="alert alert-danger">{{ student_forms.non_form_errors }}</div>
+<div class="alert alert-danger">{{ student_forms.non_form_errors }}</div>
 {% endif %}
 
 <form name="registration" data-toggle="validator" role="form" method="post">
-    {% crispy team_form %}
-
-    {{ student_forms.management_form|crispy }}
-    {% for form in student_forms %}
+    {% csrf_token %}
+    <div class="form-group fancy-group team-form">
+        <div class="team-name">{{ team_form.name|as_crispy_field }}</div>
+        <div class="team-division">{{ team_form.division|as_crispy_field }}</div>
+    </div>
+    {{ student_forms.management_form }}
+    {% for student_form in student_forms %}
+    <div class="student-form">
         <h3>Student {{ forloop.counter }}</h3>
-        {% crispy form student_helper %}
+        {{ student_form.id }}
+        <div class="form-group fancy-group columns-2">
+            <div class="student-first-name">{{ student_form.first_name|as_crispy_field }}</div>
+            <div class="student-last-name">{{ student_form.last_name|as_crispy_field }}</div>
+        </div>
+        <div class="form-group fancy-group columns-2">
+            <div class="student-subjects fancy-group columns-2">
+                <div class="student-subject1">{{ student_form.subject1|as_crispy_field }}</div>
+                <div class="student-subject2">{{ student_form.subject2|as_crispy_field }}</div>
+            </div>
+            <div class="student-info fancy-group columns-2">
+                <div class="student-grade">{{ student_form.grade|as_crispy_field }}</div>
+                <div class="student-shirt-size">{{ student_form.shirt_size|as_crispy_field }}</div>
+            </div>
+        </div>
+    </div>
     {% endfor %}
-
     <div class="form-group">
-        <input id="submit" type="submit" value="Finish" class="btn btn-primary right"/>
-        <input id="cancel" type="button" value="Cancel" class="btn btn-secondary right" onclick="window.location = {% url 'teams' %};"/>
+        <input id="submit" type="submit" value="Save" class="btn btn-primary right"/>
+        <input id="cancel" type="button" value="Cancel" class="btn btn-secondary right" onclick="window.location = '{% url "coaches:index" %}';"/>
     </div>
 </form>
 
+<!-- <script>
+$('select[name=division]').change(function(e){
+  if ($('select[name=division]').val() == '1'){
+      $('.student-subjects select').val('');
+    $('.student-subjects select option').prop('disabled',false);
+    $('.student-subjects select option[value=g1]').prop('disabled',true);
+      $('.student-subjects select option[value=g2]').prop('disabled',true);
+  }else{
+      $('.student-subject1 select').val('g1');
+      $('.student-subject2 select').val('g2');
+      $('.student-subjects select option').prop('disabled',true);
+      $('.student-subject1 select option[value=g1]').prop('disabled',false);
+      $('.student-subject2 select option[value=g2]').prop('disabled',false);
+  }
+});
+</script> -->
 {% endblock %}

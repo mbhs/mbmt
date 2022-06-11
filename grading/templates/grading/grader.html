@@ -1,13 +1,13 @@
-{% extends "home/../../../home/templates/shared/base.html" %}
+{% extends "shared/base.html" %}
 {% load staticfiles %}
 
 {% block content %}
 <script>
     function back() {
         {% if mode == "student" %}
-        window.location.href = "{% url 'student_view' %}";
+        window.location.href = "{% url 'grading:students' %}";
         {% elif mode == "team" %}
-        window.location.href = "{% url 'team_view' %}";
+        window.location.href = "{% url 'grading:teams' %}";
         {% endif %}
     }
 </script>
@@ -16,16 +16,24 @@
     <h1 class="round">{{ round.name }}</h1>
     <p class="team">{{ name }} ({{ division }})</p>
 
+    <p class="note">To speed up grading, drag across the options.</p>
+
     <table class="grader table">
         {% csrf_token %}
     {% for question, answer in question_answer %}
         <tr class="question">
-            <td class="qlabel">{{ question.label }}</td>
+            <td class="question-number">{{ question.label }}</td>
             <td>
             {% if question.get_type_display == "correct" %}
-                <input type="radio" name="{{ question.id }}" value="1" {% if answer.value == 1 %} checked {% endif %}>
-                <input type="radio" name="{{ question.id }}" value="0" {% if answer.value == 0 %} checked {% endif %}>
-                <input type="radio" name="{{ question.id }}" value="" {% if answer.value is None %} checked {% endif %}>
+                <label class="question-label">
+                    <input type="radio" name="{{ question.id }}" value="1" {% if answer.value == 1 %} checked {% endif %}>
+                </label>
+                <label class="question-label">
+                    <input type="radio" name="{{ question.id }}" value="0" {% if answer.value == 0 %} checked {% endif %}>
+                </label>
+                <label class="question-label">
+                    <input type="radio" name="{{ question.id }}" value="" {% if answer.value is None %} checked {% endif %}>
+                </label>
             {% elif question.get_type_display == "estimation" %}
                 <input type="number" step="any" name="{{ question.id }}" value="{{ answer.value|default:"" }}">
             {% endif %}
@@ -38,8 +46,11 @@
         </tr>
     {% endfor %}
     </table>
+
     <button type="submit" class="btn btn-primary">Save</button>
     <button type="button" class="btn" style="margin-left: 10px;" onclick="back()">Back</button>
 </form>
+
+<script type="text/javascript" src="{% static "js/faster.js" %}"></script>
 
 {% endblock %}

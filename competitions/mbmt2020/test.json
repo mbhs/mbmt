@@ -1,0 +1,94 @@
+{
+  "grader": "competitions.mbmt2020.grading",
+  "rounds": [
+    {
+      "ref": "subject1",
+      "name": "Individual Round 1",
+      "grouping": "individual",
+      "questions": [
+        {"label": 1, "type": "correct"},
+        {"label": 2, "type": "correct"},
+        {"label": 3, "type": "correct"},
+        {"label": 4, "type": "correct"},
+        {"label": 5, "type": "correct"},
+        {"label": 6, "type": "correct"},
+        {"label": 7, "type": "correct"},
+        {"label": 8, "type": "correct"}
+      ]
+    },
+    {
+      "ref": "subject2",
+      "name": "Individual Round 2",
+      "grouping": "individual",
+      "questions": [
+        {"label": 1, "type": "correct"},
+        {"label": 2, "type": "correct"},
+        {"label": 3, "type": "correct"},
+        {"label": 4, "type": "correct"},
+        {"label": 5, "type": "correct"},
+        {"label": 6, "type": "correct"},
+        {"label": 7, "type": "correct"},
+        {"label": 8, "type": "correct"}
+      ]
+    },
+    {
+      "ref": "team",
+      "name": "Team Round",
+      "grouping": "team",
+      "questions": [
+        {"label": 1, "type": "correct", "weight": 4},
+        {"label": 2, "type": "correct", "weight": 4},
+        {"label": 3, "type": "correct", "weight": 4},
+        {"label": 4, "type": "correct", "weight": 5},
+        {"label": 5, "type": "correct", "weight": 5},
+        {"label": 6, "type": "correct", "weight": 5},
+        {"label": 7, "type": "correct", "weight": 6},
+        {"label": 8, "type": "correct", "weight": 6},
+        {"label": 9, "type": "correct", "weight": 7},
+        {"label": 10, "type": "correct", "weight": 8},
+        {"label": 11, "type": "correct", "weight": 8},
+        {"label": 12, "type": "correct", "weight": 9},
+        {"label": 13, "type": "correct", "weight": 9},
+        {"label": 14, "type": "correct", "weight": 10},
+        {"label": 15, "type": "correct", "weight": 10}
+      ]
+    },
+    {
+      "ref": "guts",
+      "name": "Guts Round",
+      "grouping": "team",
+      "questions": [
+        {"label": 1, "type": "correct", "weight": 3},
+        {"label": 2, "type": "correct", "weight": 3},
+        {"label": 3, "type": "correct", "weight": 3},
+        {"label": 4, "type": "correct", "weight": 3},
+        {"label": 5, "type": "correct", "weight": 3},
+        {"label": 6, "type": "correct", "weight": 4},
+        {"label": 7, "type": "correct", "weight": 4},
+        {"label": 8, "type": "correct", "weight": 4},
+        {"label": 9, "type": "correct", "weight": 4},
+        {"label": 10, "type": "correct", "weight": 4},
+        {"label": 11, "type": "correct", "weight": 5},
+        {"label": 12, "type": "correct", "weight": 5},
+        {"label": 13, "type": "correct", "weight": 5},
+        {"label": 14, "type": "correct", "weight": 5},
+        {"label": 15, "type": "correct", "weight": 5},
+        {"label": 16, "type": "correct", "weight": 7},
+        {"label": 17, "type": "correct", "weight": 7},
+        {"label": 18, "type": "correct", "weight": 7},
+        {"label": 19, "type": "correct", "weight": 7},
+        {"label": 20, "type": "correct", "weight": 7},
+        {"label": 21, "type": "correct", "weight": 9},
+        {"label": 22, "type": "correct", "weight": 9},
+        {"label": 23, "type": "correct", "weight": 9},
+        {"label": 24, "type": "correct", "weight": 9},
+        {"label": 25, "type": "correct", "weight": 9},
+        {"label": 26, "type": "estimation", "weight": 12, "answer": 0},
+        {"label": 27, "type": "estimation", "weight": 12, "answer": 0},
+        {"label": 28, "type": "estimation", "weight": 12, "answer": 0},
+        {"label": 29, "type": "estimation", "weight": 12, "answer": 0},
+        {"label": 30, "type": "estimation", "weight": 12, "answer": 0}
+      ]
+    }
+  ]
+}

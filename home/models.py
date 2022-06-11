@@ -26,8 +26,9 @@ class Competition(models.Model):
     # Semantics
     year = models.CharField(max_length=20)  # First, second, etc.
 
-    # Grader cache
-    _graders = {}
+    # Grader path and cache
+    _grader = models.CharField(max_length=40, null=True, blank=True)
+    _grader_instance = None
 
     def __repr__(self):
         """Represent the competition as a string."""
@@ -37,13 +38,13 @@ class Competition(models.Model):
     __str__ = __repr__
 
     @staticmethod
-    def has_current():
+    def has_current() -> bool:
         """Check if there is an active competition."""
 
         return Competition.objects.filter(active=True).exists()
 
     @staticmethod
-    def current():
+    def current() -> "Competition":
         """Get the active competition."""
 
         return Competition.objects.filter(active=True).first()
@@ -61,13 +62,13 @@ class Competition(models.Model):
     def grader(self):
         """Instantiate a grader of the competition type."""
 
-        try:
-            return self._graders[self.id]
-        except KeyError:
-            import importlib
-            grader = importlib.import_module("competitions.{}.grading".format(self.id)).Grader(self)
-            self._graders[self.id] = grader
-            return grader
+        if Competition._grader_instance is not None:
+            return Competition._grader_instance
+
+        import importlib
+        grader = importlib.import_module(self._grader).Grader(self)
+        Competition._grader_instance = grader
+        return grader
 
     @property
     def can_register(self):

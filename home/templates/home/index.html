@@ -1,4 +1,5 @@
-{% extends "home/../shared/base.html" %}
+{% extends "shared/base.html" %}
+{% load static %}
 
 {% block content %}
 
@@ -7,10 +8,37 @@
 <br/>
 
 <p class="main-title">The Montgomery Blair Math Tournament</p>
+
+
 <p class="main-text">
+    <span>A mathematics competition for middle school students in the Maryland area</span>
+    <!-- <span>Join us on May 21, 2022</span>
+    <a href="{% url "coaches:register" %}" style="color: #ba2222">Register &#x276f;</a> -->
+</p>
+
+<!-- <p class="main-text" style="font-weight:bold;color:#ba2222">Due to COVID-19, MBMT 6 will be held online this year.</p> -->
+<!--
+<p class="main-text">
+<<<<<<< HEAD
     <span>A mathematics competition for middle school students in the Maryland area on Saturday, March 30th, 2019</span>
     <a href="{% url "coaches:register" %}" style="color: #ba2222">Register &#x276f;</a>
+=======
+        <span> MBMT 6 will be held an unconventional and original competition approach: From <b>Saturday, June 13th</b> to <b>Wednesday, June 17th</b>, your students will submit answers to a set of problems and 
+        compete live against other teams. Students will receive feedback on their answers and will have the opportunity to resubmit answers on subsequent days; a live leaderboard will display scores of top teams.
+        You can find more information and ask questions on our <a href="https://artofproblemsolving.com/community/c5h2130495_montgomery_blair_math_tournament_6">AOPS forum thread</a>, or email us directly at mbhs.mathteam@gmail.com.</span>
 </p>
+
+<p class="main-text">
+    Please register for MBMT 6 through <a href="http://tinyurl.com/mbmt2020" style="color: #ba2222">this form &#x276f;</a> by <b>Friday, June 12th</b>. After you register, more details about our competition, submission, grading, and scoring policies
+    will be sent out to registered adult contacts as it gets closer to the competition window.
+</p>
+-->
+<!--
+<p>
+    You can find a link to our sample brochure from last year's contest: <a href='{% static "files/Pamphlet.pdf" %}' style = "color:red font-size:20px">Link to MBMT 2019 Brochure</a></p>
+>>>>>>> 6171d6f72e84680763d69c3e29f9b1fca55774c6
+</p>
+-->
 
 <div class="row">
     <div class="col-lg-4">
@@ -22,7 +50,7 @@
     <div class="col-lg-4">
         <h2>Work together.</h2>
         <p><strong>Life is better in teams.</strong> The competition is divided into several <em>rounds</em>, during several
-        of which you get to work together with up to three other students to collaborate to do math. You can
+        of which you get to work together with up to four other students to collaborate to do math. You can
         help support each other and make each other better competitors, as well as winning glory for your school!</p>
     </div>
     <div class="col-lg-4">

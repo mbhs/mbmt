@@ -18,7 +18,7 @@ from django.db.models import Q
 
 import time
 
-import home.models
+import coaches.models
 from . import models
 
 
@@ -162,17 +162,17 @@ class CompetitionGrader:
         """Default action for grading a round."""
 
         if round.grouping == models.ROUND_GROUPINGS["individual"]:
-            model = home.models.Student
+            model = coaches.models.Student
             group = "student"
         elif round.grouping == models.ROUND_GROUPINGS["team"]:
-            model = home.models.Team
+            model = coaches.models.Team
             group = "team"
         else:
             return None
 
         # Iterate through teams or students
         scores = ChillDictionary()
-        for division in home.models.DIVISIONS_MAP:
+        for division in coaches.models.DIVISIONS_MAP:
             scores[division] = ChillDictionary()
 
         for thing in model.current():
@@ -252,7 +252,7 @@ def prepare_individual_scores(scores):
 
     divisions = []
     for division in sorted(scores.keys()):
-        division_name = home.models.DIVISIONS_MAP[division]
+        division_name = coaches.models.DIVISIONS_MAP[division]
         things = []
         for thing in scores[division]:
             things.append((thing.name, scores[division][thing]))
@@ -266,25 +266,26 @@ def prepare_subject_scores(scores):
 
     divisions = []
     for division in sorted(scores.keys()):
-        division_name = home.models.DIVISIONS_MAP[division]
+        division_name = coaches.models.DIVISIONS_MAP[division]
         subjects = []
         for subject in scores[division]:
             students = []
             for student in scores[division][subject]:
                 students.append((student.name, scores[division][subject][student]))
             students.sort(key=lambda x: x[1], reverse=True)
-            subjects.append((home.models.SUBJECTS_MAP[subject], students))
+            subjects.append((coaches.models.SUBJECTS_MAP[subject], students))
         subjects.sort(key=lambda x: x[0])
         divisions.append((division_name, subjects))
     return divisions
 
 
-def prepare_composite_team_scores(guts_scores, guts_z, team_scores, team_z, team_individual_scores, overall_scores):
+def prepare_composite_team_scores(guts_scores, guts_z, team_scores, team_z,
+                                  team_individual_scores, overall_scores):
     """Prepare team scores for scoreboard."""
 
     divisions = []
     for division in sorted(overall_scores.keys()):
-        division_name = home.models.DIVISIONS_MAP[division]
+        division_name = coaches.models.DIVISIONS_MAP[division]
         teams = []
         for team in overall_scores[division]:
             teams.append((
@@ -305,8 +306,9 @@ def prepare_school_team_scores(school, guts_scores, team_scores, team_individual
 
     divisions = []
     for division in sorted(overall_scores.keys()):
-        division_name = home.models.DIVISIONS_MAP[division]
+        division_name = coaches.models.DIVISIONS_MAP[division]
         teams = []
+        print(overall_scores)
         for team in overall_scores[division]:
             if team.school != school:
                 continue
@@ -327,8 +329,8 @@ def prepare_school_individual_scores(school, scores):
     divisions = []
     for division in scores:
         students = {}
-        for i, subject in enumerate(sorted(home.models.SUBJECTS_MAP.keys())):
-            for student in scores[division][subject]:
+        for i, subject in enumerate(sorted(coaches.models.SUBJECTS_MAP.keys())):
+            for student in scores[division].get(subject, []):
                 if student.team.school != school:
                     continue
                 if student not in students:
@@ -336,5 +338,5 @@ def prepare_school_individual_scores(school, scores):
                 students[student][i] = scores[division][subject][student]
         students = list(map(lambda x: (x[0].name, x[1]), students.items()))
         students.sort(key=lambda x: x[0])
-        divisions.append((home.models.DIVISIONS_MAP[division], students))
+        divisions.append((coaches.models.DIVISIONS_MAP[division], students))
     return divisions

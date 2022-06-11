@@ -1,0 +1,22 @@
+<html>
+    <head>
+        <title>Name tags</title>
+        <link rel="stylesheet" type="text/css" href="/static/css/master.css">
+    </head>
+    <body>
+        <table id="tags">
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>School</th>
+            </tr>
+            {% for coaching in coachings %}
+            <tr>
+                <td>{{ coaching.coach.get_full_name }}</td>
+                <td>{{ coaching.coach.email }}</td>
+                <td>{{ coaching.school.name }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </body>
+</html>

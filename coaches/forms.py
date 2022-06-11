@@ -72,6 +72,15 @@ class SchoolForm(forms.Form):
 class TeamForm(PrettyForm, forms.ModelForm):
     """Form for creating a new team."""
 
+    def __init__(self, *args, **kwargs):
+        """Initialize the team form and modify the empty label."""
+
+        super().__init__(*args, **kwargs)
+        divisions = [("", "Choose...")] + self.fields["division"].choices[1:]
+        divisions[1] = divisions[1][0], divisions[1][1] + " (harder)"
+        self.fields["division"].choices = divisions
+        self.fields["name"].widget.attrs["placeholder"] = "Official Team Name"
+
     class Meta:
         """Form metadata and formatting."""
 
@@ -82,32 +91,55 @@ class TeamForm(PrettyForm, forms.ModelForm):
 class StudentForm(forms.ModelForm):
     """Inline form for a single student."""
 
+    def __init__(self, *args, **kwargs):
+        """Initialize and modify fields."""
+
+        super().__init__(*args, **kwargs)
+        self.fields["first_name"].widget.attrs["placeholder"] = "First"
+        self.fields["last_name"].widget.attrs["placeholder"] = "Last"
+        self.fields["subject1"].choices = [("", "Choose...")] + self.fields["subject1"].choices[1:]
+        self.fields["subject2"].choices = [("", "Choose...")] + self.fields["subject2"].choices[1:]
+        self.fields["shirt_size"].choices = [("", "Choose...")] + self.fields["shirt_size"].choices[1:]
+        self.fields["grade"].choices = [("", "Choose...")] + self.fields["grade"].choices[1:]
+
     def clean(self):
         """Clean and validate student data."""
 
         cleaned_data = super().clean()
         if any(cleaned_data.values()):
-            if not cleaned_data["name"]:
-                raise ValidationError("A name is required.")
+            if cleaned_data=={'first_name': '', 'last_name': '', 'subject1': 'g1', 'subject2': 'g2', 'grade': '', 'shirt_size': '', 'id': None}:
+                return cleaned_data
+            if not cleaned_data["first_name"] or not cleaned_data["last_name"]:
+                raise ValidationError("A first and last name is required.")
             if not cleaned_data["subject1"] or not cleaned_data["subject2"]:
-                raise ValidationError("Two subjects are required.")
+                raise ValidationError("Two subjects are required for {} {}.".format(
+                    cleaned_data["first_name"], cleaned_data["last_name"]))
             if cleaned_data["subject1"] == cleaned_data["subject2"]:
-                raise ValidationError("The two subjects must be different.")
+                raise ValidationError("The subject tests for {} {} must be different.".format(
+                    cleaned_data["first_name"], cleaned_data["last_name"]))
+            if not cleaned_data["grade"]:
+                raise ValidationError("A grade level is required for {} {}.".format(
+                    cleaned_data["first_name"], cleaned_data["last_name"]))
+            if not cleaned_data["shirt_size"]:
+                raise ValidationError("A shirt size is required for {} {}.".format(
+                    cleaned_data["first_name"], cleaned_data["last_name"]))
         return cleaned_data
 
     class Meta:
         """Form metadata and formatting."""
 
         model = models.Student
-        fields = ["name", "subject1", "subject2", "size"]
+        fields = ["first_name", "last_name", "subject1", "subject2", "grade", "shirt_size"]
 
 
 # Form factory for multiple students on a single team
 NaiveStudentFormSet = forms.modelformset_factory(
     models.Student,
     form=StudentForm,
-    min_num=5,
-    max_num=5)
+    min_num=1,
+    max_num=5,
+    extra=5,
+    validate_min=False)
 
 
 class StudentFormSet(NaiveStudentFormSet):
@@ -116,23 +148,52 @@ class StudentFormSet(NaiveStudentFormSet):
     def clean(self):
         """Clean and validate student data."""
 
-        students = [form.instance for form in self if form.instance.name]
+        data = super().clean()
+        for form in self:
+            form.clean()
+
+        students = [form.instance for form in self if form.instance.first_name]
         if len(students) == 0:
             raise ValidationError("There must be at least one student.")
         subjects = {
             subject: len(list(filter(lambda student: code in (student.subject1, student.subject2), students)))
             for code, subject in models.SUBJECTS}
-        if len(students) == 3:
-            for subject, count in subjects.items():
-                if count < 1:
-                    raise ValidationError("There must be at least one student in subject {}.".format(subject))
-        elif len(students) == 4:
-            for subject, count in subjects.items():
-                if count < 1:
-                    raise ValidationError("There must be at least one student in subject {}.".format(subject))
-                if count > 3:
-                    raise ValidationError("There can be at most three items in subject {}.".format(subject))
-        elif len(students) == 5:
-            for subject, count in subjects.items():
-                if count < 2:
-                    raise ValidationError("There must be at least two items in subject {}.".format(subject))
+
+        # fits_lower_division = True
+        # for student in students:
+        #     if student.subject1 != "g1" or student.subject2 != "g2":
+        #         fits_lower_division = False
+
+        # if fits_lower_division:
+        #     return data
+        # elif len(students) == 3:
+        #     for subject, count in subjects.items():
+        #         if count < 1 and subject != "General Test 1" and subject != "General Test 2":
+        #             raise ValidationError("There must be at least one student in subject {}.".format(subject))
+        # elif len(students) == 4:
+        #     for subject, count in subjects.items():
+        #         if count < 1 and subject != "General Test 1" and subject != "General Test 2":
+        #             raise ValidationError("There must be at least one student in subject {}.".format(subject))
+        #         if count > 3 and subject != "General Test 1" and subject != "General Test 2":
+        #             raise ValidationError("There can be at most three items in subject {}.".format(subject))
+        # elif len(students) == 5:
+        #     for subject, count in subjects.items():
+        #         if count < 2 and subject != "General Test 1" and subject != "General Test 2":
+        #             raise ValidationError("There must be at least two items in subject {}.".format(subject))
+        # elif len(students)==2:
+        #     raise ValidationError("We do not accept teams of two. Please either add a student to make a team of three, or register each student as an individual.")
+        return data
+
+
+class ChaperoneForm(PrettyForm, forms.ModelForm):
+    """Simple chaperone entry."""
+
+    def __init__(self, *args, **kwargs):
+        """Initialize and modify fields."""
+
+        super().__init__(*args, **kwargs)
+        self.fields["shirt_size"].choices = [("", "Choose...")] + self.fields["shirt_size"].choices[1:]
+
+    class Meta:
+        model = models.Chaperone
+        fields = ["first_name", "last_name", "email", "phone", "shirt_size"]

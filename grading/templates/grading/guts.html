@@ -1,11 +1,10 @@
-{% extends "home/../../../home/templates/shared/base.html" %}
+{% extends "shared/base.html" %}
 {% load staticfiles %}
 
-{% block extrahead %}
+{% block head %}
 <style>
-    .container {
-        width: 100%;
-    }
+    #content { max-width: 100% !important; }
+    .container { margin: 0; width: 100%; }
 </style>
 {% endblock %}
 
@@ -15,34 +14,36 @@
     MBMT Guts Round
     <span id="freeze" class="right" onclick="freeze()">Freeze!</span>
 </h1>
-<table class="scoreboard">
-    <tr>
-        <td valign="top">
-            <h2>Ramanujan</h2>
-            <table class="table table-striped">
-                <tbody id="ramanujan1"></tbody>
-            </table>
-        </td>
-        <td valign="top">
-            <h2>&nbsp;</h2>
-            <table class="table table-striped">
-                <tbody id="ramanujan2"></tbody>
-            </table>
-        </td>
-        <td valign="top">
-            <h2>Pascal</h2>
-            <table class="table table-striped">
-                <tbody id="pascal1"></tbody>
-            </table>
-        </td>
-        <td valign="top">
-            <h2>&nbsp;</h2>
-            <table class="table table-striped">
-                <tbody id="pascal2"></tbody>
-            </table>
-        </td>
-    </tr>
-</table>
+
+<div class="flexible">
+    <div>
+        <h2>{{ divisions.0 }}</h2>
+        <table class="table table-striped">
+            <tbody id="{{ divisions.0 }}1" class="scoreboard-body"></tbody>
+        </table>
+    </div>
+    <div>
+        <h2>&nbsp;</h2>
+        <table class="table table-striped">
+            <tbody id="{{ divisions.0 }}2" class="scoreboard-body"></tbody>
+        </table>
+    </div>
+
+    <div class="break"></div>
+    <div>
+        <h2>{{ divisions.1 }}</h2>
+        <table class="table table-striped">
+            <tbody id="{{ divisions.1 }}1" class="scoreboard-body"></tbody>
+        </table>
+    </div>
+    <div>
+        <h2>&nbsp;</h2>
+        <table class="table table-striped">
+            <tbody id="{{ divisions.1 }}2" class="scoreboard-body"></tbody>
+        </table>
+    </div>
+</div>
+
 
 <script type="text/javascript" src="{% static "js/guts.js" %}"></script>
 {% endblock %}
