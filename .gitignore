@@ -23,4 +23,4 @@ deployed/
 !**/test.json
 
 # Virtual Env
-.local
+.local/
