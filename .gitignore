@@ -21,3 +21,6 @@ deployed/
 # Various data
 *.json
 !**/test.json
+
+# Virtual Env
+.local
