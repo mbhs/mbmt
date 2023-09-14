@@ -4,69 +4,54 @@
 
 <h1 class="lowerer">Contest Information</h1>
 <p>
-    MBMT is a free middle school math competition that seeks to excite students’ interests in mathematics and pursuing mathematics beyond the school curriculum.
-    {% if competition %}We are pleased to announce that, for the {{ competition.year }} year, the Montgomery Blair Math Team is hosting the Montgomery Blair Math Tournament (MBMT) on <b>{{ competition.date|date:"F jS, Y" }}</b>!
-    {% else %}Currently, there is no scheduled competition!{% endif %}
+    MBMT is a free middle school math competition that seeks to excite students’ interests in mathematics and in pursuing mathematics beyond the school curriculum. We are pleased to announce that, for the 2023 year, the Montgomery Blair Math Team is hosting the 8th Montgomery Blair Math Tournament (MBMT 8) on <b>April 16th, 2023!</b>
 </p>
 
-{% if competition %}
 <h3>Registration</h3>
 <p>
-    Registration will open on <b>{{ competition.date_registration_start|date:"F jS, Y" }}</b>.
-    We would like all math team sponsors to <b>register by {{ competition.date_registration_end|date:"F jS, Y" }}</b>.
-    This will help us estimate the number of teams participating and assist us with logistics. To register, visit <a href="{% url "coaches:register" %}">here</a>.
+    Registration will open on Monday, February  6th, 2023. We would like all math team sponsors to register their teams by Sunday, March 26th, 2023. This will help us estimate the number of teams participating and assist us with logistics. Please take note that if you don’t register by this date, you might not receive our free swag. To register, visit <a href="https://mbmt.mbhs.edu/coaches/register/">here</a>. For more details on registration, see our [link]Rules page.
 </p>
-{% endif %}
 
 {% if competition %}
 <h3>Logistics</h3>
 <p>
-    The {{ competition.year }} annual MBMT will occur in <strong>Montgomery Blair High School</strong> on <strong>{{ competition.date|date:"F jS, Y" }}</strong> from <strong>9:00 am - 3:00 pm</strong>.
-    Our address is <a href="https://www.google.com/maps/place/Montgomery+Blair+High+School/@39.0183042,-77.01385,17z/data=!3m1!4b1!4m5!3m4!1s0x89b7cf586f9b73d5:0xc227c473fffb50c7!8m2!3d39.0183042!4d-77.011656"><strong>51 University Blvd E, Silver Spring, MD 20901</strong></a>.
-    Please arrive on the University Boulevard side of the school.
-    <b>Snacks and drinks will be provided for students</b>.
-    Additionally, snacks will be provided for coaches in the grading room (room 161, a computer lab).
-    Coaches are invited to bring snacks for their own team, although it is not necessary.
+    MBMT 8 will occur at <b>Montgomery Blair High School</b> on </b>Sunday, April 16th, 2023</b> from </b>2:00 - 8:00 pm.</b> Our address is <a href="https://goo.gl/maps/QUudw1ir4JPsHSL98">51 University Blvd E, Silver Spring, MD 20901</a>. Please arrive on the University Boulevard side of the school.  
+Thanks to the generosity of the Montgomery County Division of Food & Nutrition Services, <b>FREE dinner will be provided to all competitors.</b> Additionally, dinner will be provided for coaches. Coaches and participants are invited to bring snacks for their own team.
+
 </p>
 
 {% endif %}
 
 <h3>Contest</h3>
 <p>
-    MBMT consists of four rounds: Individual Round, Team Round, Guts Round, and Fun Round. 
-    Both the Zermelo (upper) and Dedekind (lower) divisions  will take Subject Tests (of which students take two subjects among Algebra, Geometry, Combinatorics, and Number Theory). 
+    MBMT consists of four rounds: Individual Round, Team Round, Guts Round, and Fun Round. Both the Germain (upper) and Bernoulli (lower) divisions will take Individual Subject Tests (of which students take two subjects among Algebra, Geometry, Combinatorics, and Number Theory). Each Subject Test consists of eight questions and lasts thirty minutes.
     <!-- In the Dedekind (lower) division, students now take two General Tests, which consist of problems from all subjects.  -->
     Each Individual Test consists of eight questions and lasts thirty minutes.
 </p>
 <p>
-    The Team Round contains fifteen questions for all team members to collaboratively solve in forty-five minutes. 
-    The Guts Round (something many middle school students have not seen before), an hour-long round, is graded live and requires team members to work together on progressively harder five-problem sets, each of which is worth more points than the previous set. 
-    The Fun Round is an exciting round consisting of several separate mini-events, including puzzles, trivia, and an estimation round.
+    The Team Round contains fifteen questions for all team members to collaboratively solve in forty-five minutes. The Guts Round is an hour-long round that is graded live and requires team members to work together on progressively harder five-problem sets, each of which is worth more points than the previous set. The Fun Round is an exciting round consisting of several separate mini-events, including puzzles, trivia, and an estimation round.
 </p>
 <p>
-    Based on reflections made after last year’s tournament, we have recalibrated the accessibility and difficulty of problems in both divisions.
-    Our guiding philosophy is that every participant in MBMT should have a shot at winning, while still being challenged at the highest level.
+    After hosting the tournament for several years, we have worked hard to calibrate the accessibility and difficulty of problems in both divisions. Our guiding philosophy is that every participant in MBMT should find the rounds approachable yet challenging.
+
 </p>
 <p>
-    Individual and team winners in each division will receive trophies or medals!
-    Team scores are calculated using Team and Guts round scores, combined with a weighted average of individual scores, and teams with the highest scores in each division win.
-    The individual awards are for high-scoring individuals in each subject test and overall, combining the subject test scores.
-    There are also additional awards for high performance on the Guts round.
-    Finally, we also provide an Award to the highest-scoring 6th grade student.
+    Individual and team winners in each division will receive medals or trophies! Team scores are calculated using Team and Guts Round scores, combined with a weighted average of individual scores, and teams with the highest scores in each division win. The individual awards are for high-scoring individuals overall and in each subject test. There are also additional awards for high performance on the Guts Round. Finally, we will also recognize the highest-scoring 6th grade student.
+
 </p>
 
 {% if competition %}
 <h3>Schedule</h3>
 <table class="schedule">
-    <tr><td>8:45 AM - 9:15 AM</td><td>Registration, finding assigned tables</td></tr>
-    <tr><td>9:30 - 10:00 AM</td><td>Subject Test #1</td></tr>
-    <tr><td>10:05 - 10:35 AM</td><td>Subject Test #2</td></tr>
-    <tr><td>10:35 - 11:00 AM</td><td>Break</td></tr>
-    <tr><td>11:05 - 11:50 AM</td><td>Team Round</td></tr>
-    <tr><td>12:00 - 1:00 PM</td><td>Guts Round</td></tr>
-    <tr><td>1:00 - 2:00 PM</td><td>Tiebreakers and Lunch</td></tr>
-    <tr><td>1:30 - 2:15 PM</td><td>Fun Round</td></tr>
-    <tr><td>2:20 - 3:00 PM</td><td>Awards Ceremony</td></tr>
+    <tr><td>1:45 - 2:15 PM</td><td>Registration</td></tr>
+    <tr><td>2:30 - 3:00 PM</td><td>Subject Test #1</td></tr>
+    <tr><td>3:05 - 3:35 PM</td><td>Subject Test #2</td></tr>
+    <tr><td>3:35 - 4:00 PM</td><td>Break</td></tr>
+    <tr><td>4:05 - 4:50 PM</td><td>Team Round</td></tr>
+    <tr><td>5:00 - 6:00 PM</td><td>Guts Round</td></tr>
+    <tr><td>6:00 - 7:00 PM</td><td>Tiebreakers and Dinner</td></tr>
+    <tr><td>6:30 - 7:15 PM</td><td>Fun Round</td></tr>
+    <tr><td>7:20 - 8:00 PM</td><td>Awards Ceremony</td></tr>
 </table>
 {% endif %}
 

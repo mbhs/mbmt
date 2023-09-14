@@ -5,7 +5,7 @@
 
 <h1 class="lowerer">Official Rules</h1>
 <p>
-    Welcome to the seventh annual Montgomery Blair Math Tournament, or MBMT for short!
+    Welcome to the eighth annual Montgomery Blair Math Tournament, or MBMT for short!
     MBMT is a free middle school math contest that seeks to inspire students' interest in mathematics and to encourage them to explore math beyond the school curriculum.
     Contest details can be found on the <a href="{% url "home:about" %}">information page</a>.
 </p>
@@ -16,13 +16,14 @@
         The math team sponsors of each school/organization register individual student teams through the website via the <a href="{% url "coaches:register" %}">registration page</a>.
         There is no limit to the number of full teams a school or organization may send.
     </li>
-    <li><b class="red">Division A (Zermelo) only: Subject Tests are specifically limited</b>. The goal of this policy is twofold: to make the subjects more competitive and balanced, and to perhaps introduce other topics of math not normally found in the classroom setting.</li>
+    <li><b class="red">Division A (Germain) only: Subject Tests are specifically limited</b>. The goal of this policy is twofold: to make the subjects more competitive and balanced, and to perhaps introduce other topics of math not normally found in the classroom setting.</li>
     <ol>
         <!-- <li>Each full team of 5 will be required to have at least 2 tests per subject. For example, it is not allowed to have only one student on a team of 5 take the Algebra Subject Test.</li> -->
         <!-- <li>A team of 4 will be required to have at least 1 test per subject, but no more than 3 tests per subject.</li> -->
         <!-- <li>A team of 3 will only be required to have at least 1 test per subject.</li> -->
         <!-- <li>Teams of 1 or 2 have no restrictions; however, refer to rule #4 below for more information on teams of 1 or 2.</li> -->
-        <li>Each team can have no more than 3 tests per subject.</li>
+        <li>Each Division A (Germain) team can have no more than 3 tests per subject.</li>
+        <li>Division B (Bernoulli) teams can select any combination of subject tests.</li>
     </ol>
     <li>If there are fewer than 5 students interested in participating, you may register incomplete teams. For an incomplete team’s Team and Guts round scores to be officially considered, incomplete teams must have <b>at least 3 students</b>. Teams with one or two students will be merged into larger teams.</li>
     <li>We <b>do not</b> allow mixed-school or mixed-organization teams. However, we do allow organizations consisting of home-school groups, and community activity groups, to name a few.</li>
@@ -40,7 +41,7 @@
 
 <a name="notation"></a><h3>Important Notation</h3>
 <ol class="top">
-    <li><b>Sequence notation</b>: an denotes the <em>n</em><sup>th</sup> term of a sequence, where <em>n </em>is a positive integer. For example, in the sequence 1, 1, 2, 3, 5, &hellip;, a<sub>1</sub>=1, a<sub>2</sub>=1, a<sub>3</sub>=2, a<sub>4</sub>=3, and so on.</li>
+    <li><b>Sequence notation</b>: a<sub>n</sub> denotes the <em>n</em><sup>th</sup> term of a sequence, where <em>n </em>is a positive integer. For example, in the sequence 1, 1, 2, 3, 5, &hellip;, a<sub>1</sub>=1, a<sub>2</sub>=1, a<sub>3</sub>=2, a<sub>4</sub>=3, and so on.</li>
     <li><b>Factorial notation</b>: n! refers to the product of all positive integers up through <em>n</em>. That is: n! = n(n-1)(n-2)&hellip;(2)(1). For example, 4! = 4&sdot;3&sdot;2&sdot;1 = 24.</li>
     <li><b>Ordered <em>n</em>-tuples</b>: Certain questions will ask for an answer as an ordered pair, ordered triple, or ordered 6-tuple. </li>
     <ul>
@@ -76,10 +77,10 @@ Further clarifications on terminology, notation, and acceptable answer forms can
 <a name="awards"></a><h3>Scoring and Awards</h3>
 <ol>
 <li>A student&rsquo;s <strong>overall individual score</strong> is the weighted sum of the two subject tests that they have taken. The <strong>top 5 individuals</strong> in each division will be recognized, and the <strong>top 5 </strong>will receive medals.</li>
-<li><strong>Zermelo Division Only:</strong> Students are ranked individually in the four subject tests. The <strong>top 3 individuals</strong> of each subject test are recognized. These scores are calculated through a method that accounts for test item difficulty and normalizes the scores between tests.</li>
+<li><strong>Germain Division Only:</strong> Students are ranked individually in the four subject tests. The <strong>top 3 individuals</strong> of each subject test are recognized. These scores are calculated through a method that accounts for test item difficulty and normalizes the scores between tests.</li>
 <li>High-placement ties will be broken using tiebreaker rounds. Tiebreaker rounds will be held in the grading room during the Fun Round.</li>
 <li>The <strong>team score</strong> is a weighted sum of the individual, Team Round, and Guts Round scores. The <strong>top 5 teams</strong> in each division will be recognized.</li>
-<li>The highest scoring 6th grade student in the Zermelo division will receive the <strong>Young Scholar Award</strong>.</li>
+<li>The highest scoring 6th grade student in the Germain division will receive the <strong>Young Scholar Award</strong>.</li>
 </ol>
 
 A more detailed guide to the scoring algorithm we use can be found at <a href="{% static "files/Scoring.pdf" %}">the scoring document linked here</a>.
