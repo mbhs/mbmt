@@ -24,3 +24,6 @@ deployed/
 
 # Virtual Env
 .local/
+
+# MacOS
+.DS_Store
