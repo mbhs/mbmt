@@ -579,10 +579,22 @@ nav .container-fluid {
 
 .navbar-brand {
     margin-left: 0 !important;
+    @media (max-width: 767px) {
+        margin-left: 15px !important;
+    }
+}
+
+.navbar-toggle {
+    right: 8px;
 }
 
 .navbar-right {
     margin-right: 0 !important;
+    margin-bottom: 0 !important;
+}
+
+.navbar-collapse a {
+    margin-left: 0.5em;
 }
 
 nav a {
