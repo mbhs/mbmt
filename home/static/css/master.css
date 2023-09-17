@@ -17,12 +17,14 @@
   --primary-color: #BF1D1C;
   --font-color: black;
   --bg-color: white;
+  --footer-bg-color: #cccccc;
 }
 
 [data-theme="dark"] {
   --primary-color: #BF1D1C;
   --font-color: white;
   --bg-color: #121212;
+  --footer-bg-color: #262727;
 }
 
 body {
@@ -38,6 +40,12 @@ body {
 
 h1, h2, h3, h4, h5, h6 {
   font-family: 'Helvetica 27px', sans-serif;
+}
+
+h2, h3, h4, h5, h6 { color: var(--primary-color); }
+
+h1 {
+    margin-left: 0.5em;
 }
 
 #menu {
@@ -119,12 +127,23 @@ footer {
 /**************/
 
 h1.title {
-  font-size: 9vw;
+  font-size: calc(1.5em + 7vw);
   text-align: center;
   padding: .2em;
+  padding-bottom: 0;
+  margin: 0;
   user-select: none;
   font-family: 'Neoneon', sans-serif;
 }
+
+.title-date {
+    display: flex;
+    justify-content: center;
+}
+
+.title-date .line { width: 120px; max-width: 30vw; }
+
+.title-date .main-text { margin: 0 1em; padding: 0; }
 
 span.title-left {
   background-color: #ba2222;
@@ -149,9 +168,9 @@ p.main-title {
 
 p.main-text {
   text-align: center;
-  font-size: 24px;
+  font-size: 18px;
   margin: 0 auto;
-  max-width: 820px;
+  max-width: 340px;
   padding-bottom: 2em;
 }
 
@@ -534,4 +553,50 @@ table#tags td {
   display: inline-block;
   color: gray;
   cursor: pointer;
+}
+
+.line {
+    height: 3px;
+    background-color: var(--primary-color);
+    width: 400px;
+    max-width: 90vw;
+    margin-top: 1em;
+    margin-bottom: 1em;
+}
+
+/**********/
+/* NavBar */
+/**********/
+
+nav {
+    border-color: var(--primary-color) !important;
+    border-bottom-width: 3px !important;
+}
+nav .container-fluid {
+    padding: 0;
+    background-color: #262727;
+}
+
+.navbar-brand {
+    margin-left: 0 !important;
+}
+
+.navbar-right {
+    margin-right: 0 !important;
+}
+
+nav a {
+    color: white !important;
+}
+
+.bg-primary {
+    background-color: var(--primary-color) !important;
+}
+
+/**********/
+/* Footer */
+/**********/
+
+footer {
+    background-color: var(--footer-bg-color);
 }
