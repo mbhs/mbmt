@@ -3,18 +3,41 @@
 /***********/
 
 @import url('https://fonts.googleapis.com/css?family=Roboto:400,700|Slabo+27px');
+@font-face {
+  font-family: 'Neoneon';
+  src: url('/static/fonts/Neoneon.otf');
+}
 
 
 /*******************/
 /* Universal rules */
 /*******************/
 
+:root {
+  --primary-color: #BF1D1C;
+  --font-color: black;
+  --bg-color: white;
+}
+
+[data-theme="dark"] {
+  --primary-color: #BF1D1C;
+  --font-color: white;
+  --bg-color: #121212;
+}
+
 body {
-  font-family: 'Roboto', serif;
+  font-family: 'Helvetica', serif;
+  background-color: var(--bg-color);
+  color: var(--font-color);
+}
+
+.dark-mode {
+    background-color: #121212;
+    color: white;
 }
 
 h1, h2, h3, h4, h5, h6 {
-  font-family: 'Slabo 27px', sans-serif;
+  font-family: 'Helvetica 27px', sans-serif;
 }
 
 #menu {
@@ -100,6 +123,7 @@ h1.title {
   text-align: center;
   padding: .2em;
   user-select: none;
+  font-family: 'Neoneon', sans-serif;
 }
 
 span.title-left {
