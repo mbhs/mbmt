@@ -243,6 +243,7 @@ div.about-person img {
   text-align: center;
   margin-top: 8px;
   margin-bottom: 4px;
+  color: var(--font-color);
 }
 
 .about-person > p {
@@ -595,6 +596,11 @@ nav .container-fluid {
 
 .navbar-collapse a {
     margin-left: 0.5em;
+}
+
+.navbar-collapse {
+    border-color: var(--primary-color) !important;
+    border-width: 3px;
 }
 
 nav a {
