@@ -18,6 +18,7 @@
   --font-color: black;
   --bg-color: white;
   --footer-bg-color: #cccccc;
+  --table-color: white;
 }
 
 [data-theme="dark"] {
@@ -25,6 +26,7 @@
   --font-color: white;
   --bg-color: #121212;
   --footer-bg-color: #262727;
+  --table-color: #262727;
 }
 
 body {
@@ -622,4 +624,21 @@ footer {
 .btn-secondary {
     background-color: var(--primary-color);
     color: white;
+}
+
+th {
+    background-color: var(--table-color);
+}
+
+td {
+    background-color: var(--table-color);
+}
+
+.table-responsive {
+    border: 1px solid var(--font-color);
+    color: var(--font-color);
+}
+
+.table {
+    margin: 0;
 }
