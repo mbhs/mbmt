@@ -618,3 +618,8 @@ nav a {
 footer {
     background-color: var(--footer-bg-color);
 }
+
+.btn-secondary {
+    background-color: var(--primary-color);
+    color: white;
+}
