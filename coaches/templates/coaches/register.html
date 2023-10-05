@@ -14,14 +14,18 @@
 <p>
     Welcome to the {{ competition.year }} annual MBMT, held on {{ competition.date }}!
     We highly encourage schools' math team coaches or math resource department chairs to act as sponsors; however, any adult who is willing to supervise the team is fine.
+
+    <br /><br />
+
+    Here is the <a href="https://docs.google.com/forms/d/1Zo3dyR_Aayv3xGduzcfdgUhmQexc3vB5C_KppBfHAfk/edit">registration form</a> for this year!
 </p>
-<form name="registration" data-toggle="validator" role="form" method="post">
-    {% crispy form %}
-    <div class="button-group bump-down">
-        <input id="submit" type="submit" value="Finish" class="btn btn-primary right"/>
-        <input id="cancel" type="button" value="Cancel" class="btn btn-secondary right" onclick="window.location = '{% url "home:index" %}';"/>
-    </div>
-</form>
+<!-- <form name="registration" data-toggle="validator" role="form" method="post"> -->
+<!--     {% crispy form %} -->
+<!--     <div class="button-group bump-down"> -->
+<!--         <input id="submit" type="submit" value="Finish" class="btn btn-primary right"/> -->
+<!--         <input id="cancel" type="button" value="Cancel" class="btn btn-secondary right" onclick="window.location = '{% url "home:index" %}';"/> -->
+<!--     </div> -->
+<!-- </form> -->
 {% else %}
 <p>
     At the moment, registration is closed.
