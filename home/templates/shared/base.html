@@ -80,7 +80,6 @@
                         {% endif %}
                         <li><a href="{% url "home:logout" %}">Logout</a></li>
                         {% else %}
-                        <li><a href="{% url "home:login" %}">Login</a></li>
                         <li><a href="{% url "coaches:register" %}" class="bg-primary">Register</a></li>
                         {% endif %}
                         {% endblock %}
