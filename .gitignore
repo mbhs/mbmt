@@ -24,6 +24,7 @@ deployed/
 
 # Virtual Env
 .local/
+.python-version
 
 # MacOS
 .DS_Store
