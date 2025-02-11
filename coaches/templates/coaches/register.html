@@ -10,7 +10,9 @@
 {% block content %}
 
 <h2 class="lower">Team Registration</h2>
-{% if competition.can_register %}
+{% comment %} {% if competition.can_register %}  {% endcomment %}
+{% comment %} Future note: just disable registration from Google Forms. It's way more simple {% endcomment %}
+{% if True %}
 <p>
     Welcome to MBMT X, held on {{ competition.date }}!
     We highly encourage schools' math team coaches or math resource department chairs to act as sponsors; however, any adult who is willing to supervise the team is fine.
